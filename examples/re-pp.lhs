@@ -4,6 +4,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE QuasiQuotes                #-}
+{-# LANGUAGE FlexibleContexts           #-}
 {-# LANGUAGE OverloadedStrings          #-}
 
 module Main
@@ -26,7 +27,7 @@ import           TestKit
 import           Text.Printf
 import           Text.RE.Edit
 import           Text.RE.TDFA.ByteString.Lazy
-import           Text.RE.TDFA.Text                        as T
+import qualified Text.RE.TDFA.Text                        as TT
 import           Text.RE.Tools.Grep
 import           Text.RE.Tools.Sed
 \end{code}
@@ -41,6 +42,8 @@ main = do
     ["doc",fn,fn'] | is_file fn -> doc fn fn'
     ["gen",fn,fn'] | is_file fn -> gen fn fn'
     ["badges"]                  -> badges
+    ["bump-version",vrn]        -> bumpVersion vrn
+    ["readme"]                  -> readme
     ["all"]                     -> gen_all
     _                           -> usage
   where
@@ -57,6 +60,7 @@ main = do
         , "  "++prg "--help"
         , "  "++prg "[test]"
         , "  "++prg "badges"
+        , "  "++prg "bump-version <version>"
         , "  "++prg "all"
         , "  "++prg "doc (-|<in-file>) (-|<out-file>)"
         , "  "++prg "gen (-|<in-file>) (-|<out-file>)"
@@ -194,7 +198,7 @@ gen_all = do
     dm <- docMode
     loop dm "examples/re-tutorial-master.lhs" "tmp/re-tutorial.lhs"
     createDirectoryIfMissing False "tmp"
-    pandoc'
+    pandoc_lhs'
       "re-tutorial.lhs"
       "examples/re-tutorial.lhs"
       "tmp/re-tutorial.lhs"
@@ -203,10 +207,11 @@ gen_all = do
     gm <- genMode
     loop gm "examples/re-tutorial-master.lhs" "examples/re-tutorial.lhs"
     putStrLn ">> examples/re-tutorial.lhs"
+    readme
   where
-    pd fnm = case captureTextMaybe [cp|mnm|] $ fnm T.?=~ [re|^RE/(Tools/|Internal/)?${mnm}(@{%id})|] of
-        Just mnm -> pandoc fnm ("Text/"<>fnm<>".lhs") ("docs/"<>mnm<>".html")
-        Nothing  -> pandoc fnm ("examples/"<>fnm<>".lhs") ("docs/"<>fnm<>".html")
+    pd fnm = case captureTextMaybe [cp|mnm|] $ fnm TT.?=~ [re|^RE/(Tools/|Internal/)?${mnm}(@{%id})|] of
+        Just mnm -> pandoc_lhs fnm ("Text/"<>fnm<>".lhs") ("docs/"<>mnm<>".html")
+        Nothing  -> pandoc_lhs fnm ("examples/"<>fnm<>".lhs") ("docs/"<>fnm<>".html")
 \end{code}
 
 
@@ -418,17 +423,41 @@ badges
 
 \begin{code}
 badges :: IO ()
-badges = mapM_ collect
-    [ (,) "hackage"         "https://img.shields.io/hackage/v/regex.svg"
-    , (,) "license"         "https://img.shields.io/badge/license-BSD3-brightgreen.svg"
-    , (,) "unix-build"      "https://img.shields.io/travis/iconnect/regex.svg?label=Linux%2BmacOS"
-    , (,) "windows-build"   "https://img.shields.io/appveyor/ci/engineerirngirisconnectcouk/regex.svg?label=Windows"
-    , (,) "coverage"        "https://img.shields.io/coveralls/iconnect/regex.svg"
-    ]
+badges = do
+    mapM_ collect
+      [ (,) "license"         "https://img.shields.io/badge/license-BSD3-brightgreen.svg"
+      , (,) "unix-build"      "https://img.shields.io/travis/iconnect/regex.svg?label=Linux%2BmacOS"
+      , (,) "windows-build"   "https://img.shields.io/appveyor/ci/engineerirngirisconnectcouk/regex.svg?label=Windows"
+      , (,) "coverage"        "https://img.shields.io/coveralls/iconnect/regex.svg"
+      ]
+    substVersion "lib/hackage-template.svg" $ badge_fn "hackage"
   where
     collect (nm,url) = do
       putStrLn $ "updating badge: " ++ nm
-      simpleHttp url >>= LBS.writeFile ("docs/badges/"++nm++".svg")
+      simpleHttp url >>= LBS.writeFile (badge_fn nm)
+
+    badge_fn nm = "docs/badges/"++nm++".svg"
+\end{code}
+
+
+readme
+------
+
+\begin{code}
+readme :: IO ()
+readme = do
+  fmap (const ()) $
+    SH.shelly $ SH.verbosely $
+      SH.run "pandoc"
+        [ "-f", "markdown+grid_tables"
+        , "-t", "html"
+        , "-s"
+        , "-B", "lib/site-prebody-template.html"
+        , "-A", "lib/site-pstbody-template.html"
+        , "-c", "lib/du.css"
+        , "-o", "docs/index.html"
+        , "README.md"
+        ]
 \end{code}
 
 
@@ -436,11 +465,11 @@ pandoc
 ------
 
 \begin{code}
-pandoc :: T.Text -> T.Text -> T.Text -> IO ()
-pandoc title in_file = pandoc' title in_file in_file
+pandoc_lhs :: T.Text -> T.Text -> T.Text -> IO ()
+pandoc_lhs title in_file = pandoc_lhs' title in_file in_file
 
-pandoc' :: T.Text -> T.Text -> T.Text -> T.Text -> IO ()
-pandoc' title repo_path in_file out_file = do
+pandoc_lhs' :: T.Text -> T.Text -> T.Text -> T.Text -> IO ()
+pandoc_lhs' title repo_path in_file out_file = do
   writeFile "tmp/bc.html" bc
   writeFile "tmp/ft.html" ft
   fmap (const ()) $
