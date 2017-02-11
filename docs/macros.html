@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="lib/du.css" type="text/css" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="theme-color" content="#ffffff">
+</head>
+<body>
+    <div id="container">
+    <div id="nav">
+      <div id="header">
+        <a href="http://regex.uk" id="logo" name="logo">[<span style='color:red;'>re</span>|${<span style='color:red;'>gex</span>}(.*)|<span/>]</a>
+      </div>
+      <div class="section" id="sections">
+        <ul class="section-nav">
+          <li class='h2'>
+            <a href='#macros'>Macro Environment Tables</a>
+          </li>
+          </ul>
+      </div>
+      <div class="extra section" id="github">
+        <a href="https://github.com/iconnect/regex">Code</a>
+      </div>
+      <div class="extra section" id="github-issues">
+        <a href="https://github.com/iconnect/regex/issues">Issues</a>
+      </div>
+      <div class="extra section" id="travis">
+        <a href="http://travis-ci.org/iconnect/regex">
+          <img src="https://travis-ci.org/iconnect/regex.svg?branch=master">
+          </a>
+      </div>
+      <div class="extra section twitter">
+        <iframe allowtransparency="true" frameborder="0" scrolling="no" style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=cdornan&amp;show_count=false">
+        </iframe>
+      </div>
+    </div>
+    <div id="content">
+<p><a href='.' title='Home'>Home</a> &gt; <strong>Macro Environment Tables</strong></p>
+<h2 id="macros">
+Macro Environment Tables
+</h2>
+<p>These tables document the macros for the standard environment and for the <a href="../re-examples/nginx-log-processor.lhs">examples/re-nginx-log-processor</a>.</p>
+<p>The main tables have the following columns.</p>
+<table>
+<thead>
+<tr class="header">
+<th>column</th>
+<th>content</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>name</strong></td>
+<td>name of the macro</td>
+</tr>
+<tr class="even">
+<td><strong>caps</strong></td>
+<td>the number of captures in the RE</td>
+</tr>
+<tr class="odd">
+<td><strong>regex</strong></td>
+<td>the RE (with macros)</td>
+</tr>
+<tr class="even">
+<td><strong>examples</strong></td>
+<td>examples that should be matched by the RE</td>
+</tr>
+<tr class="odd">
+<td><strong>anti-examples</strong></td>
+<td>examples that should not be match by the RE</td>
+</tr>
+<tr class="even">
+<td><strong>fails</strong></td>
+<td>messages for failing tests (should be empty)</td>
+</tr>
+<tr class="odd">
+<td><strong>parser</strong></td>
+<td>name of Haskell parser for the matched text (optional)</td>
+</tr>
+<tr class="even">
+<td><strong>comment</strong></td>
+<td>notes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>These tables best viewed raw.</strong></p>
+<ul>
+<li>The <a href="prelude-PCRE.md">Prelude macros for PCRE</a> (and the <a href="prelude-PCRE.txt">macro sources</a>)</li>
+<li>The <a href="prelude-TDFA.md">Prelude macros for TDFA</a> (and the <a href="prelude-TDFA.txt">macro sources</a>)</li>
+<li>The <a href="nginx-log-processor-PCRE.md">nginx-log-processor macros (for PCRE)</a> (<a href="nginx-log-processor-PCRE.txt">and the macro sources</a>)</li>
+</ul>
+      </div>
+    </div>
+</body>
+</html>

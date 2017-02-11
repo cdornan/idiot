@@ -452,6 +452,8 @@ readme = do
   prep_page   MM_hackage "lib/readme-master.md" "doc/README.md"
   pandoc_page MM_pandoc  "lib/readme-master.md" "docs/index.html"
   pandoc_page MM_pandoc  "lib/builds-master.md" "docs/build-status.html"
+  prep_page   MM_github  "lib/tables-master.md" "tables/README.md"
+  pandoc_page MM_pandoc  "lib/tables-master.md" "docs/macros.html"
 \end{code}
 
 \begin{code}

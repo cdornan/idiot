@@ -403,7 +403,9 @@ readme <span class="fu">=</span> <span class="kw">do</span>
   prep_page   <span class="dt">MM_github</span>  <span class="st">&quot;lib/readme-master.md&quot;</span> <span class="st">&quot;README.md&quot;</span>
   prep_page   <span class="dt">MM_hackage</span> <span class="st">&quot;lib/readme-master.md&quot;</span> <span class="st">&quot;doc/README.md&quot;</span>
   pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/readme-master.md&quot;</span> <span class="st">&quot;docs/index.html&quot;</span>
-  pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/builds-master.md&quot;</span> <span class="st">&quot;docs/build-status.html&quot;</span></code></pre></div>
+  pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/builds-master.md&quot;</span> <span class="st">&quot;docs/build-status.html&quot;</span>
+  prep_page   <span class="dt">MM_github</span>  <span class="st">&quot;lib/tables-master.md&quot;</span> <span class="st">&quot;tables/README.md&quot;</span>
+  pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/tables-master.md&quot;</span> <span class="st">&quot;docs/macros.html&quot;</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">pandoc_page ::</span> <span class="dt">MarkdownMode</span> <span class="ot">-&gt;</span> FilePath <span class="ot">-&gt;</span> FilePath <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
 pandoc_page mmd in_fp out_fp <span class="fu">=</span> <span class="kw">do</span>
   mt_lbs <span class="ot">&lt;-</span> LBS.readFile in_fp
