@@ -427,7 +427,7 @@ a {
 }
 #content caption {
   text-align: center;
-  font-family: Georgia, serif
+  font-family: Arial, serif
 }
 #content abbr,#content acronym {
   border-bottom: 1px dotted #000
@@ -441,14 +441,14 @@ a {
 }
 #content blockquote {
   padding: 1em 1em 1.625em 1em;
-  font-family: georgia,serif;
+  font-family: Arial,serif;
   font-style: italic
 }
 #content blockquote:before {
   content: "\201C";
   font-size: 3em;
   margin-left: -.625em;
-  font-family: georgia,serif;
+  font-family: Arrial,serif;
   color: #aaa;
   line-height: 0
 }
