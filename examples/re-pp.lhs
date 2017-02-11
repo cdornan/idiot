@@ -468,6 +468,7 @@ pandoc_page mmd in_fp out_fp = do
         [ "-f", "markdown+grid_tables"
         , "-t", "html"
         , "-s"
+        , "-H", "lib/favicons.html"
         , "-B", "tmp/page_pre_body.html"
         , "-A", "tmp/page_pst_body.html"
         , "-c", "lib/du.css"
@@ -589,6 +590,7 @@ pandoc_lhs' title repo_path in_file out_file = do
         [ "-f", "markdown+lhs+grid_tables"
         , "-t", "html"
         , "-s"
+        , "-H", "lib/favicons.html"
         , "-B", "tmp/bc.html"
         , "-A", "tmp/ft.html"
         , "-c", "lib/styles.css"
@@ -616,6 +618,7 @@ pandoc_lhs' title repo_path in_file out_file = do
       , T.unpack repo_path
       ]
 \end{code}
+
 
 testing
 -------
