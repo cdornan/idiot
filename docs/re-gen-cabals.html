@@ -98,7 +98,8 @@ test <span class="fu">=</span> <span class="kw">do</span>
 <span class="ot">gen ::</span> FilePath <span class="ot">-&gt;</span> FilePath <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
 gen in_f out_f <span class="fu">=</span> <span class="kw">do</span>
     ctx <span class="ot">&lt;-</span> setup
-    sed (gc_script ctx) in_f out_f
+    substVersion in_f <span class="st">&quot;tmp/regex-vrn.cabal&quot;</span>
+    sed (gc_script ctx) <span class="st">&quot;tmp/regex-vrn.cabal&quot;</span> out_f
 
 <span class="kw">data</span> <span class="dt">Ctx</span> <span class="fu">=</span>
   <span class="dt">Ctx</span>
