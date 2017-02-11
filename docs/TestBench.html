@@ -233,13 +233,13 @@ runTests&#39; rty parser vector env mid md<span class="fu">@</span><span class="
 <h2 id="dumpmacrotable-formatmacrotable-formatmacrosummary-formatmacrosources-formatmacrosource">dumpMacroTable, formatMacroTable, formatMacroSummary, formatMacroSources, formatMacroSource</h2>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">dumpMacroTable ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">RegexType</span> <span class="ot">-&gt;</span> <span class="dt">MacroEnv</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
 dumpMacroTable lab rty m_env <span class="fu">=</span> <span class="kw">do</span>
-    writeFile (<span class="st">&quot;tables/&quot;</span><span class="fu">++</span>fp_t) <span class="fu">$</span> formatMacroTable   rty              m_env
-    writeFile (<span class="st">&quot;tables/&quot;</span><span class="fu">++</span>fp_s) <span class="fu">$</span> formatMacroSources rty <span class="dt">ExclCaptures</span> m_env
-    writeFile (<span class="st">&quot;docs/&quot;</span>  <span class="fu">++</span>fp_t) <span class="fu">$</span> formatMacroTable   rty              m_env
-    writeFile (<span class="st">&quot;docs/&quot;</span>  <span class="fu">++</span>fp_s) <span class="fu">$</span> formatMacroSources rty <span class="dt">ExclCaptures</span> m_env
+    writeFile (fp_t <span class="st">&quot;tables&quot;</span>) <span class="fu">$</span> formatMacroTable   rty              m_env ; print <span class="fu">$</span> fp_t <span class="st">&quot;tables&quot;</span>
+    writeFile (fp_s <span class="st">&quot;tables&quot;</span>) <span class="fu">$</span> formatMacroSources rty <span class="dt">ExclCaptures</span> m_env ; print <span class="fu">$</span> fp_s <span class="st">&quot;tables&quot;</span>
+    writeFile (fp_t <span class="st">&quot;docs&quot;</span>  ) <span class="fu">$</span> formatMacroTable   rty              m_env ; print <span class="fu">$</span> fp_t <span class="st">&quot;docs&quot;</span>
+    writeFile (fp_s <span class="st">&quot;docs&quot;</span>  ) <span class="fu">$</span> formatMacroSources rty <span class="dt">ExclCaptures</span> m_env ; print <span class="fu">$</span> fp_s <span class="st">&quot;docs&quot;</span>
   <span class="kw">where</span>
-    fp_t <span class="fu">=</span> lab <span class="fu">++</span> <span class="st">&quot;-&quot;</span> <span class="fu">++</span> show rty <span class="fu">++</span> <span class="st">&quot;.md&quot;</span>
-    fp_s <span class="fu">=</span> lab <span class="fu">++</span> <span class="st">&quot;-&quot;</span> <span class="fu">++</span> show rty <span class="fu">++</span> <span class="st">&quot;.txt&quot;</span></code></pre></div>
+    fp_t dir <span class="fu">=</span> dir <span class="fu">++</span> <span class="st">&quot;/&quot;</span> <span class="fu">++</span> lab <span class="fu">++</span> <span class="st">&quot;-&quot;</span> <span class="fu">++</span> show rty <span class="fu">++</span> <span class="st">&quot;.txt&quot;</span>
+    fp_s dir <span class="fu">=</span> dir <span class="fu">++</span> <span class="st">&quot;/&quot;</span> <span class="fu">++</span> lab <span class="fu">++</span> <span class="st">&quot;-&quot;</span> <span class="fu">++</span> show rty <span class="fu">++</span> <span class="st">&quot;.txt&quot;</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">formatMacroTable ::</span> <span class="dt">RegexType</span> <span class="ot">-&gt;</span> <span class="dt">MacroEnv</span> <span class="ot">-&gt;</span> <span class="dt">String</span>
 formatMacroTable rty env <span class="fu">=</span> unlines <span class="fu">$</span>
   format_table macro_table_hdr
