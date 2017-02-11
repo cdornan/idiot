@@ -538,6 +538,15 @@ mk_pre_body_html hdgs = hdr <> LBS.concat (map sec hdgs) <> ftr
       </div>
       <div class="section" id="sections">
         <ul class="section-nav">
+        <li class='h2'>
+          <a href="directory">Directory</a>
+          <a href="build-status">Build Status</a>
+          <a href="macros">Macro Tables</a>
+        </li>
+        </ul>
+      </div>
+      <div class="section" id="sections">
+        <ul class="section-nav">
 |]
 
     sec Heading{..} = LBS.unlines $ map ("          "<>)
