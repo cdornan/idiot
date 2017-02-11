@@ -15,15 +15,15 @@ Regex is a regular expression toolkit for regex-base with:
   * built-in support for the TDFA and PCRE backends;
   * comprehensive documentation and copious examples.
 
-See [build status page](http://regex.uk/build-status) for details.
 
-
-## Road Map
+## Build Status
 
 [![Hackage](https://iconnect.github.io/regex/badges/hackage.svg)](https://hackage.haskell.org/package/regex) [![BSD3 License](https://iconnect.github.io/regex/badges/license.svg)](https://tldrlegal.com/license/bsd-3-clause-license-%28revised%29) [![Un*x build](https://iconnect.github.io/regex/badges/unix-build.svg)](https://travis-ci.org/iconnect/regex) [![Windows build](https://iconnect.github.io/regex/badges/windows-build.svg)](https://ci.appveyor.com/project/engineerirngirisconnectcouk/regex/branch/master) [![Coverage](https://iconnect.github.io/regex/badges/coverage.svg)](https://coveralls.io/github/iconnect/regex?branch=master)
 
+See [build status page](http://regex.uk/build-status) for details.
 
-## Schedule
+
+## Road Mapschedule Schedule
 
   * ~~2017-01-26  0.0.0.1  Pre-release (I)~~
   * ~~2017-01-30  0.0.0.2  Pre-release (II)~~
