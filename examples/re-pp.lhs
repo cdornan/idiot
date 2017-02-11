@@ -531,7 +531,7 @@ mk_pre_body_html hdgs = hdr <> LBS.concat (map sec hdgs) <> ftr
     hdr = [here|    <div id="container">
     <div id="nav">
       <div id="header">
-        <a href="#" id="logo" name="logo">regex</a>
+        <a href="#" id="logo" name="logo">[[**re**|${**gex**}(.*)|]](http://regex.uk)</a>
       </div>
       <div class="section" id="sections">
         <ul class="section-nav">
