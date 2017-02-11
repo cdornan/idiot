@@ -23,7 +23,7 @@ Regex is a regular expression toolkit for regex-base with:
 See [build status page](http://regex.uk/build-status) for details.
 
 
-%heading#roadmap Road Mapschedule Schedule
+%heading#roadmap Road Map
 
   * ~~2017-01-26  0.0.0.1  Pre-release (I)~~
   * ~~2017-01-30  0.0.0.2  Pre-release (II)~~
