@@ -51,4 +51,4 @@ of them used in the package itself).
 ## The Macro Tables
 
 The macro environments are an important part of the package and they
-are documented [in these tables](tables).
+are documented [in these tables](macros).
