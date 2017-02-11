@@ -201,13 +201,13 @@ dumpMacroTable, formatMacroTable, formatMacroSummary, formatMacroSources, format
 \begin{code}
 dumpMacroTable :: String -> RegexType -> MacroEnv -> IO ()
 dumpMacroTable lab rty m_env = do
-    writeFile ("tables/"++fp_t) $ formatMacroTable   rty              m_env
-    writeFile ("tables/"++fp_s) $ formatMacroSources rty ExclCaptures m_env
-    writeFile ("docs/"  ++fp_t) $ formatMacroTable   rty              m_env
-    writeFile ("docs/"  ++fp_s) $ formatMacroSources rty ExclCaptures m_env
+    writeFile (fp_t "tables") $ formatMacroTable   rty              m_env ; print $ fp_t "tables"
+    writeFile (fp_s "tables") $ formatMacroSources rty ExclCaptures m_env ; print $ fp_s "tables"
+    writeFile (fp_t "docs"  ) $ formatMacroTable   rty              m_env ; print $ fp_t "docs"
+    writeFile (fp_s "docs"  ) $ formatMacroSources rty ExclCaptures m_env ; print $ fp_s "docs"
   where
-    fp_t = lab ++ "-" ++ show rty ++ ".md"
-    fp_s = lab ++ "-" ++ show rty ++ ".txt"
+    fp_t dir = dir ++ "/" ++ lab ++ "-" ++ show rty ++ ".txt"
+    fp_s dir = dir ++ "/" ++ lab ++ "-" ++ show rty ++ ".txt"
 \end{code}
 
 \begin{code}
