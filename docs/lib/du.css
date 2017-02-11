@@ -229,6 +229,7 @@ a img {
 }
 body {
   margin: 10px
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 html {
   height: 100%
@@ -427,7 +428,7 @@ a {
 }
 #content caption {
   text-align: center;
-  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 #content abbr,#content acronym {
   border-bottom: 1px dotted #000
@@ -441,9 +442,10 @@ a {
 }
 #content blockquote {
   padding: 1em 1em 1.625em 1em;
-  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
   font-style: italic
 }
+/*
 #content blockquote:before {
   content: "\201C";
   font-size: 3em;
@@ -456,6 +458,7 @@ a {
   padding: 0;
   margin: 0
 }
+*/
 #content strong {
   font-weight: bold
 }
