@@ -427,7 +427,7 @@ a {
 }
 #content caption {
   text-align: center;
-  font-family: Arial, serif
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif
 }
 #content abbr,#content acronym {
   border-bottom: 1px dotted #000
@@ -441,7 +441,7 @@ a {
 }
 #content blockquote {
   padding: 1em 1em 1.625em 1em;
-  font-family: Arial,serif;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   font-style: italic
 }
 #content blockquote:before {
@@ -495,7 +495,7 @@ a {
   margin-bottom: 1.625em
 }
 #content table {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Helvetica Neue", Helvetica, sans-serif;
   width: 100%
 }
 #content th,#content td {
