@@ -441,7 +441,7 @@ prep_page mmd in_fp out_fp <span class="fu">=</span> <span class="kw">do</span>
 prep_page&#39; mmd lbs <span class="fu">=</span> <span class="kw">do</span>
     rf   <span class="ot">&lt;-</span> newIORef []
     lbs&#39; <span class="ot">&lt;-</span> sed&#39; (scr rf) lbs
-    hdgs <span class="ot">&lt;-</span> readIORef rf
+    hdgs <span class="ot">&lt;-</span> reverse <span class="fu">&lt;$&gt;</span> readIORef rf
     return (hdgs,lbs&#39;)
   <span class="kw">where</span>
     scr rf <span class="fu">=</span> <span class="dt">Select</span>

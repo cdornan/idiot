@@ -498,7 +498,7 @@ prep_page' :: MarkdownMode -> LBS.ByteString -> IO ([Heading],LBS.ByteString)
 prep_page' mmd lbs = do
     rf   <- newIORef []
     lbs' <- sed' (scr rf) lbs
-    hdgs <- readIORef rf
+    hdgs <- reverse <$> readIORef rf
     return (hdgs,lbs')
   where
     scr rf = Select
