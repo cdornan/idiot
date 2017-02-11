@@ -227,22 +227,19 @@ blockquote,q {
 a img {
   border: none
 }
-body {
-  margin: 10px
-  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-}
 html {
   height: 100%
 }
 body {
   padding: 0;
   margin: 0;
-  font: 16px/24px "Alegreya", serif;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   font-size-adjust: none;
   font-style: normal;
   font-variant: normal;
   font-weight: normal;
-  background: #F4F6EC
+  background: #F4F6EC;
+  margin: 10px;
 }
 a {
   color: #369
