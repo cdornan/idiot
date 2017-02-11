@@ -169,7 +169,7 @@ Library
     Other-Modules:
       TestKit
 
-%build-depends regex base base-compat bytestring directory http-conduit shelly text
+%build-depends regex base base-compat bytestring directory heredoc http-conduit shelly text
 
 %test-exe re-tests
     Hs-Source-Dirs:     examples

@@ -19,7 +19,7 @@ Stability:              rfc
 bug-reports:            https://github.com/iconnect/regex/issues
 
 Extra-Source-Files:
-    README.md
+    doc/README.md
     changelog
 
 Cabal-Version:          >= 1.16
@@ -327,6 +327,7 @@ Executable re-pp
       , base-compat          >= 0.6.0
       , bytestring           >= 0.10.2.0
       , directory            >= 1.2.1.0
+      , heredoc              >= 0.2.0.0
       , http-conduit         >= 2.1.7.2
       , shelly               >= 1.6.1.2
       , text                 >= 1.2.0.6
@@ -352,6 +353,7 @@ Test-Suite re-pp-test
       , base-compat          >= 0.6.0
       , bytestring           >= 0.10.2.0
       , directory            >= 1.2.1.0
+      , heredoc              >= 0.2.0.0
       , http-conduit         >= 2.1.7.2
       , shelly               >= 1.6.1.2
       , text                 >= 1.2.0.6
