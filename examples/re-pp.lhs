@@ -563,6 +563,10 @@ mk_pre_body_html hdgs = hdr <> LBS.concat (map sec hdgs) <> ftr
         <iframe allowtransparency="true" frameborder="0" scrolling="no" style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=cdornan&amp;show_count=false">
         </iframe>
       </div>
+      <div class="extra section twitter">
+        <iframe allowtransparency="true" frameborder="0" scrolling="no" style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;show_count=false">
+        </iframe>
+      </div>
     </div>
     <div id="content">
 |]
