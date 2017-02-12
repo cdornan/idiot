@@ -108,7 +108,7 @@ main <span class="fu">=</span> <span class="kw">do</span>
     [<span class="st">&quot;gen&quot;</span>,fn,fn&#39;] <span class="fu">|</span> is_file fn <span class="ot">-&gt;</span> gen fn fn&#39;
     [<span class="st">&quot;badges&quot;</span>]                  <span class="ot">-&gt;</span> badges
     [<span class="st">&quot;bump-version&quot;</span>,vrn]        <span class="ot">-&gt;</span> bumpVersion vrn
-    [<span class="st">&quot;site&quot;</span>]                    <span class="ot">-&gt;</span> readme
+    [<span class="st">&quot;pages&quot;</span>]                   <span class="ot">-&gt;</span> pages
     [<span class="st">&quot;all&quot;</span>]                     <span class="ot">-&gt;</span> gen_all
     _                           <span class="ot">-&gt;</span> usage
   <span class="kw">where</span>
@@ -126,7 +126,7 @@ main <span class="fu">=</span> <span class="kw">do</span>
         , prg <span class="st">&quot;[test]&quot;</span>
         , prg <span class="st">&quot;badges&quot;</span>
         , prg <span class="st">&quot;bump-version &lt;version&gt;&quot;</span>
-        , prg <span class="st">&quot;site&quot;</span>
+        , prg <span class="st">&quot;pages&quot;</span>
         , prg <span class="st">&quot;all&quot;</span>
         , prg <span class="st">&quot;doc (-|&lt;in-file&gt;) (-|&lt;out-file&gt;)&quot;</span>
         , prg <span class="st">&quot;gen (-|&lt;in-file&gt;) (-|&lt;out-file&gt;)&quot;</span>
@@ -204,7 +204,7 @@ passthru _ _ _ _ <span class="fu">=</span> return <span class="dt">Nothing</span
            <span class="ot">-&gt;</span> <span class="dt">Matches</span> <span class="dt">LBS.ByteString</span>
            <span class="ot">-&gt;</span> <span class="dt">IO</span> (<span class="dt">LineEdit</span> <span class="dt">LBS.ByteString</span>)
 passthru_g _ _ <span class="fu">=</span> return <span class="dt">NoEdit</span></code></pre></div>
-<h2 id="script-to-generate-all-tutorial-tests-and-docs">Script to Generate All Tutorial Tests and Docs</h2>
+<h2 id="script-to-generate-the-whole-web-site">Script to Generate the Whole Web Site</h2>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">gen_all ::</span> <span class="dt">IO</span> ()
 gen_all <span class="fu">=</span> <span class="kw">do</span>
     <span class="co">-- prepare HTML docs for the (literate) tools</span>
@@ -238,7 +238,7 @@ gen_all <span class="fu">=</span> <span class="kw">do</span>
     gm <span class="ot">&lt;-</span> genMode
     loop gm <span class="st">&quot;examples/re-tutorial-master.lhs&quot;</span> <span class="st">&quot;examples/re-tutorial.lhs&quot;</span>
     putStrLn <span class="st">&quot;&gt;&gt; examples/re-tutorial.lhs&quot;</span>
-    readme
+    pages
   <span class="kw">where</span>
     pd fnm <span class="fu">=</span> <span class="kw">case</span> (captureTextMaybe [cp|fdr|] mtch,captureTextMaybe [cp|mnm|] mtch) <span class="kw">of</span>
         (<span class="dt">Nothing</span> ,<span class="dt">Just</span> mnm) <span class="ot">-&gt;</span> pandoc_lhs (<span class="st">&quot;Text.RE.&quot;</span>          <span class="fu">&lt;&gt;</span>mnm) (<span class="st">&quot;Text/&quot;</span>    <span class="fu">&lt;&gt;</span>fnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.lhs&quot;</span>) (<span class="st">&quot;docs/&quot;</span><span class="fu">&lt;&gt;</span>mnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.html&quot;</span>)
@@ -404,6 +404,7 @@ badges <span class="fu">=</span> <span class="kw">do</span>
       , (,) <span class="st">&quot;unix-build&quot;</span>      <span class="st">&quot;https://img.shields.io/travis/iconnect/regex.svg?label=Linux%2BmacOS&quot;</span>
       , (,) <span class="st">&quot;windows-build&quot;</span>   <span class="st">&quot;https://img.shields.io/appveyor/ci/engineerirngirisconnectcouk/regex.svg?label=Windows&quot;</span>
       , (,) <span class="st">&quot;coverage&quot;</span>        <span class="st">&quot;https://img.shields.io/coveralls/iconnect/regex.svg&quot;</span>
+      , (,) <span class="st">&quot;build-status&quot;</span>    <span class="st">&quot;https://img.shields.io/travis/iconnect/regex.svg?label=Build%20Status&quot;</span>
       ]
     substVersion <span class="st">&quot;lib/hackage-template.svg&quot;</span> <span class="fu">$</span> badge_fn <span class="st">&quot;hackage&quot;</span>
   <span class="kw">where</span>
@@ -412,20 +413,49 @@ badges <span class="fu">=</span> <span class="kw">do</span>
       simpleHttp url <span class="fu">&gt;&gt;=</span> LBS.writeFile (badge_fn nm)
 
     badge_fn nm <span class="fu">=</span> <span class="st">&quot;docs/badges/&quot;</span><span class="fu">++</span>nm<span class="fu">++</span><span class="st">&quot;.svg&quot;</span></code></pre></div>
-<h2 id="readme">readme</h2>
-<div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">readme ::</span> <span class="dt">IO</span> ()
-readme <span class="fu">=</span> <span class="kw">do</span>
-  prep_page   <span class="dt">MM_hackage</span> <span class="st">&quot;lib/md/readme.md&quot;</span>    <span class="st">&quot;doc/README.md&quot;</span>
-  prep_page   <span class="dt">MM_github</span>  <span class="st">&quot;lib/md/readme.md&quot;</span>    <span class="st">&quot;README.md&quot;</span>
-  pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/md/readme.md&quot;</span>    <span class="st">&quot;index&quot;</span>
-  pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/md/directory.md&quot;</span> <span class="st">&quot;directory&quot;</span>
-  pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/md/builds.md&quot;</span>    <span class="st">&quot;build-status&quot;</span>
-  pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/md/macros.md&quot;</span>    <span class="st">&quot;macros&quot;</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">pandoc_page ::</span> <span class="dt">MarkdownMode</span> <span class="ot">-&gt;</span> FilePath <span class="ot">-&gt;</span> FilePath <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
-pandoc_page mmd in_fp pge <span class="fu">=</span> <span class="kw">do</span>
-  mt_lbs <span class="ot">&lt;-</span> LBS.readFile in_fp
-  (hdgs,md_lbs) <span class="ot">&lt;-</span> prep_page&#39; mmd mt_lbs
-  LBS.writeFile <span class="st">&quot;tmp/page_pre_body.html&quot;</span> <span class="fu">$</span> mk_pre_body_html pge hdgs
+<h2 id="pages">pages</h2>
+<div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">pages ::</span> <span class="dt">IO</span> ()
+pages <span class="fu">=</span> <span class="kw">do</span>
+  prep_page   <span class="dt">MM_hackage</span> <span class="st">&quot;lib/md/index.md&quot;</span>    <span class="st">&quot;doc/README.md&quot;</span>
+  prep_page   <span class="dt">MM_github</span>  <span class="st">&quot;lib/md/index.md&quot;</span>    <span class="st">&quot;README.md&quot;</span>
+  mapM_ pandoc_page [minBound<span class="fu">..</span>maxBound]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Page</span>
+  <span class="fu">=</span> <span class="dt">PG_index</span>
+  <span class="fu">|</span> <span class="dt">PG_contact</span>
+  <span class="fu">|</span> <span class="dt">PG_build_status</span>
+  <span class="fu">|</span> <span class="dt">PG_installation</span>
+  <span class="fu">|</span> <span class="dt">PG_examples</span>
+  <span class="fu">|</span> <span class="dt">PG_macros</span>
+  <span class="fu">|</span> <span class="dt">PG_directory</span>
+  <span class="kw">deriving</span> (<span class="dt">Bounded</span>,<span class="dt">Enum</span>,<span class="dt">Eq</span>,<span class="dt">Ord</span>,<span class="dt">Show</span>)
+
+<span class="ot">page_root ::</span> <span class="dt">Page</span> <span class="ot">-&gt;</span> <span class="dt">String</span>
+page_root <span class="fu">=</span> map tr <span class="fu">.</span> drop <span class="dv">3</span> <span class="fu">.</span> show
+  <span class="kw">where</span>
+    tr <span class="ch">&#39;_&#39;</span> <span class="fu">=</span> <span class="ch">&#39;-&#39;</span>
+    tr c   <span class="fu">=</span> c
+
+page_master_file,<span class="ot"> page_docs_file ::</span> <span class="dt">Page</span> <span class="ot">-&gt;</span> FilePath
+page_master_file pg <span class="fu">=</span> <span class="st">&quot;lib/md/&quot;</span> <span class="fu">++</span> page_root pg <span class="fu">++</span> <span class="st">&quot;.md&quot;</span>
+page_docs_file   pg <span class="fu">=</span> <span class="st">&quot;docs/&quot;</span>   <span class="fu">++</span> page_root pg <span class="fu">++</span> <span class="st">&quot;.html&quot;</span>
+
+<span class="ot">page_address ::</span> <span class="dt">Page</span> <span class="ot">-&gt;</span> <span class="dt">LBS.ByteString</span>
+page_address <span class="fu">=</span> LBS.pack <span class="fu">.</span> page_root
+
+<span class="ot">page_title ::</span> <span class="dt">Page</span> <span class="ot">-&gt;</span> <span class="dt">LBS.ByteString</span>
+page_title pg <span class="fu">=</span> <span class="kw">case</span> pg <span class="kw">of</span>
+  <span class="dt">PG_index</span>        <span class="ot">-&gt;</span> <span class="st">&quot;Home&quot;</span>
+  <span class="dt">PG_contact</span>      <span class="ot">-&gt;</span> <span class="st">&quot;Contact&quot;</span>
+  <span class="dt">PG_build_status</span> <span class="ot">-&gt;</span> <span class="st">&quot;Build Status&quot;</span>
+  <span class="dt">PG_installation</span> <span class="ot">-&gt;</span> <span class="st">&quot;Installation&quot;</span>
+  <span class="dt">PG_examples</span>     <span class="ot">-&gt;</span> <span class="st">&quot;Examples&quot;</span>
+  <span class="dt">PG_macros</span>       <span class="ot">-&gt;</span> <span class="st">&quot;Macro Tables&quot;</span>
+  <span class="dt">PG_directory</span>    <span class="ot">-&gt;</span> <span class="st">&quot;Directory&quot;</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">pandoc_page ::</span> <span class="dt">Page</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+pandoc_page pg <span class="fu">=</span> <span class="kw">do</span>
+  mt_lbs <span class="ot">&lt;-</span> LBS.readFile <span class="fu">$</span> page_master_file pg
+  (hdgs,md_lbs) <span class="ot">&lt;-</span> prep_page&#39; <span class="dt">MM_pandoc</span> mt_lbs
+  LBS.writeFile <span class="st">&quot;tmp/page_pre_body.html&quot;</span> <span class="fu">$</span> mk_pre_body_html pg hdgs
   LBS.writeFile <span class="st">&quot;tmp/page_pst_body.html&quot;</span>   pst_body_html
   LBS.writeFile <span class="st">&quot;tmp/page.markdown&quot;</span>        md_lbs
   fmap (const ()) <span class="fu">$</span>
@@ -439,7 +469,7 @@ pandoc_page mmd in_fp pge <span class="fu">=</span> <span class="kw">do</span>
         , <span class="st">&quot;-B&quot;</span>, <span class="st">&quot;tmp/page_pre_body.html&quot;</span>
         , <span class="st">&quot;-A&quot;</span>, <span class="st">&quot;tmp/page_pst_body.html&quot;</span>
         , <span class="st">&quot;-c&quot;</span>, <span class="st">&quot;lib/styles.css&quot;</span>
-        , <span class="st">&quot;-o&quot;</span>, T.pack <span class="fu">$</span> <span class="st">&quot;docs/&quot;</span> <span class="fu">++</span> pge <span class="fu">++</span> <span class="st">&quot;.html&quot;</span>
+        , <span class="st">&quot;-o&quot;</span>, T.pack <span class="fu">$</span> page_docs_file pg
         , <span class="st">&quot;tmp/page.markdown&quot;</span>
         ]
 
@@ -493,42 +523,41 @@ heading mmd rf _ mtch _ _ <span class="fu">=</span> <span class="kw">do</span>
     ide <span class="fu">=</span> mtch <span class="fu">!$$</span> [cp|ide|]
     ttl <span class="fu">=</span> mtch <span class="fu">!$$</span> [cp|ttl|]
 
-<span class="ot">mk_pre_body_html ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> [<span class="dt">Heading</span>] <span class="ot">-&gt;</span> <span class="dt">LBS.ByteString</span>
-mk_pre_body_html pge hdgs <span class="fu">=</span> hdr <span class="fu">&lt;&gt;</span> LBS.concat (map sec hdgs) <span class="fu">&lt;&gt;</span> ftr
+<span class="ot">mk_pre_body_html ::</span> <span class="dt">Page</span> <span class="ot">-&gt;</span> [<span class="dt">Heading</span>] <span class="ot">-&gt;</span> <span class="dt">LBS.ByteString</span>
+mk_pre_body_html pg hdgs <span class="fu">=</span> hdr <span class="fu">&lt;&gt;</span> LBS.concat (map nav [minBound<span class="fu">..</span>maxBound]) <span class="fu">&lt;&gt;</span> ftr
   <span class="kw">where</span>
-    pg_nav dst_pge title <span class="fu">=</span> LBS.concat
-      [ <span class="st">&quot;          &lt;li class=&#39;h2 &quot;</span>
-      , <span class="kw">if</span> pge<span class="fu">==</span>dst_pge <span class="kw">then</span> <span class="st">&quot;moi&quot;</span> <span class="kw">else</span> <span class="st">&quot;toi&quot;</span>
-      , <span class="st">&quot;&#39;&gt;&lt;a href=&#39;&quot;</span>
-      , LBS.pack dst_pge
-      , <span class="st">&quot;&#39;&gt;&quot;</span>
-      , LBS.pack title
-      , <span class="st">&quot;&lt;/a&gt;&lt;/li&gt;&quot;</span>
-      ]
-
+<span class="ot">    hdr ::</span> <span class="dt">LBS.ByteString</span>
     hdr <span class="fu">=</span> [here|    &lt;div id=&quot;container&quot;&gt;
     &lt;div id=&quot;nav&quot;&gt;
       &lt;div id=&quot;header&quot;&gt;
         |] <span class="fu">&lt;&gt;</span> logo <span class="fu">&lt;&gt;</span> [here|
       &lt;/div&gt;
       &lt;div class=&quot;section&quot; id=&quot;pages&quot;&gt;
-        &lt;ul class=&quot;section-nav&quot;&gt;
-|] <span class="fu">&lt;&gt;</span> LBS.unlines
-        [ pg_nav <span class="st">&quot;index&quot;</span>        <span class="st">&quot;Home&quot;</span>
-        , pg_nav <span class="st">&quot;directory&quot;</span>    <span class="st">&quot;Directory&quot;</span>
-        , pg_nav <span class="st">&quot;build-status&quot;</span> <span class="st">&quot;Build Status&quot;</span>
-        , pg_nav <span class="st">&quot;macros&quot;</span>       <span class="st">&quot;Macro Tables&quot;</span>
-        ] <span class="fu">&lt;&gt;</span> [here|        &lt;/ul&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;section&quot; id=&quot;sections&quot;&gt;
-        &lt;ul class=&quot;section-nav&quot;&gt;
+        &lt;ul class=&quot;page-nav&quot;&gt;
 |]
 
-    sec <span class="dt">Heading</span>{<span class="fu">..</span>} <span class="fu">=</span> LBS.unlines <span class="fu">$</span> map (<span class="st">&quot;          &quot;</span><span class="fu">&lt;&gt;</span>)
-              [ <span class="st">&quot;&lt;li class=&#39;h2&#39;&gt;&quot;</span>
-              , <span class="st">&quot;  &lt;a href=&#39;#&quot;</span><span class="fu">&lt;&gt;</span>_hdg_id<span class="fu">&lt;&gt;</span><span class="st">&quot;&#39;&gt;&quot;</span><span class="fu">&lt;&gt;</span>_hdg_title<span class="fu">&lt;&gt;</span><span class="st">&quot;&lt;/a&gt;&quot;</span>
-              , <span class="st">&quot;&lt;/li&gt;&quot;</span>
-              ]
+    nav dst_pg <span class="fu">=</span> LBS.unlines <span class="fu">$</span>
+      nav_li <span class="st">&quot;          &quot;</span> pg_cls pg_adr pg_ttl <span class="fu">:</span>
+        [ nav_li <span class="st">&quot;            &quot;</span> [<span class="st">&quot;secnav&quot;</span>] (<span class="st">&quot;#&quot;</span><span class="fu">&lt;&gt;</span>_hdg_id) _hdg_title
+          <span class="fu">|</span> <span class="dt">Heading</span>{<span class="fu">..</span>} <span class="ot">&lt;-</span> hdgs
+          , is_moi
+          ]
+      <span class="kw">where</span>
+        pg_cls <span class="fu">=</span> [<span class="st">&quot;pagenav&quot;</span>,<span class="kw">if</span> is_moi <span class="kw">then</span> <span class="st">&quot;moi&quot;</span> <span class="kw">else</span> <span class="st">&quot;toi&quot;</span>]
+        pg_adr <span class="fu">=</span> page_address dst_pg
+        pg_ttl <span class="fu">=</span> page_title   dst_pg
+        is_moi <span class="fu">=</span> pg <span class="fu">==</span> dst_pg
+
+    nav_li pfx cls dst title <span class="fu">=</span> LBS.concat
+      [ pfx
+      , <span class="st">&quot;&lt;li class=&#39;&quot;</span>
+      , LBS.unwords cls
+      , <span class="st">&quot;&#39;&gt;&lt;a href=&#39;&quot;</span>
+      , dst
+      , <span class="st">&quot;&#39;&gt;&quot;</span>
+      , title
+      , <span class="st">&quot;&lt;/a&gt;&lt;/li&gt;&quot;</span>
+      ]
 
     ftr <span class="fu">=</span> [here|          &lt;/ul&gt;
       &lt;/div&gt;
@@ -559,7 +588,7 @@ mk_pre_body_html pge hdgs <span class="fu">=</span> hdr <span class="fu">&lt;&gt
 pst_body_html <span class="fu">=</span> [here|      &lt;/div&gt;
     &lt;/div&gt;
 |]</code></pre></div>
-<h2 id="pandoc">pandoc</h2>
+<h2 id="literate-haskell-pages">Literate Haskell Pages</h2>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">pandoc_lhs ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
 pandoc_lhs title in_file <span class="fu">=</span> pandoc_lhs&#39; title in_file in_file
 

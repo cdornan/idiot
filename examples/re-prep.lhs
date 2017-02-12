@@ -44,7 +44,7 @@ main = do
     ["gen",fn,fn'] | is_file fn -> gen fn fn'
     ["badges"]                  -> badges
     ["bump-version",vrn]        -> bumpVersion vrn
-    ["site"]                    -> readme
+    ["pages"]                   -> pages
     ["all"]                     -> gen_all
     _                           -> usage
   where
@@ -62,7 +62,7 @@ main = do
         , prg "[test]"
         , prg "badges"
         , prg "bump-version <version>"
-        , prg "site"
+        , prg "pages"
         , prg "all"
         , prg "doc (-|<in-file>) (-|<out-file>)"
         , prg "gen (-|<in-file>) (-|<out-file>)"
@@ -172,8 +172,8 @@ passthru_g _ _ = return NoEdit
 \end{code}
 
 
-Script to Generate All Tutorial Tests and Docs
-----------------------------------------------
+Script to Generate the Whole Web Site
+-------------------------------------
 
 \begin{code}
 gen_all :: IO ()
@@ -209,7 +209,7 @@ gen_all = do
     gm <- genMode
     loop gm "examples/re-tutorial-master.lhs" "examples/re-tutorial.lhs"
     putStrLn ">> examples/re-tutorial.lhs"
-    readme
+    pages
   where
     pd fnm = case (captureTextMaybe [cp|fdr|] mtch,captureTextMaybe [cp|mnm|] mtch) of
         (Nothing ,Just mnm) -> pandoc_lhs ("Text.RE."          <>mnm) ("Text/"    <>fnm<>".lhs") ("docs/"<>mnm<>".html")
@@ -434,6 +434,7 @@ badges = do
       , (,) "unix-build"      "https://img.shields.io/travis/iconnect/regex.svg?label=Linux%2BmacOS"
       , (,) "windows-build"   "https://img.shields.io/appveyor/ci/engineerirngirisconnectcouk/regex.svg?label=Windows"
       , (,) "coverage"        "https://img.shields.io/coveralls/iconnect/regex.svg"
+      , (,) "build-status"    "https://img.shields.io/travis/iconnect/regex.svg?label=Build%20Status"
       ]
     substVersion "lib/hackage-template.svg" $ badge_fn "hackage"
   where
@@ -445,26 +446,58 @@ badges = do
 \end{code}
 
 
-readme
-------
+pages
+-----
 
 \begin{code}
-readme :: IO ()
-readme = do
-  prep_page   MM_hackage "lib/md/readme.md"    "doc/README.md"
-  prep_page   MM_github  "lib/md/readme.md"    "README.md"
-  pandoc_page MM_pandoc  "lib/md/readme.md"    "index"
-  pandoc_page MM_pandoc  "lib/md/directory.md" "directory"
-  pandoc_page MM_pandoc  "lib/md/builds.md"    "build-status"
-  pandoc_page MM_pandoc  "lib/md/macros.md"    "macros"
+pages :: IO ()
+pages = do
+  prep_page   MM_hackage "lib/md/index.md"    "doc/README.md"
+  prep_page   MM_github  "lib/md/index.md"    "README.md"
+  mapM_ pandoc_page [minBound..maxBound]
 \end{code}
 
 \begin{code}
-pandoc_page :: MarkdownMode -> FilePath -> FilePath -> IO ()
-pandoc_page mmd in_fp pge = do
-  mt_lbs <- LBS.readFile in_fp
-  (hdgs,md_lbs) <- prep_page' mmd mt_lbs
-  LBS.writeFile "tmp/page_pre_body.html" $ mk_pre_body_html pge hdgs
+data Page
+  = PG_index
+  | PG_contact
+  | PG_build_status
+  | PG_installation
+  | PG_examples
+  | PG_macros
+  | PG_directory
+  deriving (Bounded,Enum,Eq,Ord,Show)
+
+page_root :: Page -> String
+page_root = map tr . drop 3 . show
+  where
+    tr '_' = '-'
+    tr c   = c
+
+page_master_file, page_docs_file :: Page -> FilePath
+page_master_file pg = "lib/md/" ++ page_root pg ++ ".md"
+page_docs_file   pg = "docs/"   ++ page_root pg ++ ".html"
+
+page_address :: Page -> LBS.ByteString
+page_address = LBS.pack . page_root
+
+page_title :: Page -> LBS.ByteString
+page_title pg = case pg of
+  PG_index        -> "Home"
+  PG_contact      -> "Contact"
+  PG_build_status -> "Build Status"
+  PG_installation -> "Installation"
+  PG_examples     -> "Examples"
+  PG_macros       -> "Macro Tables"
+  PG_directory    -> "Directory"
+\end{code}
+
+\begin{code}
+pandoc_page :: Page -> IO ()
+pandoc_page pg = do
+  mt_lbs <- LBS.readFile $ page_master_file pg
+  (hdgs,md_lbs) <- prep_page' MM_pandoc mt_lbs
+  LBS.writeFile "tmp/page_pre_body.html" $ mk_pre_body_html pg hdgs
   LBS.writeFile "tmp/page_pst_body.html"   pst_body_html
   LBS.writeFile "tmp/page.markdown"        md_lbs
   fmap (const ()) $
@@ -478,7 +511,7 @@ pandoc_page mmd in_fp pge = do
         , "-B", "tmp/page_pre_body.html"
         , "-A", "tmp/page_pst_body.html"
         , "-c", "lib/styles.css"
-        , "-o", T.pack $ "docs/" ++ pge ++ ".html"
+        , "-o", T.pack $ page_docs_file pg
         , "tmp/page.markdown"
         ]
 
@@ -532,42 +565,41 @@ heading mmd rf _ mtch _ _ = do
     ide = mtch !$$ [cp|ide|]
     ttl = mtch !$$ [cp|ttl|]
 
-mk_pre_body_html :: String -> [Heading] -> LBS.ByteString
-mk_pre_body_html pge hdgs = hdr <> LBS.concat (map sec hdgs) <> ftr
+mk_pre_body_html :: Page -> [Heading] -> LBS.ByteString
+mk_pre_body_html pg hdgs = hdr <> LBS.concat (map nav [minBound..maxBound]) <> ftr
   where
-    pg_nav dst_pge title = LBS.concat
-      [ "          <li class='h2 "
-      , if pge==dst_pge then "moi" else "toi"
-      , "'><a href='"
-      , LBS.pack dst_pge
-      , "'>"
-      , LBS.pack title
-      , "</a></li>"
-      ]
-
+    hdr :: LBS.ByteString
     hdr = [here|    <div id="container">
     <div id="nav">
       <div id="header">
         |] <> logo <> [here|
       </div>
       <div class="section" id="pages">
-        <ul class="section-nav">
-|] <> LBS.unlines
-        [ pg_nav "index"        "Home"
-        , pg_nav "directory"    "Directory"
-        , pg_nav "build-status" "Build Status"
-        , pg_nav "macros"       "Macro Tables"
-        ] <> [here|        </ul>
-      </div>
-      <div class="section" id="sections">
-        <ul class="section-nav">
+        <ul class="page-nav">
 |]
 
-    sec Heading{..} = LBS.unlines $ map ("          "<>)
-              [ "<li class='h2'>"
-              , "  <a href='#"<>_hdg_id<>"'>"<>_hdg_title<>"</a>"
-              , "</li>"
-              ]
+    nav dst_pg = LBS.unlines $
+      nav_li "          " pg_cls pg_adr pg_ttl :
+        [ nav_li "            " ["secnav"] ("#"<>_hdg_id) _hdg_title
+          | Heading{..} <- hdgs
+          , is_moi
+          ]
+      where
+        pg_cls = ["pagenav",if is_moi then "moi" else "toi"]
+        pg_adr = page_address dst_pg
+        pg_ttl = page_title   dst_pg
+        is_moi = pg == dst_pg
+
+    nav_li pfx cls dst title = LBS.concat
+      [ pfx
+      , "<li class='"
+      , LBS.unwords cls
+      , "'><a href='"
+      , dst
+      , "'>"
+      , title
+      , "</a></li>"
+      ]
 
     ftr = [here|          </ul>
       </div>
@@ -601,8 +633,8 @@ pst_body_html = [here|      </div>
 \end{code}
 
 
-pandoc
-------
+Literate Haskell Pages
+----------------------
 
 \begin{code}
 pandoc_lhs :: T.Text -> T.Text -> T.Text -> IO ()
