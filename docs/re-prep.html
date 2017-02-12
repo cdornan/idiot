@@ -402,6 +402,7 @@ badges <span class="fu">=</span> <span class="kw">do</span>
       , (,) <span class="st">&quot;windows-build&quot;</span>   <span class="st">&quot;https://img.shields.io/appveyor/ci/engineerirngirisconnectcouk/regex.svg?label=Windows&quot;</span>
       , (,) <span class="st">&quot;coverage&quot;</span>        <span class="st">&quot;https://img.shields.io/coveralls/iconnect/regex.svg&quot;</span>
       , (,) <span class="st">&quot;build-status&quot;</span>    <span class="st">&quot;https://img.shields.io/travis/iconnect/regex.svg?label=Build%20Status&quot;</span>
+      , (,) <span class="st">&quot;email-contact&quot;</span>   <span class="st">&quot;https://img.shields.io/badge/email-regex%40chrisdornan.com-blue.svg&quot;</span>
       ]
     substVersion <span class="st">&quot;lib/hackage-template.svg&quot;</span> <span class="fu">$</span> badge_fn <span class="st">&quot;hackage&quot;</span>
   <span class="kw">where</span>
@@ -573,17 +574,19 @@ mk_pre_body_html pg hdgs <span class="fu">=</span> hdr <span class="fu">&lt;&gt;
       &lt;div class=&quot;supplementary widget&quot; id=&quot;github-issues&quot;&gt;
         &lt;a href=&quot;https://github.com/iconnect/regex/issues&quot;&gt;Issues&lt;/a&gt;
       &lt;/div&gt;
+      &lt;div class=&quot;widget-divider&quot;&gt;&amp;nbsp;&lt;/div&gt;
       &lt;div class=&quot;supplementary widget&quot; id=&quot;build-status&quot;&gt;
         &lt;a href=&quot;build-status&quot;&gt;
           &lt;img src=&quot;badges/build-status.svg&quot; alt=&quot;build status&quot; /&gt;
         &lt;/a&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;supplementary widget twitter&quot;&gt;
-        &lt;iframe style=&quot;width:162px; height:20px;&quot; src=&quot;https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;amp;show_count=false&quot;&gt;
-        &lt;/iframe&gt;
+      &lt;div class=&quot;supplementary widget&quot; id=&quot;email-contact&quot;&gt;
+        &lt;a href=&quot;mailto:regex@chrisdornan.com&quot;&gt;
+          &lt;img src=&quot;badges/email-contact.svg&quot; alt=&quot;build status&quot; /&gt;
+        &lt;/a&gt;
       &lt;/div&gt;
       &lt;div class=&quot;supplementary widget twitter&quot;&gt;
-        &lt;iframe style=&quot;width:162px; height:20px;&quot; src=&quot;https://platform.twitter.com/widgets/follow_button.html?screen_name=cdornan&amp;amp;show_count=false&quot;&gt;
+        &lt;iframe style=&quot;width:162px; height:20px;&quot; src=&quot;https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;amp;show_count=false&quot;&gt;
         &lt;/iframe&gt;
       &lt;/div&gt;
     &lt;/div&gt;

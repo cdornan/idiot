@@ -435,6 +435,7 @@ badges = do
       , (,) "windows-build"   "https://img.shields.io/appveyor/ci/engineerirngirisconnectcouk/regex.svg?label=Windows"
       , (,) "coverage"        "https://img.shields.io/coveralls/iconnect/regex.svg"
       , (,) "build-status"    "https://img.shields.io/travis/iconnect/regex.svg?label=Build%20Status"
+      , (,) "email-contact"   "https://img.shields.io/badge/email-regex%40chrisdornan.com-blue.svg"
       ]
     substVersion "lib/hackage-template.svg" $ badge_fn "hackage"
   where
@@ -618,17 +619,19 @@ mk_pre_body_html pg hdgs = hdr <> LBS.concat (map nav [minBound..maxBound]) <> f
       <div class="supplementary widget" id="github-issues">
         <a href="https://github.com/iconnect/regex/issues">Issues</a>
       </div>
+      <div class="widget-divider">&nbsp;</div>
       <div class="supplementary widget" id="build-status">
         <a href="build-status">
           <img src="badges/build-status.svg" alt="build status" />
         </a>
       </div>
-      <div class="supplementary widget twitter">
-        <iframe style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;show_count=false">
-        </iframe>
+      <div class="supplementary widget" id="email-contact">
+        <a href="mailto:regex@chrisdornan.com">
+          <img src="badges/email-contact.svg" alt="build status" />
+        </a>
       </div>
       <div class="supplementary widget twitter">
-        <iframe style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=cdornan&amp;show_count=false">
+        <iframe style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;show_count=false">
         </iframe>
       </div>
     </div>
