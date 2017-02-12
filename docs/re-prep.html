@@ -56,16 +56,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   <meta name="theme-color" content="#ffffff"/>
 </head>
 <body>
-<div class='brandingdiv'>
-  <a href="http://regex.uk" style="Arial, 'Helvetica Neue', Helvetica, sans-serif;" id="branding">[<span style='color:red;'>re</span>|${<span style='color:red;'>gex</span>}(.*)|<span></span>]</a>
-</div>
 <div class='bcdiv'>
   <ol class='breadcrumb'>
-    <li><a href='.' title='Home'>Home</a></li>
+    <li><a href="." style="Arial, 'Helvetica Neue', Helvetica, sans-serif;" id="branding">[<span style='color:red;'>re</span>|${<span style='color:red;'>gex</span>}(.*)|<span></span>]</a></li>
     <li><a title='source file' href='https://github.com/iconnect/regex/blob/master/examples/re-prep.lhs'>examples/re-prep.lhs</a></li>
 </ol>
 </div>
-<div class='content'>
+<div class='litcontent'>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE NoImplicitPrelude          #-}</span>
 <span class="ot">{-# LANGUAGE RecordWildCards            #-}</span>
 <span class="ot">{-# LANGUAGE GeneralizedNewtypeDeriving #-}</span>
@@ -622,17 +619,17 @@ pandoc_lhs&#39; title repo_path in_file out_file <span class="fu">=</span> <span
         ]
   <span class="kw">where</span>
     bc <span class="fu">=</span> LBS.unlines
-      [ <span class="st">&quot;&lt;div class=&#39;brandingdiv&#39;&gt;&quot;</span>
-      , <span class="st">&quot;  &quot;</span> <span class="fu">&lt;&gt;</span> branding
-      , <span class="st">&quot;&lt;/div&gt;&quot;</span>
-      , <span class="st">&quot;&lt;div class=&#39;bcdiv&#39;&gt;&quot;</span>
+    <span class="co">--  [ &quot;&lt;div class=&#39;brandingdiv&#39;&gt;&quot;</span>
+    <span class="co">--  , &quot;  &quot; &lt;&gt; branding</span>
+    <span class="co">--  , &quot;&lt;/div&gt;&quot;</span>
+      [ <span class="st">&quot;&lt;div class=&#39;bcdiv&#39;&gt;&quot;</span>
       , <span class="st">&quot;  &lt;ol class=&#39;breadcrumb&#39;&gt;&quot;</span>
-      , <span class="st">&quot;    &lt;li&gt;&lt;a href=&#39;.&#39; title=&#39;Home&#39;&gt;Home&lt;/a&gt;&lt;/li&gt;&quot;</span> <span class="co">-- &amp;raquo;</span>
+      , <span class="st">&quot;    &lt;li&gt;&quot;</span><span class="fu">&lt;&gt;</span>branding<span class="fu">&lt;&gt;</span><span class="st">&quot;&lt;/li&gt;&quot;</span>
       , <span class="st">&quot;    &lt;li&gt;&lt;a title=&#39;source file&#39; href=&#39;&quot;</span> <span class="fu">&lt;&gt;</span>
               repo_url <span class="fu">&lt;&gt;</span> <span class="st">&quot;&#39;&gt;&quot;</span> <span class="fu">&lt;&gt;</span> (LBS.pack <span class="fu">$</span> T.unpack title) <span class="fu">&lt;&gt;</span> <span class="st">&quot;&lt;/a&gt;&lt;/li&gt;&quot;</span>
       , <span class="st">&quot;&lt;/ol&gt;&quot;</span>
       , <span class="st">&quot;&lt;/div&gt;&quot;</span>
-      , <span class="st">&quot;&lt;div class=&#39;content&#39;&gt;&quot;</span>
+      , <span class="st">&quot;&lt;div class=&#39;litcontent&#39;&gt;&quot;</span>
       ]
 
     ft <span class="fu">=</span> LBS.concat
@@ -645,7 +642,7 @@ pandoc_lhs&#39; title repo_path in_file out_file <span class="fu">=</span> <span
       ]</code></pre></div>
 <h2 id="branding">branding</h2>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">branding ::</span> <span class="dt">LBS.ByteString</span>
-branding <span class="fu">=</span> [here|&lt;a href=&quot;http://regex.uk&quot; style=&quot;Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;&quot; id=&quot;branding&quot;&gt;[&lt;span style=&#39;color:red;&#39;&gt;re&lt;/span&gt;|${&lt;span style=&#39;color:red;&#39;&gt;gex&lt;/span&gt;}(.*)|&lt;span&gt;&lt;/span&gt;]&lt;/a&gt;|]</code></pre></div>
+branding <span class="fu">=</span> [here|&lt;a href=&quot;.&quot; style=&quot;Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;&quot; id=&quot;branding&quot;&gt;[&lt;span style=&#39;color:red;&#39;&gt;re&lt;/span&gt;|${&lt;span style=&#39;color:red;&#39;&gt;gex&lt;/span&gt;}(.*)|&lt;span&gt;&lt;/span&gt;]&lt;/a&gt;|]</code></pre></div>
 <h2 id="testing">testing</h2>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">test ::</span> <span class="dt">IO</span> ()
 test <span class="fu">=</span> <span class="kw">do</span>

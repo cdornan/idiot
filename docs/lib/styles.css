@@ -2,7 +2,7 @@
  * our local style sheet
  */
 
-div.content {
+div.litcontent {
   padding: 20px;
 }
 
@@ -82,7 +82,7 @@ header>h1 {
   margin: 0 auto
 }
 #corner {
-  border-bottom: 3px solid rgba(0,0,0,0.1);
+  border-bottom: 2px solid #000;
   padding-bottom: 10px;
   margin-bottom: 10px
 }
@@ -106,7 +106,7 @@ header>h1 {
 }
 #sidebar #pages>ul {
   list-style-type: none;
-  border-bottom: 3px solid rgba(0,0,0,0.1);
+  border-bottom: 2px solid #000;
   padding-bottom: 10px;
   margin-bottom: 10px
 }
@@ -262,20 +262,6 @@ header>h1 {
   font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
   font-style: italic
 }
-/*
-#content blockquote:before {
-  content: "\201C";
-  font-size: 3em;
-  margin-left: -.625em;
-  font-family: Arrial,serif;
-  color: #aaa;
-  line-height: 0
-}
-#content blockquote>p {
-  padding: 0;
-  margin: 0
-}
-*/
 #content strong {
   font-weight: bold
 }

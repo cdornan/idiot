@@ -670,17 +670,17 @@ pandoc_lhs' title repo_path in_file out_file = do
         ]
   where
     bc = LBS.unlines
-      [ "<div class='brandingdiv'>"
-      , "  " <> branding
-      , "</div>"
-      , "<div class='bcdiv'>"
+    --  [ "<div class='brandingdiv'>"
+    --  , "  " <> branding
+    --  , "</div>"
+      [ "<div class='bcdiv'>"
       , "  <ol class='breadcrumb'>"
-      , "    <li><a href='.' title='Home'>Home</a></li>" -- &raquo;
+      , "    <li>"<>branding<>"</li>"
       , "    <li><a title='source file' href='" <>
               repo_url <> "'>" <> (LBS.pack $ T.unpack title) <> "</a></li>"
       , "</ol>"
       , "</div>"
-      , "<div class='content'>"
+      , "<div class='litcontent'>"
       ]
 
     ft = LBS.concat
@@ -699,7 +699,7 @@ branding
 
 \begin{code}
 branding :: LBS.ByteString
-branding = [here|<a href="http://regex.uk" style="Arial, 'Helvetica Neue', Helvetica, sans-serif;" id="branding">[<span style='color:red;'>re</span>|${<span style='color:red;'>gex</span>}(.*)|<span></span>]</a>|]
+branding = [here|<a href="." style="Arial, 'Helvetica Neue', Helvetica, sans-serif;" id="branding">[<span style='color:red;'>re</span>|${<span style='color:red;'>gex</span>}(.*)|<span></span>]</a>|]
 \end{code}
 
 
