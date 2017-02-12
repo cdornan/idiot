@@ -485,7 +485,7 @@ If you just need to specify some non-standard options while statically checking 
 <ul>
 <li><p>[Text.RE.Tools.Grep}(Grep.html): takes a regular expression and a file or lazy ByteString (depending upon the variant) and returns all of the matching lines. (Used in the <a href="re-include.html">include</a> example.)</p></li>
 <li><p>[Text.RE.Tools.Lex}(Lex.html): takes an association list of REs and token-generating functions and the input text and returns a list of tokens. This should never be used where performance is important (use Alex), except as a development prototype (used internally in <a href="NamedCaptures.html">Text.RE.Internal.NamedCaptures</a>).</p></li>
-<li><p>[Text.RE.Tools.Lex}(Sed.html) using <a href="Edit.html">Text.RE.Edit</a>: takes an association list of regular expressions and substitution actions, some input text and invokes the associated action on each line of the file that matches one of the REs, substituting the text returned from the action in the output stream. (Used in the <a href="re-include.html">include</a>, <a href="re-gen-modules.html">gen-modules</a>, <a href="re-nginx-log-processor.html">log-processor</a> and <a href="re-pp">tutorial-pp</a> examples.)</p></li>
+<li><p>[Text.RE.Tools.Lex}(Sed.html) using <a href="Edit.html">Text.RE.Edit</a>: takes an association list of regular expressions and substitution actions, some input text and invokes the associated action on each line of the file that matches one of the REs, substituting the text returned from the action in the output stream. (Used in the <a href="re-include.html">include</a>, <a href="re-gen-modules.html">gen-modules</a>, <a href="re-nginx-log-processor.html">log-processor</a> and <a href="re-prep">tutorial-pp</a> examples.)</p></li>
 </ul>
 <h2 id="the-examples">The Examples</h2>
 <p>The remaining sections have been given over to various standalone examples. All bar the first are taken from the package itself, each contributing to either the API or the tools used to prepare the documentation and test suites.</p>
@@ -591,7 +591,7 @@ gen_all <span class="fu">=</span> <span class="kw">do</span>
     pd <span class="st">&quot;re-gen-modules&quot;</span>
     pd <span class="st">&quot;re-include&quot;</span>
     pd <span class="st">&quot;re-nginx-log-processor&quot;</span>
-    pd <span class="st">&quot;re-pp&quot;</span>
+    pd <span class="st">&quot;re-prep&quot;</span>
     pd <span class="st">&quot;re-tests&quot;</span>
     pd <span class="st">&quot;TestKit&quot;</span>
     pd <span class="st">&quot;RE/Capture&quot;</span>
@@ -623,7 +623,7 @@ gen_all <span class="fu">=</span> <span class="kw">do</span>
         <span class="dt">Just</span> mnm <span class="ot">-&gt;</span> pandoc_lhs fnm (<span class="st">&quot;Text/&quot;</span><span class="fu">&lt;&gt;</span>fnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.lhs&quot;</span>) (<span class="st">&quot;docs/&quot;</span><span class="fu">&lt;&gt;</span>mnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.html&quot;</span>)
         <span class="dt">Nothing</span>  <span class="ot">-&gt;</span> pandoc_lhs fnm (<span class="st">&quot;examples/&quot;</span><span class="fu">&lt;&gt;</span>fnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.lhs&quot;</span>) (<span class="st">&quot;docs/&quot;</span><span class="fu">&lt;&gt;</span>fnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.html&quot;</span>)</code></pre></div>
 </div>
-<p>See <a href="re-pp.html">examples/re-pp.lhs</a></p>
+<p>See <a href="re-prep.html">examples/re-prep.lhs</a></p>
 <h2 id="example-parsing-re-macros">Example: parsing RE macros</h2>
 <p>The regex RE macros are parsed with code that looks similar to this.</p>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="co">-- | expand the @{..} macos in the argument string using the given</span>
@@ -734,7 +734,7 @@ scan rex <span class="fu">=</span> grepScript
 </div>
 <p>See <a href="re-include.html">examples/re-include.lhs</a></p>
 <h2 id="example-literate-preprocessor">Example: literate preprocessor</h2>
-<p>The preprocessor that converts this literate Haskell program into a web page and a test suite that makes plenty of use of regex is in <a href="re-pp.html">examples/re-pp.lhs</a>.</p>
+<p>The preprocessor that converts this literate Haskell program into a web page and a test suite that makes plenty of use of regex is in <a href="re-prep.html">examples/re-prep.lhs</a>.</p>
 <h2 id="example-gen-modules">Example: gen-modules</h2>
 <p>The many TDFA and PCRE API modules (but <em>not</em> the <code>RE</code> modules) are all generated from <code>Text.RE.TDFA.ByteString.Lazy</code> with <a href="re-gen-modules.html">examples/re-gen-modules.lhs</a> which is also an application of regex.</p>
 </div>

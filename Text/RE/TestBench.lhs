@@ -31,6 +31,7 @@ module Text.RE.TestBench
   ) where
 
 import           Data.Array
+import           Data.Char
 import qualified Data.HashMap.Lazy              as HML
 import qualified Data.List                      as L
 import           Data.Maybe
@@ -201,13 +202,13 @@ dumpMacroTable, formatMacroTable, formatMacroSummary, formatMacroSources, format
 \begin{code}
 dumpMacroTable :: String -> RegexType -> MacroEnv -> IO ()
 dumpMacroTable lab rty m_env = do
-    writeFile (fp_t "tables") $ formatMacroTable   rty              m_env ; print $ fp_t "tables"
-    writeFile (fp_s "tables") $ formatMacroSources rty ExclCaptures m_env ; print $ fp_s "tables"
-    writeFile (fp_t "docs"  ) $ formatMacroTable   rty              m_env ; print $ fp_t "docs"
-    writeFile (fp_s "docs"  ) $ formatMacroSources rty ExclCaptures m_env ; print $ fp_s "docs"
+    writeFile fp_t $ formatMacroTable   rty              m_env
+    writeFile fp_s $ formatMacroSources rty ExclCaptures m_env
   where
-    fp_t dir = dir ++ "/" ++ lab ++ "-" ++ show rty ++ ".txt"
-    fp_s dir = dir ++ "/" ++ lab ++ "-" ++ show rty ++ ".txt"
+    fp_t  = "docs/" ++ rty_s ++ "-" ++ lab ++ ".txt"
+    fp_s  = "docs/" ++ rty_s ++ "-" ++ lab ++ "-src.txt"
+
+    rty_s = map toLower $ show rty
 \end{code}
 
 \begin{code}

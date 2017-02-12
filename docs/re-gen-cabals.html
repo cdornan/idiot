@@ -87,7 +87,7 @@ main <span class="fu">=</span> <span class="kw">do</span>
   <span class="kw">case</span> as <span class="kw">of</span>
     []        <span class="ot">-&gt;</span> test
     [<span class="st">&quot;test&quot;</span>]  <span class="ot">-&gt;</span> test
-    [<span class="st">&quot;gen&quot;</span>]   <span class="ot">-&gt;</span> gen  <span class="st">&quot;lib/regex-master.cabal&quot;</span> <span class="st">&quot;regex.cabal&quot;</span>
+    [<span class="st">&quot;gen&quot;</span>]   <span class="ot">-&gt;</span> gen  <span class="st">&quot;lib/cabal-masters/regex.cabal&quot;</span> <span class="st">&quot;regex.cabal&quot;</span>
     _         <span class="ot">-&gt;</span> <span class="kw">do</span>
       hPutStrLn stderr <span class="fu">$</span> <span class="st">&quot;usage: &quot;</span> <span class="fu">++</span> pn <span class="fu">++</span> <span class="st">&quot; [test|gen]&quot;</span>
       exitWith <span class="fu">$</span> <span class="dt">ExitFailure</span> <span class="dv">1</span>
@@ -95,7 +95,7 @@ main <span class="fu">=</span> <span class="kw">do</span>
 <span class="ot">test ::</span> <span class="dt">IO</span> ()
 test <span class="fu">=</span> <span class="kw">do</span>
   createDirectoryIfMissing <span class="dt">False</span> <span class="st">&quot;tmp&quot;</span>
-  gen <span class="st">&quot;lib/regex-master.cabal&quot;</span> <span class="st">&quot;tmp/regex.cabal&quot;</span>
+  gen <span class="st">&quot;lib/cabal-masters/regex.cabal&quot;</span> <span class="st">&quot;tmp/regex.cabal&quot;</span>
   ok <span class="ot">&lt;-</span> cmp <span class="st">&quot;tmp/regex.cabal&quot;</span> <span class="st">&quot;regex.cabal&quot;</span>
   <span class="kw">case</span> ok <span class="kw">of</span>
     <span class="dt">True</span>  <span class="ot">-&gt;</span> return ()

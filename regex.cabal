@@ -308,10 +308,10 @@ Test-Suite re-nginx-log-processor-test
 
 
 
-Executable re-pp
+Executable re-prep
     Hs-Source-Dirs:     examples
 
-    Main-Is:            re-pp.lhs
+    Main-Is:            re-prep.lhs
 
     Default-Language:   Haskell2010
     GHC-Options:
@@ -333,11 +333,11 @@ Executable re-pp
       , text                 >= 1.2.0.6
 
 
-Test-Suite re-pp-test
+Test-Suite re-prep-test
     type:               exitcode-stdio-1.0
     Hs-Source-Dirs:     examples
 
-    Main-Is:            re-pp.lhs
+    Main-Is:            re-prep.lhs
 
     Default-Language:   Haskell2010
     GHC-Options:

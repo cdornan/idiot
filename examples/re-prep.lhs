@@ -183,7 +183,7 @@ gen_all = do
     pd "re-gen-modules"
     pd "re-include"
     pd "re-nginx-log-processor"
-    pd "re-pp"
+    pd "re-prep"
     pd "re-tests"
     pd "TestKit"
     pd "RE/Capture"
@@ -448,13 +448,13 @@ readme
 \begin{code}
 readme :: IO ()
 readme = do
-  prep_page   MM_hackage "lib/readme-master.md" "doc/README.md"
-  prep_page   MM_github  "lib/readme-master.md" "README.md"
-  prep_page   MM_github  "lib/tables-master.md" "README.md"
-  pandoc_page MM_pandoc  "lib/readme-master.md" "index"
-  pandoc_page MM_pandoc  "lib/direct-master.md" "directory"
-  pandoc_page MM_pandoc  "lib/builds-master.md" "build-status"
-  pandoc_page MM_pandoc  "lib/tables-master.md" "macros"
+  prep_page   MM_hackage "lib/md/readme.md"    "doc/README.md"
+  prep_page   MM_github  "lib/md/readme.md"    "README.md"
+  prep_page   MM_github  "lib/md/macros.md"    "README.md"
+  pandoc_page MM_pandoc  "lib/md/readme.md"    "index"
+  pandoc_page MM_pandoc  "lib/md/directory.md" "directory"
+  pandoc_page MM_pandoc  "lib/md/builds.md"    "build-status"
+  pandoc_page MM_pandoc  "lib/md/macros.md"    "macros"
 \end{code}
 
 \begin{code}

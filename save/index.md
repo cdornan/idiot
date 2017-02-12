@@ -114,7 +114,7 @@ in [lib/regex-master.cabal](https://github.com/iconnect/regex/blob/master/lib/re
 ### The Library Tests [examples/re-tests.lhs](re-tests.html)
 contains various test suites for exercising various components of the library.
 
-### The Tutorial Preprocessor [examples/re-pp.lhs](re-pp.html)
+### The Tutorial Preprocessor [examples/re-prep.lhs](re-prep.html)
 contains the tool we use to generate the tutorial HTML and its derived test suite.
 
 ### The API Module Generator [examples/re-gen-modules.lhs](re-gen-modules.html)

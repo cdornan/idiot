@@ -20,6 +20,6 @@ The main tables have the following columns.
 
 **These tables best viewed raw.**
 
-  * The [Prelude macros for PCRE](http://regex.uk/prelude-PCRE.md) (and the [macro sources](http://regex.uk/prelude-PCRE.txt))
-  * The [Prelude macros for TDFA](http://regex.uk/prelude-TDFA.md) (and the [macro sources](http://regex.uk/prelude-TDFA.txt))
-  * The [nginx-log-processor macros (for PCRE)](nginx-log-processor-PCRE.txt) ([and the macro sources](nginx-log-processor-PCRE.txt))
+  * The [Prelude macros for PCRE](pcre-macros.txt) (and the [macro sources](pcre-macros-src.txt))
+  * The [Prelude macros for TDFA](tdfa-macros.txt) (and the [macro sources](tdfa-macros-src.txt))
+  * The [nginx-log-processor macros (for PCRE)](pcre-nginx-log-processor.txt) ([and the macro sources](pcre-nginx-log-processor-src.txt))

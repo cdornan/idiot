@@ -156,10 +156,10 @@ Library
 
 %build-depends regex array base base-compat bytestring directory regex-base regex-tdfa shelly text time time-locale-compat transformers unordered-containers
 
-%test-exe re-pp
+%test-exe re-prep
     Hs-Source-Dirs:     examples
 
-    Main-Is:            re-pp.lhs
+    Main-Is:            re-prep.lhs
 
     Default-Language:   Haskell2010
     GHC-Options:

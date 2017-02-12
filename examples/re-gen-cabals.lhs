@@ -32,7 +32,7 @@ main = do
   case as of
     []        -> test
     ["test"]  -> test
-    ["gen"]   -> gen  "lib/regex-master.cabal" "regex.cabal"
+    ["gen"]   -> gen  "lib/cabal-masters/regex.cabal" "regex.cabal"
     _         -> do
       hPutStrLn stderr $ "usage: " ++ pn ++ " [test|gen]"
       exitWith $ ExitFailure 1
@@ -40,7 +40,7 @@ main = do
 test :: IO ()
 test = do
   createDirectoryIfMissing False "tmp"
-  gen "lib/regex-master.cabal" "tmp/regex.cabal"
+  gen "lib/cabal-masters/regex.cabal" "tmp/regex.cabal"
   ok <- cmp "tmp/regex.cabal" "regex.cabal"
   case ok of
     True  -> return ()

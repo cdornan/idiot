@@ -121,7 +121,7 @@ prelude_tests <span class="fu">=</span> testGroup <span class="st">&quot;Prelude
   <span class="kw">where</span>
     tc rty m_env <span class="fu">=</span>
       testCase (show rty) <span class="fu">$</span> <span class="kw">do</span>
-        dumpMacroTable <span class="st">&quot;prelude&quot;</span> rty m_env
+        dumpMacroTable <span class="st">&quot;macros&quot;</span> rty m_env
         assertBool <span class="st">&quot;testMacroEnv&quot;</span> <span class="fu">=&lt;&lt;</span> testMacroEnv <span class="st">&quot;prelude&quot;</span> rty m_env
 
 str,<span class="ot"> str&#39; ::</span> <span class="dt">String</span>
