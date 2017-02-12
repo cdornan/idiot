@@ -211,9 +211,12 @@ gen_all = do
     putStrLn ">> examples/re-tutorial.lhs"
     readme
   where
-    pd fnm = case captureTextMaybe [cp|mnm|] $ fnm TT.?=~ [re|^RE/(Tools/|Internal/)?${mnm}(@{%id})|] of
-        Just mnm -> pandoc_lhs fnm ("Text/"<>fnm<>".lhs") ("docs/"<>mnm<>".html")
-        Nothing  -> pandoc_lhs fnm ("examples/"<>fnm<>".lhs") ("docs/"<>fnm<>".html")
+    pd fnm = case (captureTextMaybe [cp|fdr|] mtch,captureTextMaybe [cp|mnm|] mtch) of
+        (Nothing ,Just mnm) -> pandoc_lhs ("Text.RE."          <>mnm) ("Text/"    <>fnm<>".lhs") ("docs/"<>mnm<>".html")
+        (Just fdr,Just mnm) -> pandoc_lhs ("Text.RE."<>fdr<>"."<>mnm) ("Text/"    <>fnm<>".lhs") ("docs/"<>mnm<>".html")
+        _                   -> pandoc_lhs ("examples/"<>fnm<>".lhs" ) ("examples/"<>fnm<>".lhs") ("docs/"<>fnm<>".html")
+      where
+        mtch = fnm TT.?=~ [re|^RE/(${fdr}(Tools|Internal)/)?${mnm}(@{%id})|]
 \end{code}
 
 
@@ -469,7 +472,8 @@ pandoc_page mmd in_fp pge = do
     SH.shelly $ SH.verbosely $
       SH.run "pandoc"
         [ "-f", "markdown+grid_tables"
-        , "-t", "html"
+        , "-t", "html5"
+        , "-T", "regex"
         , "-s"
         , "-H", "lib/favicons.html"
         , "-B", "tmp/page_pre_body.html"
@@ -545,17 +549,16 @@ mk_pre_body_html pge hdgs = hdr <> LBS.concat (map sec hdgs) <> ftr
     hdr = [here|    <div id="container">
     <div id="nav">
       <div id="header">
-        <a href="http://regex.uk" style="Arial, 'Helvetica Neue', Helvetica, sans-serif;" id="logo" name="logo">[<span style='color:red;'>re</span>|${<span style='color:red;'>gex</span>}(.*)|<span/>]</a>
+        |] <> logo <> [here|
       </div>
-      <div class="section" id="sections">
+      <div class="section" id="pages">
         <ul class="section-nav">
 |] <> LBS.unlines
         [ pg_nav "index"        "Home"
         , pg_nav "directory"    "Directory"
         , pg_nav "build-status" "Build Status"
         , pg_nav "macros"       "Macro Tables"
-        ] <> [here|        </li>
-        </ul>
+        ] <> [here|        </ul>
       </div>
       <div class="section" id="sections">
         <ul class="section-nav">
@@ -577,15 +580,15 @@ mk_pre_body_html pge hdgs = hdr <> LBS.concat (map sec hdgs) <> ftr
       </div>
       <div class="extra section" id="travis">
         <a href="http://travis-ci.org/iconnect/regex">
-          <img src="https://travis-ci.org/iconnect/regex.svg?branch=master">
+          <img alt="travis-ci" src="https://travis-ci.org/iconnect/regex.svg?branch=master"/>
           </a>
       </div>
       <div class="extra section twitter">
-        <iframe allowtransparency="true" frameborder="0" scrolling="no" style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;show_count=false">
+        <iframe style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;show_count=false">
         </iframe>
       </div>
       <div class="extra section twitter">
-        <iframe allowtransparency="true" frameborder="0" scrolling="no" style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=cdornan&amp;show_count=false">
+        <iframe style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=cdornan&amp;show_count=false">
         </iframe>
       </div>
     </div>
@@ -599,7 +602,6 @@ pst_body_html = [here|      </div>
 \end{code}
 
 
-
 pandoc
 ------
 
@@ -609,13 +611,14 @@ pandoc_lhs title in_file = pandoc_lhs' title in_file in_file
 
 pandoc_lhs' :: T.Text -> T.Text -> T.Text -> T.Text -> IO ()
 pandoc_lhs' title repo_path in_file out_file = do
-  writeFile "tmp/bc.html" bc
-  writeFile "tmp/ft.html" ft
+  LBS.writeFile "tmp/bc.html" bc
+  LBS.writeFile "tmp/ft.html" ft
   fmap (const ()) $
     SH.shelly $ SH.verbosely $
       SH.run "pandoc"
         [ "-f", "markdown+lhs+grid_tables"
-        , "-t", "html"
+        , "-t", "html5"
+        , "-T", "regex"
         , "-s"
         , "-H", "lib/favicons.html"
         , "-B", "tmp/bc.html"
@@ -626,24 +629,37 @@ pandoc_lhs' title repo_path in_file out_file = do
         , in_file
         ]
   where
-    bc = concat
-      [ "<ol class='breadcrumb'><li><a href='.' title='Home'>"
-      , "Home</a></li> &gt; <a title='source file' href='"
-      , repo_url
-      , "'>"
-      , T.unpack title
-      , "</a></ol>"
+    bc = LBS.unlines
+      [ "<div class='logodiv'>"
+      , "  " <> logo
+      , "</div>"
+      , "<div class='bcdiv'>"
+      , "  <ol class='breadcrumb'>"
+      , "    <li><a href='.' title='Home'>Home</a></li>" -- &raquo;
+      , "    <li><a title='source file' href='" <>
+              repo_url <> "'>" <> (LBS.pack $ T.unpack title) <> "</a></li>"
+      , "</ol>"
+      , "</div>"
       , "<div class='content'>"
       ]
 
-    ft = concat
+    ft = LBS.concat
       [ "</div>"
       ]
 
-    repo_url = concat
+    repo_url = LBS.concat
       [ "https://github.com/iconnect/regex/blob/master/"
-      , T.unpack repo_path
+      , LBS.pack $ T.unpack repo_path
       ]
+\end{code}
+
+
+logo
+----
+
+\begin{code}
+logo :: LBS.ByteString
+logo = [here|<a href="http://regex.uk" style="Arial, 'Helvetica Neue', Helvetica, sans-serif;" id="logo">[<span style='color:red;'>re</span>|${<span style='color:red;'>gex</span>}(.*)|<span></span>]</a>|]
 \end{code}
 
 

@@ -1,10 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
-  <meta name="generator" content="pandoc" />
-  <title></title>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>regex – </title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 div.sourceCode { overflow-x: auto; }
@@ -43,17 +43,29 @@ code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Ann
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
   </style>
-  <link rel="stylesheet" href="lib/styles.css" type="text/css" />
-  <link rel="stylesheet" href="lib/bs.css" type="text/css" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-  <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="lib/styles.css">
+  <link rel="stylesheet" href="lib/bs.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32"/>
+  <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16"/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="mask-icon" href="/safari-pinned-tab.svg"/>
+  <meta name="theme-color" content="#ffffff"/>
 </head>
 <body>
-<ol class='breadcrumb'><li><a href='.' title='Home'>Home</a></li> &gt; <a title='source file' href='https://github.com/iconnect/regex/blob/master/examples/re-prep.lhs'>re-prep</a></ol><div class='content'>
+<div class='logodiv'>
+  <a href="http://regex.uk" style="Arial, 'Helvetica Neue', Helvetica, sans-serif;" id="logo">[<span style='color:red;'>re</span>|${<span style='color:red;'>gex</span>}(.*)|<span></span>]</a>
+</div>
+<div class='bcdiv'>
+  <ol class='breadcrumb'>
+    <li><a href='.' title='Home'>Home</a></li>
+    <li><a title='source file' href='https://github.com/iconnect/regex/blob/master/examples/re-prep.lhs'>examples/re-prep.lhs</a></li>
+</ol>
+</div>
+<div class='content'>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE NoImplicitPrelude          #-}</span>
 <span class="ot">{-# LANGUAGE RecordWildCards            #-}</span>
 <span class="ot">{-# LANGUAGE GeneralizedNewtypeDeriving #-}</span>
@@ -228,9 +240,12 @@ gen_all <span class="fu">=</span> <span class="kw">do</span>
     putStrLn <span class="st">&quot;&gt;&gt; examples/re-tutorial.lhs&quot;</span>
     readme
   <span class="kw">where</span>
-    pd fnm <span class="fu">=</span> <span class="kw">case</span> captureTextMaybe [cp|mnm|] <span class="fu">$</span> fnm <span class="fu">TT.?=~</span> [re|^RE/(Tools/|Internal/)?${mnm}(@{%id})|] <span class="kw">of</span>
-        <span class="dt">Just</span> mnm <span class="ot">-&gt;</span> pandoc_lhs fnm (<span class="st">&quot;Text/&quot;</span><span class="fu">&lt;&gt;</span>fnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.lhs&quot;</span>) (<span class="st">&quot;docs/&quot;</span><span class="fu">&lt;&gt;</span>mnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.html&quot;</span>)
-        <span class="dt">Nothing</span>  <span class="ot">-&gt;</span> pandoc_lhs fnm (<span class="st">&quot;examples/&quot;</span><span class="fu">&lt;&gt;</span>fnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.lhs&quot;</span>) (<span class="st">&quot;docs/&quot;</span><span class="fu">&lt;&gt;</span>fnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.html&quot;</span>)</code></pre></div>
+    pd fnm <span class="fu">=</span> <span class="kw">case</span> (captureTextMaybe [cp|fdr|] mtch,captureTextMaybe [cp|mnm|] mtch) <span class="kw">of</span>
+        (<span class="dt">Nothing</span> ,<span class="dt">Just</span> mnm) <span class="ot">-&gt;</span> pandoc_lhs (<span class="st">&quot;Text.RE.&quot;</span>          <span class="fu">&lt;&gt;</span>mnm) (<span class="st">&quot;Text/&quot;</span>    <span class="fu">&lt;&gt;</span>fnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.lhs&quot;</span>) (<span class="st">&quot;docs/&quot;</span><span class="fu">&lt;&gt;</span>mnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.html&quot;</span>)
+        (<span class="dt">Just</span> fdr,<span class="dt">Just</span> mnm) <span class="ot">-&gt;</span> pandoc_lhs (<span class="st">&quot;Text.RE.&quot;</span><span class="fu">&lt;&gt;</span>fdr<span class="fu">&lt;&gt;</span><span class="st">&quot;.&quot;</span><span class="fu">&lt;&gt;</span>mnm) (<span class="st">&quot;Text/&quot;</span>    <span class="fu">&lt;&gt;</span>fnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.lhs&quot;</span>) (<span class="st">&quot;docs/&quot;</span><span class="fu">&lt;&gt;</span>mnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.html&quot;</span>)
+        _                   <span class="ot">-&gt;</span> pandoc_lhs (<span class="st">&quot;examples/&quot;</span><span class="fu">&lt;&gt;</span>fnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.lhs&quot;</span> ) (<span class="st">&quot;examples/&quot;</span><span class="fu">&lt;&gt;</span>fnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.lhs&quot;</span>) (<span class="st">&quot;docs/&quot;</span><span class="fu">&lt;&gt;</span>fnm<span class="fu">&lt;&gt;</span><span class="st">&quot;.html&quot;</span>)
+      <span class="kw">where</span>
+        mtch <span class="fu">=</span> fnm <span class="fu">TT.?=~</span> [re|^RE/(${fdr}(Tools|Internal)/)?${mnm}(@{%id})|]</code></pre></div>
 <h2 id="generating-the-tutorial">Generating the Tutorial</h2>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">includeDoc ::</span> <span class="dt">LineNo</span>
            <span class="ot">-&gt;</span> <span class="dt">Match</span> <span class="dt">LBS.ByteString</span>
@@ -418,7 +433,8 @@ pandoc_page mmd in_fp pge <span class="fu">=</span> <span class="kw">do</span>
     SH.shelly <span class="fu">$</span> SH.verbosely <span class="fu">$</span>
       SH.run <span class="st">&quot;pandoc&quot;</span>
         [ <span class="st">&quot;-f&quot;</span>, <span class="st">&quot;markdown+grid_tables&quot;</span>
-        , <span class="st">&quot;-t&quot;</span>, <span class="st">&quot;html&quot;</span>
+        , <span class="st">&quot;-t&quot;</span>, <span class="st">&quot;html5&quot;</span>
+        , <span class="st">&quot;-T&quot;</span>, <span class="st">&quot;regex&quot;</span>
         , <span class="st">&quot;-s&quot;</span>
         , <span class="st">&quot;-H&quot;</span>, <span class="st">&quot;lib/favicons.html&quot;</span>
         , <span class="st">&quot;-B&quot;</span>, <span class="st">&quot;tmp/page_pre_body.html&quot;</span>
@@ -494,17 +510,16 @@ mk_pre_body_html pge hdgs <span class="fu">=</span> hdr <span class="fu">&lt;&gt
     hdr <span class="fu">=</span> [here|    &lt;div id=&quot;container&quot;&gt;
     &lt;div id=&quot;nav&quot;&gt;
       &lt;div id=&quot;header&quot;&gt;
-        &lt;a href=&quot;http://regex.uk&quot; style=&quot;Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;&quot; id=&quot;logo&quot; name=&quot;logo&quot;&gt;[&lt;span style=&#39;color:red;&#39;&gt;re&lt;/span&gt;|${&lt;span style=&#39;color:red;&#39;&gt;gex&lt;/span&gt;}(.*)|&lt;span/&gt;]&lt;/a&gt;
+        |] <span class="fu">&lt;&gt;</span> logo <span class="fu">&lt;&gt;</span> [here|
       &lt;/div&gt;
-      &lt;div class=&quot;section&quot; id=&quot;sections&quot;&gt;
+      &lt;div class=&quot;section&quot; id=&quot;pages&quot;&gt;
         &lt;ul class=&quot;section-nav&quot;&gt;
 |] <span class="fu">&lt;&gt;</span> LBS.unlines
         [ pg_nav <span class="st">&quot;index&quot;</span>        <span class="st">&quot;Home&quot;</span>
         , pg_nav <span class="st">&quot;directory&quot;</span>    <span class="st">&quot;Directory&quot;</span>
         , pg_nav <span class="st">&quot;build-status&quot;</span> <span class="st">&quot;Build Status&quot;</span>
         , pg_nav <span class="st">&quot;macros&quot;</span>       <span class="st">&quot;Macro Tables&quot;</span>
-        ] <span class="fu">&lt;&gt;</span> [here|        &lt;/li&gt;
-        &lt;/ul&gt;
+        ] <span class="fu">&lt;&gt;</span> [here|        &lt;/ul&gt;
       &lt;/div&gt;
       &lt;div class=&quot;section&quot; id=&quot;sections&quot;&gt;
         &lt;ul class=&quot;section-nav&quot;&gt;
@@ -526,15 +541,15 @@ mk_pre_body_html pge hdgs <span class="fu">=</span> hdr <span class="fu">&lt;&gt
       &lt;/div&gt;
       &lt;div class=&quot;extra section&quot; id=&quot;travis&quot;&gt;
         &lt;a href=&quot;http://travis-ci.org/iconnect/regex&quot;&gt;
-          &lt;img src=&quot;https://travis-ci.org/iconnect/regex.svg?branch=master&quot;&gt;
+          &lt;img alt=&quot;travis-ci&quot; src=&quot;https://travis-ci.org/iconnect/regex.svg?branch=master&quot;/&gt;
           &lt;/a&gt;
       &lt;/div&gt;
       &lt;div class=&quot;extra section twitter&quot;&gt;
-        &lt;iframe allowtransparency=&quot;true&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;width:162px; height:20px;&quot; src=&quot;https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;amp;show_count=false&quot;&gt;
+        &lt;iframe style=&quot;width:162px; height:20px;&quot; src=&quot;https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;amp;show_count=false&quot;&gt;
         &lt;/iframe&gt;
       &lt;/div&gt;
       &lt;div class=&quot;extra section twitter&quot;&gt;
-        &lt;iframe allowtransparency=&quot;true&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;width:162px; height:20px;&quot; src=&quot;https://platform.twitter.com/widgets/follow_button.html?screen_name=cdornan&amp;amp;show_count=false&quot;&gt;
+        &lt;iframe style=&quot;width:162px; height:20px;&quot; src=&quot;https://platform.twitter.com/widgets/follow_button.html?screen_name=cdornan&amp;amp;show_count=false&quot;&gt;
         &lt;/iframe&gt;
       &lt;/div&gt;
     &lt;/div&gt;
@@ -551,13 +566,14 @@ pandoc_lhs title in_file <span class="fu">=</span> pandoc_lhs&#39; title in_file
 
 <span class="ot">pandoc_lhs&#39; ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
 pandoc_lhs&#39; title repo_path in_file out_file <span class="fu">=</span> <span class="kw">do</span>
-  writeFile <span class="st">&quot;tmp/bc.html&quot;</span> bc
-  writeFile <span class="st">&quot;tmp/ft.html&quot;</span> ft
+  LBS.writeFile <span class="st">&quot;tmp/bc.html&quot;</span> bc
+  LBS.writeFile <span class="st">&quot;tmp/ft.html&quot;</span> ft
   fmap (const ()) <span class="fu">$</span>
     SH.shelly <span class="fu">$</span> SH.verbosely <span class="fu">$</span>
       SH.run <span class="st">&quot;pandoc&quot;</span>
         [ <span class="st">&quot;-f&quot;</span>, <span class="st">&quot;markdown+lhs+grid_tables&quot;</span>
-        , <span class="st">&quot;-t&quot;</span>, <span class="st">&quot;html&quot;</span>
+        , <span class="st">&quot;-t&quot;</span>, <span class="st">&quot;html5&quot;</span>
+        , <span class="st">&quot;-T&quot;</span>, <span class="st">&quot;regex&quot;</span>
         , <span class="st">&quot;-s&quot;</span>
         , <span class="st">&quot;-H&quot;</span>, <span class="st">&quot;lib/favicons.html&quot;</span>
         , <span class="st">&quot;-B&quot;</span>, <span class="st">&quot;tmp/bc.html&quot;</span>
@@ -568,24 +584,31 @@ pandoc_lhs&#39; title repo_path in_file out_file <span class="fu">=</span> <span
         , in_file
         ]
   <span class="kw">where</span>
-    bc <span class="fu">=</span> concat
-      [ <span class="st">&quot;&lt;ol class=&#39;breadcrumb&#39;&gt;&lt;li&gt;&lt;a href=&#39;.&#39; title=&#39;Home&#39;&gt;&quot;</span>
-      , <span class="st">&quot;Home&lt;/a&gt;&lt;/li&gt; &amp;gt; &lt;a title=&#39;source file&#39; href=&#39;&quot;</span>
-      , repo_url
-      , <span class="st">&quot;&#39;&gt;&quot;</span>
-      , T.unpack title
-      , <span class="st">&quot;&lt;/a&gt;&lt;/ol&gt;&quot;</span>
+    bc <span class="fu">=</span> LBS.unlines
+      [ <span class="st">&quot;&lt;div class=&#39;logodiv&#39;&gt;&quot;</span>
+      , <span class="st">&quot;  &quot;</span> <span class="fu">&lt;&gt;</span> logo
+      , <span class="st">&quot;&lt;/div&gt;&quot;</span>
+      , <span class="st">&quot;&lt;div class=&#39;bcdiv&#39;&gt;&quot;</span>
+      , <span class="st">&quot;  &lt;ol class=&#39;breadcrumb&#39;&gt;&quot;</span>
+      , <span class="st">&quot;    &lt;li&gt;&lt;a href=&#39;.&#39; title=&#39;Home&#39;&gt;Home&lt;/a&gt;&lt;/li&gt;&quot;</span> <span class="co">-- &amp;raquo;</span>
+      , <span class="st">&quot;    &lt;li&gt;&lt;a title=&#39;source file&#39; href=&#39;&quot;</span> <span class="fu">&lt;&gt;</span>
+              repo_url <span class="fu">&lt;&gt;</span> <span class="st">&quot;&#39;&gt;&quot;</span> <span class="fu">&lt;&gt;</span> (LBS.pack <span class="fu">$</span> T.unpack title) <span class="fu">&lt;&gt;</span> <span class="st">&quot;&lt;/a&gt;&lt;/li&gt;&quot;</span>
+      , <span class="st">&quot;&lt;/ol&gt;&quot;</span>
+      , <span class="st">&quot;&lt;/div&gt;&quot;</span>
       , <span class="st">&quot;&lt;div class=&#39;content&#39;&gt;&quot;</span>
       ]
 
-    ft <span class="fu">=</span> concat
+    ft <span class="fu">=</span> LBS.concat
       [ <span class="st">&quot;&lt;/div&gt;&quot;</span>
       ]
 
-    repo_url <span class="fu">=</span> concat
+    repo_url <span class="fu">=</span> LBS.concat
       [ <span class="st">&quot;https://github.com/iconnect/regex/blob/master/&quot;</span>
-      , T.unpack repo_path
+      , LBS.pack <span class="fu">$</span> T.unpack repo_path
       ]</code></pre></div>
+<h2 id="logo">logo</h2>
+<div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">logo ::</span> <span class="dt">LBS.ByteString</span>
+logo <span class="fu">=</span> [here|&lt;a href=&quot;http://regex.uk&quot; style=&quot;Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;&quot; id=&quot;logo&quot;&gt;[&lt;span style=&#39;color:red;&#39;&gt;re&lt;/span&gt;|${&lt;span style=&#39;color:red;&#39;&gt;gex&lt;/span&gt;}(.*)|&lt;span&gt;&lt;/span&gt;]&lt;/a&gt;|]</code></pre></div>
 <h2 id="testing">testing</h2>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">test ::</span> <span class="dt">IO</span> ()
 test <span class="fu">=</span> <span class="kw">do</span>
