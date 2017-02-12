@@ -453,7 +453,6 @@ readme :: IO ()
 readme = do
   prep_page   MM_hackage "lib/md/readme.md"    "doc/README.md"
   prep_page   MM_github  "lib/md/readme.md"    "README.md"
-  prep_page   MM_github  "lib/md/macros.md"    "README.md"
   pandoc_page MM_pandoc  "lib/md/readme.md"    "index"
   pandoc_page MM_pandoc  "lib/md/directory.md" "directory"
   pandoc_page MM_pandoc  "lib/md/builds.md"    "build-status"
