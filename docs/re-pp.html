@@ -400,17 +400,18 @@ badges <span class="fu">=</span> <span class="kw">do</span>
 <h2 id="readme">readme</h2>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">readme ::</span> <span class="dt">IO</span> ()
 readme <span class="fu">=</span> <span class="kw">do</span>
-  prep_page   <span class="dt">MM_github</span>  <span class="st">&quot;lib/readme-master.md&quot;</span> <span class="st">&quot;README.md&quot;</span>
   prep_page   <span class="dt">MM_hackage</span> <span class="st">&quot;lib/readme-master.md&quot;</span> <span class="st">&quot;doc/README.md&quot;</span>
-  pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/readme-master.md&quot;</span> <span class="st">&quot;docs/index.html&quot;</span>
-  pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/builds-master.md&quot;</span> <span class="st">&quot;docs/build-status.html&quot;</span>
-  prep_page   <span class="dt">MM_github</span>  <span class="st">&quot;lib/tables-master.md&quot;</span> <span class="st">&quot;tables/README.md&quot;</span>
-  pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/tables-master.md&quot;</span> <span class="st">&quot;docs/macros.html&quot;</span></code></pre></div>
+  prep_page   <span class="dt">MM_github</span>  <span class="st">&quot;lib/readme-master.md&quot;</span> <span class="st">&quot;README.md&quot;</span>
+  prep_page   <span class="dt">MM_github</span>  <span class="st">&quot;lib/tables-master.md&quot;</span> <span class="st">&quot;README.md&quot;</span>
+  pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/readme-master.md&quot;</span> <span class="st">&quot;index&quot;</span>
+  pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/direct-master.md&quot;</span> <span class="st">&quot;directory&quot;</span>
+  pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/builds-master.md&quot;</span> <span class="st">&quot;build-status&quot;</span>
+  pandoc_page <span class="dt">MM_pandoc</span>  <span class="st">&quot;lib/tables-master.md&quot;</span> <span class="st">&quot;macros&quot;</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">pandoc_page ::</span> <span class="dt">MarkdownMode</span> <span class="ot">-&gt;</span> FilePath <span class="ot">-&gt;</span> FilePath <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
-pandoc_page mmd in_fp out_fp <span class="fu">=</span> <span class="kw">do</span>
+pandoc_page mmd in_fp pge <span class="fu">=</span> <span class="kw">do</span>
   mt_lbs <span class="ot">&lt;-</span> LBS.readFile in_fp
   (hdgs,md_lbs) <span class="ot">&lt;-</span> prep_page&#39; mmd mt_lbs
-  LBS.writeFile <span class="st">&quot;tmp/page_pre_body.html&quot;</span> <span class="fu">$</span> mk_pre_body_html hdgs
+  LBS.writeFile <span class="st">&quot;tmp/page_pre_body.html&quot;</span> <span class="fu">$</span> mk_pre_body_html pge hdgs
   LBS.writeFile <span class="st">&quot;tmp/page_pst_body.html&quot;</span>   pst_body_html
   LBS.writeFile <span class="st">&quot;tmp/page.markdown&quot;</span>        md_lbs
   fmap (const ()) <span class="fu">$</span>
@@ -422,8 +423,8 @@ pandoc_page mmd in_fp out_fp <span class="fu">=</span> <span class="kw">do</span
         , <span class="st">&quot;-H&quot;</span>, <span class="st">&quot;lib/favicons.html&quot;</span>
         , <span class="st">&quot;-B&quot;</span>, <span class="st">&quot;tmp/page_pre_body.html&quot;</span>
         , <span class="st">&quot;-A&quot;</span>, <span class="st">&quot;tmp/page_pst_body.html&quot;</span>
-        , <span class="st">&quot;-c&quot;</span>, <span class="st">&quot;lib/du.css&quot;</span>
-        , <span class="st">&quot;-o&quot;</span>, T.pack out_fp
+        , <span class="st">&quot;-c&quot;</span>, <span class="st">&quot;lib/styles.css&quot;</span>
+        , <span class="st">&quot;-o&quot;</span>, T.pack <span class="fu">$</span> <span class="st">&quot;docs/&quot;</span> <span class="fu">++</span> pge <span class="fu">++</span> <span class="st">&quot;.html&quot;</span>
         , <span class="st">&quot;tmp/page.markdown&quot;</span>
         ]
 
@@ -477,9 +478,19 @@ heading mmd rf _ mtch _ _ <span class="fu">=</span> <span class="kw">do</span>
     ide <span class="fu">=</span> mtch <span class="fu">!$$</span> [cp|ide|]
     ttl <span class="fu">=</span> mtch <span class="fu">!$$</span> [cp|ttl|]
 
-<span class="ot">mk_pre_body_html ::</span> [<span class="dt">Heading</span>] <span class="ot">-&gt;</span> <span class="dt">LBS.ByteString</span>
-mk_pre_body_html hdgs <span class="fu">=</span> hdr <span class="fu">&lt;&gt;</span> LBS.concat (map sec hdgs) <span class="fu">&lt;&gt;</span> ftr
+<span class="ot">mk_pre_body_html ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> [<span class="dt">Heading</span>] <span class="ot">-&gt;</span> <span class="dt">LBS.ByteString</span>
+mk_pre_body_html pge hdgs <span class="fu">=</span> hdr <span class="fu">&lt;&gt;</span> LBS.concat (map sec hdgs) <span class="fu">&lt;&gt;</span> ftr
   <span class="kw">where</span>
+    pg_nav dst_pge title <span class="fu">=</span> LBS.concat
+      [ <span class="st">&quot;          &lt;li class=&#39;h2 &quot;</span>
+      , <span class="kw">if</span> pge<span class="fu">==</span>dst_pge <span class="kw">then</span> <span class="st">&quot;moi&quot;</span> <span class="kw">else</span> <span class="st">&quot;toi&quot;</span>
+      , <span class="st">&quot;&#39;&gt;&lt;a href=&#39;&quot;</span>
+      , LBS.pack dst_pge
+      , <span class="st">&quot;&#39;&gt;&quot;</span>
+      , LBS.pack title
+      , <span class="st">&quot;&lt;/a&gt;&lt;/li&gt;&quot;</span>
+      ]
+
     hdr <span class="fu">=</span> [here|    &lt;div id=&quot;container&quot;&gt;
     &lt;div id=&quot;nav&quot;&gt;
       &lt;div id=&quot;header&quot;&gt;
@@ -487,11 +498,12 @@ mk_pre_body_html hdgs <span class="fu">=</span> hdr <span class="fu">&lt;&gt;</s
       &lt;/div&gt;
       &lt;div class=&quot;section&quot; id=&quot;sections&quot;&gt;
         &lt;ul class=&quot;section-nav&quot;&gt;
-        &lt;li class=&#39;h2&#39;&gt;
-          &lt;a href=&quot;directory&quot;&gt;Directory&lt;/a&gt;
-          &lt;a href=&quot;build-status&quot;&gt;Build Status&lt;/a&gt;
-          &lt;a href=&quot;macros&quot;&gt;Macro Tables&lt;/a&gt;
-        &lt;/li&gt;
+|] <span class="fu">&lt;&gt;</span> LBS.unlines
+        [ pg_nav <span class="st">&quot;index&quot;</span>        <span class="st">&quot;Home&quot;</span>
+        , pg_nav <span class="st">&quot;directory&quot;</span>    <span class="st">&quot;Directory&quot;</span>
+        , pg_nav <span class="st">&quot;build-status&quot;</span> <span class="st">&quot;Build Status&quot;</span>
+        , pg_nav <span class="st">&quot;macros&quot;</span>       <span class="st">&quot;Macro Tables&quot;</span>
+        ] <span class="fu">&lt;&gt;</span> [here|        &lt;/li&gt;
         &lt;/ul&gt;
       &lt;/div&gt;
       &lt;div class=&quot;section&quot; id=&quot;sections&quot;&gt;
@@ -518,11 +530,11 @@ mk_pre_body_html hdgs <span class="fu">=</span> hdr <span class="fu">&lt;&gt;</s
           &lt;/a&gt;
       &lt;/div&gt;
       &lt;div class=&quot;extra section twitter&quot;&gt;
-        &lt;iframe allowtransparency=&quot;true&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;width:162px; height:20px;&quot; src=&quot;https://platform.twitter.com/widgets/follow_button.html?screen_name=cdornan&amp;amp;show_count=false&quot;&gt;
+        &lt;iframe allowtransparency=&quot;true&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;width:162px; height:20px;&quot; src=&quot;https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;amp;show_count=false&quot;&gt;
         &lt;/iframe&gt;
       &lt;/div&gt;
       &lt;div class=&quot;extra section twitter&quot;&gt;
-        &lt;iframe allowtransparency=&quot;true&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;width:162px; height:20px;&quot; src=&quot;https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;amp;show_count=false&quot;&gt;
+        &lt;iframe allowtransparency=&quot;true&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;width:162px; height:20px;&quot; src=&quot;https://platform.twitter.com/widgets/follow_button.html?screen_name=cdornan&amp;amp;show_count=false&quot;&gt;
         &lt;/iframe&gt;
       &lt;/div&gt;
     &lt;/div&gt;

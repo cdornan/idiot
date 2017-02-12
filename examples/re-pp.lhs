@@ -448,20 +448,21 @@ readme
 \begin{code}
 readme :: IO ()
 readme = do
-  prep_page   MM_github  "lib/readme-master.md" "README.md"
   prep_page   MM_hackage "lib/readme-master.md" "doc/README.md"
-  pandoc_page MM_pandoc  "lib/readme-master.md" "docs/index.html"
-  pandoc_page MM_pandoc  "lib/builds-master.md" "docs/build-status.html"
-  prep_page   MM_github  "lib/tables-master.md" "tables/README.md"
-  pandoc_page MM_pandoc  "lib/tables-master.md" "docs/macros.html"
+  prep_page   MM_github  "lib/readme-master.md" "README.md"
+  prep_page   MM_github  "lib/tables-master.md" "README.md"
+  pandoc_page MM_pandoc  "lib/readme-master.md" "index"
+  pandoc_page MM_pandoc  "lib/direct-master.md" "directory"
+  pandoc_page MM_pandoc  "lib/builds-master.md" "build-status"
+  pandoc_page MM_pandoc  "lib/tables-master.md" "macros"
 \end{code}
 
 \begin{code}
 pandoc_page :: MarkdownMode -> FilePath -> FilePath -> IO ()
-pandoc_page mmd in_fp out_fp = do
+pandoc_page mmd in_fp pge = do
   mt_lbs <- LBS.readFile in_fp
   (hdgs,md_lbs) <- prep_page' mmd mt_lbs
-  LBS.writeFile "tmp/page_pre_body.html" $ mk_pre_body_html hdgs
+  LBS.writeFile "tmp/page_pre_body.html" $ mk_pre_body_html pge hdgs
   LBS.writeFile "tmp/page_pst_body.html"   pst_body_html
   LBS.writeFile "tmp/page.markdown"        md_lbs
   fmap (const ()) $
@@ -473,8 +474,8 @@ pandoc_page mmd in_fp out_fp = do
         , "-H", "lib/favicons.html"
         , "-B", "tmp/page_pre_body.html"
         , "-A", "tmp/page_pst_body.html"
-        , "-c", "lib/du.css"
-        , "-o", T.pack out_fp
+        , "-c", "lib/styles.css"
+        , "-o", T.pack $ "docs/" ++ pge ++ ".html"
         , "tmp/page.markdown"
         ]
 
@@ -528,9 +529,19 @@ heading mmd rf _ mtch _ _ = do
     ide = mtch !$$ [cp|ide|]
     ttl = mtch !$$ [cp|ttl|]
 
-mk_pre_body_html :: [Heading] -> LBS.ByteString
-mk_pre_body_html hdgs = hdr <> LBS.concat (map sec hdgs) <> ftr
+mk_pre_body_html :: String -> [Heading] -> LBS.ByteString
+mk_pre_body_html pge hdgs = hdr <> LBS.concat (map sec hdgs) <> ftr
   where
+    pg_nav dst_pge title = LBS.concat
+      [ "          <li class='h2 "
+      , if pge==dst_pge then "moi" else "toi"
+      , "'><a href='"
+      , LBS.pack dst_pge
+      , "'>"
+      , LBS.pack title
+      , "</a></li>"
+      ]
+
     hdr = [here|    <div id="container">
     <div id="nav">
       <div id="header">
@@ -538,11 +549,12 @@ mk_pre_body_html hdgs = hdr <> LBS.concat (map sec hdgs) <> ftr
       </div>
       <div class="section" id="sections">
         <ul class="section-nav">
-        <li class='h2'>
-          <a href="directory">Directory</a>
-          <a href="build-status">Build Status</a>
-          <a href="macros">Macro Tables</a>
-        </li>
+|] <> LBS.unlines
+        [ pg_nav "index"        "Home"
+        , pg_nav "directory"    "Directory"
+        , pg_nav "build-status" "Build Status"
+        , pg_nav "macros"       "Macro Tables"
+        ] <> [here|        </li>
         </ul>
       </div>
       <div class="section" id="sections">
@@ -569,11 +581,11 @@ mk_pre_body_html hdgs = hdr <> LBS.concat (map sec hdgs) <> ftr
           </a>
       </div>
       <div class="extra section twitter">
-        <iframe allowtransparency="true" frameborder="0" scrolling="no" style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=cdornan&amp;show_count=false">
+        <iframe allowtransparency="true" frameborder="0" scrolling="no" style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;show_count=false">
         </iframe>
       </div>
       <div class="extra section twitter">
-        <iframe allowtransparency="true" frameborder="0" scrolling="no" style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;show_count=false">
+        <iframe allowtransparency="true" frameborder="0" scrolling="no" style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=cdornan&amp;show_count=false">
         </iframe>
       </div>
     </div>
