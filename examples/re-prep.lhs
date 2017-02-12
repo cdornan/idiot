@@ -497,6 +497,7 @@ pandoc_page :: Page -> IO ()
 pandoc_page pg = do
   mt_lbs <- LBS.readFile $ page_master_file pg
   (hdgs,md_lbs) <- prep_page' MM_pandoc mt_lbs
+  LBS.writeFile "tmp/metadata.markdown"  $ LBS.unlines ["---","title: "<>page_title pg,"---"]
   LBS.writeFile "tmp/page_pre_body.html" $ mk_pre_body_html pg hdgs
   LBS.writeFile "tmp/page_pst_body.html"   pst_body_html
   LBS.writeFile "tmp/page.markdown"        md_lbs
@@ -512,6 +513,7 @@ pandoc_page pg = do
         , "-A", "tmp/page_pst_body.html"
         , "-c", "lib/styles.css"
         , "-o", T.pack $ page_docs_file pg
+        , "tmp/metadata.markdown"
         , "tmp/page.markdown"
         ]
 
@@ -570,11 +572,11 @@ mk_pre_body_html pg hdgs = hdr <> LBS.concat (map nav [minBound..maxBound]) <> f
   where
     hdr :: LBS.ByteString
     hdr = [here|    <div id="container">
-    <div id="nav">
+    <div id="sidebar">
       <div id="header">
         |] <> logo <> [here|
       </div>
-      <div class="section" id="pages">
+      <div class="widget" id="pages">
         <ul class="page-nav">
 |]
 
@@ -603,22 +605,22 @@ mk_pre_body_html pg hdgs = hdr <> LBS.concat (map nav [minBound..maxBound]) <> f
 
     ftr = [here|          </ul>
       </div>
-      <div class="extra section" id="github">
+      <div class="supplementary widget" id="github">
         <a href="https://github.com/iconnect/regex">Code</a>
       </div>
-      <div class="extra section" id="github-issues">
+      <div class="supplementary widget" id="github-issues">
         <a href="https://github.com/iconnect/regex/issues">Issues</a>
       </div>
-      <div class="extra section" id="travis">
+      <div class="supplementary widget" id="travis">
         <a href="http://travis-ci.org/iconnect/regex">
           <img alt="travis-ci" src="https://travis-ci.org/iconnect/regex.svg?branch=master"/>
           </a>
       </div>
-      <div class="extra section twitter">
+      <div class="supplementary widget twitter">
         <iframe style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;show_count=false">
         </iframe>
       </div>
-      <div class="extra section twitter">
+      <div class="supplementary widget twitter">
         <iframe style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=cdornan&amp;show_count=false">
         </iframe>
       </div>
