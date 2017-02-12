@@ -1,6 +1,4 @@
-<a href='.' title='Home'>Home</a> &gt; **Macro Environment Tables**
-
-%heading#macros Macro Environment Tables
+%heading#macros The Macro Tables
 
 These tables document the macros for the standard environment and for the
 [examples/re-nginx-log-processor](../re-examples/nginx-log-processor.lhs).

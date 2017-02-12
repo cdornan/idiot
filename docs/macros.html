@@ -20,8 +20,8 @@
 <body>
     <div id="container">
     <div id="sidebar">
-      <div id="header">
-        <a href="http://regex.uk" style="Arial, 'Helvetica Neue', Helvetica, sans-serif;" id="logo">[<span style='color:red;'>re</span>|${<span style='color:red;'>gex</span>}(.*)|<span></span>]</a>
+      <div id="corner">
+        <a href="http://regex.uk" style="Arial, 'Helvetica Neue', Helvetica, sans-serif;" id="branding">[<span style='color:red;'>re</span>|${<span style='color:red;'>gex</span>}(.*)|<span></span>]</a>
       </div>
       <div class="widget" id="pages">
         <ul class="page-nav">
@@ -31,7 +31,7 @@
           <li class='pagenav toi'><a href='installation'>Installation</a></li>
           <li class='pagenav toi'><a href='examples'>Examples</a></li>
           <li class='pagenav moi'><a href='macros'>Macro Tables</a></li>
-            <li class='secnav'><a href='#macros'>Macro Environment Tables</a></li>
+            <li class='secnav'><a href='#macros'>The Macro Tables</a></li>
           <li class='pagenav toi'><a href='directory'>Directory</a></li>
           </ul>
       </div>
@@ -41,10 +41,10 @@
       <div class="supplementary widget" id="github-issues">
         <a href="https://github.com/iconnect/regex/issues">Issues</a>
       </div>
-      <div class="supplementary widget" id="travis">
-        <a href="http://travis-ci.org/iconnect/regex">
-          <img alt="travis-ci" src="https://travis-ci.org/iconnect/regex.svg?branch=master"/>
-          </a>
+      <div class="supplementary widget" id="build-status">
+        <a href="build-status">
+          <img src="badges/build-status.svg" alt="build status" />
+        </a>
       </div>
       <div class="supplementary widget twitter">
         <iframe style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;show_count=false">
@@ -59,9 +59,11 @@
 <header>
 <h1 class="title">Macro Tables</h1>
 </header>
-<p><a href='.' title='Home'>Home</a> &gt; <strong>Macro Environment Tables</strong></p>
+<p class="pagebc">
+<a href='.' title='Home'>Home</a> » <strong>Macro Tables</strong>
+</p>
 <h2 id="macros">
-Macro Environment Tables
+The Macro Tables
 </h2>
 <p>These tables document the macros for the standard environment and for the <a href="../re-examples/nginx-log-processor.lhs">examples/re-nginx-log-processor</a>.</p>
 <p>The main tables have the following columns.</p>

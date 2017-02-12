@@ -1,3 +1,1 @@
-<a href='.' title='Home'>Home</a> &gt; **Directory**
-
-%heading#directory Directory
+%heading#directory The regex.uk Directory

@@ -498,6 +498,7 @@ pandoc_page pg = do
   mt_lbs <- LBS.readFile $ page_master_file pg
   (hdgs,md_lbs) <- prep_page' MM_pandoc mt_lbs
   LBS.writeFile "tmp/metadata.markdown"  $ LBS.unlines ["---","title: "<>page_title pg,"---"]
+  LBS.writeFile "tmp/heading.markdown"   $ page_heading pg
   LBS.writeFile "tmp/page_pre_body.html" $ mk_pre_body_html pg hdgs
   LBS.writeFile "tmp/page_pst_body.html"   pst_body_html
   LBS.writeFile "tmp/page.markdown"        md_lbs
@@ -514,6 +515,7 @@ pandoc_page pg = do
         , "-c", "lib/styles.css"
         , "-o", T.pack $ page_docs_file pg
         , "tmp/metadata.markdown"
+        , "tmp/heading.markdown"
         , "tmp/page.markdown"
         ]
 
@@ -529,6 +531,11 @@ data MarkdownMode
   | MM_hackage
   | MM_pandoc
   deriving (Eq,Show)
+
+page_heading :: Page -> LBS.ByteString
+page_heading PG_index = ""
+page_heading pg       =
+  "<p class='pagebc'><a href='.' title='Home'>Home</a> &raquo; **"<>page_title pg<>"**</p>\n"
 
 prep_page :: MarkdownMode -> FilePath -> FilePath -> IO ()
 prep_page mmd in_fp out_fp = do
@@ -573,8 +580,8 @@ mk_pre_body_html pg hdgs = hdr <> LBS.concat (map nav [minBound..maxBound]) <> f
     hdr :: LBS.ByteString
     hdr = [here|    <div id="container">
     <div id="sidebar">
-      <div id="header">
-        |] <> logo <> [here|
+      <div id="corner">
+        |] <> branding <> [here|
       </div>
       <div class="widget" id="pages">
         <ul class="page-nav">
@@ -611,10 +618,10 @@ mk_pre_body_html pg hdgs = hdr <> LBS.concat (map nav [minBound..maxBound]) <> f
       <div class="supplementary widget" id="github-issues">
         <a href="https://github.com/iconnect/regex/issues">Issues</a>
       </div>
-      <div class="supplementary widget" id="travis">
-        <a href="http://travis-ci.org/iconnect/regex">
-          <img alt="travis-ci" src="https://travis-ci.org/iconnect/regex.svg?branch=master"/>
-          </a>
+      <div class="supplementary widget" id="build-status">
+        <a href="build-status">
+          <img src="badges/build-status.svg" alt="build status" />
+        </a>
       </div>
       <div class="supplementary widget twitter">
         <iframe style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=hregex&amp;show_count=false">
@@ -663,8 +670,8 @@ pandoc_lhs' title repo_path in_file out_file = do
         ]
   where
     bc = LBS.unlines
-      [ "<div class='logodiv'>"
-      , "  " <> logo
+      [ "<div class='brandingdiv'>"
+      , "  " <> branding
       , "</div>"
       , "<div class='bcdiv'>"
       , "  <ol class='breadcrumb'>"
@@ -687,12 +694,12 @@ pandoc_lhs' title repo_path in_file out_file = do
 \end{code}
 
 
-logo
-----
+branding
+--------
 
 \begin{code}
-logo :: LBS.ByteString
-logo = [here|<a href="http://regex.uk" style="Arial, 'Helvetica Neue', Helvetica, sans-serif;" id="logo">[<span style='color:red;'>re</span>|${<span style='color:red;'>gex</span>}(.*)|<span></span>]</a>|]
+branding :: LBS.ByteString
+branding = [here|<a href="http://regex.uk" style="Arial, 'Helvetica Neue', Helvetica, sans-serif;" id="branding">[<span style='color:red;'>re</span>|${<span style='color:red;'>gex</span>}(.*)|<span></span>]</a>|]
 \end{code}
 
 

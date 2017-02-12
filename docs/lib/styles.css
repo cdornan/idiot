@@ -74,16 +74,19 @@ body {
 a {
   color: #369
 }
+header>h1 {
+  display: none;
+}
 #container {
   width: 1022px;
   margin: 0 auto
 }
-#header {
+#corner {
   border-bottom: 3px solid rgba(0,0,0,0.1);
   padding-bottom: 10px;
   margin-bottom: 10px
 }
-#header #logo {
+#corner #branding {
   color: #111;
   font-size: 25px;
   font-weight: bold;
@@ -101,28 +104,35 @@ a {
   font-weight: bold;
   text-decoration: none
 }
-#sidebar #sections>ul {
+#sidebar #pages>ul {
   list-style-type: none;
   border-bottom: 3px solid rgba(0,0,0,0.1);
   padding-bottom: 10px;
   margin-bottom: 10px
 }
-#sidebar #sections>ul li a {
+#sidebar #pages>ul li.pagenav.toi a {
   padding: 3px 0;
   color: #444;
-  font-size: 16px
+  font-size: 16px;
+  font-weight: normal;
 }
-#sidebar #sections>ul li.h2 {
+#sidebar #pages>ul li.pagenav.moi a {
+  padding: 3px 0;
+  color: #000;
+  font-size: 16px
+  font-weight: bold;
+}
+#sidebar #pages>ul li.secnav a {
+  padding: 3px 0;
+  color: #000;
+  font-size: smaller;
+}
+#sidebar #pages>ul li.pagenav {
   margin-top: 0.5em
 }
-#sidebar #sections>ul li.h3 {
-  list-style-type: none
-}
-#sidebar #sections>ul li.h3 a {
-  padding: 1px 15px;
-  font-size: 13px;
-  color: #369;
-  font-weight: normal
+#sidebar #pages>ul li.secnav {
+  margin-top: 0.25em;
+  margin-left: 1em;
 }
 #sidebar .supplementary {
   padding: 5px 0;
@@ -138,14 +148,6 @@ a {
 }
 #sidebar>*:last-child {
   margin-bottom: 20px
-}
-#github-ribbon {
-  position: absolute;
-  top: 0;
-  right: 0
-}
-#github-ribbon img {
-  border: 0
 }
 #content {
   padding: 30px 30px 20px 30px;
@@ -330,26 +332,6 @@ a {
 }
 #content tbody tr:nth-child(2n) {
   background: #f5f5f5
-}
-@media only screen and (max-width: 480px) {#container {
-  width: 100%
-}
-#sidebar {
-  width: 100%;
-  margin-top: 10px;
-  float: none
-}
-#sidebar #sections,#sidebar #header,#sidebar .supplementary {
-  padding-left: 30px;
-  padding-right: 30px
-}
-#content {
-  border-radius: 0;
-  border-width: 1px;
-  float: none;
-  margin: 0;
-  width: 100%;
-  box-sizing: border-box
 }
 h1 {
   font-size: 24px;

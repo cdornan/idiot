@@ -18,7 +18,7 @@ Regex is a regular expression toolkit for regex-base with:
 
 %heading#build Build Status
 
-[![Hackage](https://iconnect.github.io/regex/badges/hackage.svg)](https://hackage.haskell.org/package/regex) [![BSD3 License](https://iconnect.github.io/regex/badges/license.svg)](https://tldrlegal.com/license/bsd-3-clause-license-%28revised%29) [![Un*x build](https://iconnect.github.io/regex/badges/unix-build.svg)](https://travis-ci.org/iconnect/regex) [![Windows build](https://iconnect.github.io/regex/badges/windows-build.svg)](https://ci.appveyor.com/project/engineerirngirisconnectcouk/regex/branch/master) [![Coverage](https://iconnect.github.io/regex/badges/coverage.svg)](https://coveralls.io/github/iconnect/regex?branch=master)
+[![Hackage](http://regex.uk/badges/hackage.svg)](https://hackage.haskell.org/package/regex) [![BSD3 License](http://regex.uk/badges/license.svg)](https://tldrlegal.com/license/bsd-3-clause-license-%28revised%29) [![Un*x build](http://regex.uk/badges/unix-build.svg)](https://travis-ci.org/iconnect/regex) [![Windows build](http://regex.uk/badges/windows-build.svg)](https://ci.appveyor.com/project/engineerirngirisconnectcouk/regex/branch/master) [![Coverage](http://regex.uk/badges/coverage.svg)](https://coveralls.io/github/iconnect/regex?branch=master)
 
 See [build status page](http://regex.uk/build-status) for details.
 
