@@ -109,9 +109,9 @@ header>h1 {
 }
 #sidebar {
   float: left;
-  width: 230px;
+  min-width: 230px;
   margin-right: 30px;
-  margin-top: 40px
+  margin-top: 40px;
 }
 #sidebar a {
   display: block;
