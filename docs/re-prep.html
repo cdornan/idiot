@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>regex – </title>
+  <title>regex – examples/re-prep.lhs</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 div.sourceCode { overflow-x: auto; }
@@ -43,7 +43,7 @@ code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Ann
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
   </style>
-  <link rel="stylesheet" href="lib/styles.css">
+  <link rel="stylesheet" href="lib/lhs-styles.css">
   <link rel="stylesheet" href="lib/bs.css">
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
@@ -63,6 +63,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ol>
 </div>
 <div class='litcontent'>
+<header>
+<h1 class="title">examples/re-prep.lhs</h1>
+</header>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE NoImplicitPrelude          #-}</span>
 <span class="ot">{-# LANGUAGE RecordWildCards            #-}</span>
 <span class="ot">{-# LANGUAGE GeneralizedNewtypeDeriving #-}</span>
@@ -82,6 +85,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">import           </span><span class="dt">Data.Maybe</span>
 <span class="kw">import           </span><span class="dt">Data.Monoid</span>
 <span class="kw">import qualified</span> <span class="dt">Data.Text</span>                                <span class="kw">as</span> <span class="dt">T</span>
+<span class="kw">import qualified</span> <span class="dt">Data.Text.Encoding</span>                       <span class="kw">as</span> <span class="dt">TE</span>
 <span class="kw">import           </span><span class="dt">Network.HTTP.Conduit</span>
 <span class="kw">import           </span><span class="dt">Prelude.Compat</span>
 <span class="kw">import qualified</span> <span class="dt">Shelly</span>                                   <span class="kw">as</span> <span class="dt">SH</span>
@@ -501,26 +505,32 @@ prep_page mmd in_fp out_fp <span class="fu">=</span> <span class="kw">do</span>
 
 <span class="ot">prep_page&#39; ::</span> <span class="dt">MarkdownMode</span> <span class="ot">-&gt;</span> <span class="dt">LBS.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ([<span class="dt">Heading</span>],<span class="dt">LBS.ByteString</span>)
 prep_page&#39; mmd lbs <span class="fu">=</span> <span class="kw">do</span>
-    rf   <span class="ot">&lt;-</span> newIORef []
-    lbs&#39; <span class="ot">&lt;-</span> sed&#39; (scr rf) lbs
-    hdgs <span class="ot">&lt;-</span> reverse <span class="fu">&lt;$&gt;</span> readIORef rf
-    return (hdgs,lbs&#39;)
+    rf_h <span class="ot">&lt;-</span> newIORef []
+    rf_t <span class="ot">&lt;-</span> newIORef <span class="dt">False</span>
+    lbs1 <span class="ot">&lt;-</span> sed&#39; (scr rf_h rf_t) lbs
+    lbs2 <span class="ot">&lt;-</span> fromMaybe <span class="st">&quot;&quot;</span> <span class="fu">&lt;$&gt;</span> fin_task_list&#39; mmd rf_t
+    hdgs <span class="ot">&lt;-</span> reverse <span class="fu">&lt;$&gt;</span> readIORef rf_h
+    return (hdgs,lbs1<span class="fu">&lt;&gt;</span>lbs2)
   <span class="kw">where</span>
-    scr rf <span class="fu">=</span> <span class="dt">Select</span>
-      [ (,) [re|^%heading#${ide}(@{%id}) +${ttl}([^ ].*)$|] <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> heading mmd rf
-      , (,) [re|^.*$|]                                      <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> \_ _ _ _<span class="ot">-&gt;</span>return <span class="dt">Nothing</span>
+    scr rf_h rf_t <span class="fu">=</span> <span class="dt">Select</span>
+      [ (,) [re|^%heading#${ide}(@{%id}) +${ttl}([^ ].*)$|] <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> heading       mmd rf_t rf_h
+      , (,) [re|^- \[ \] +${itm}(.*)$|]                     <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> task_list     mmd rf_t <span class="dt">False</span>
+      , (,) [re|^- \[[Xx]\] +${itm}(.*)$|]                  <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> task_list     mmd rf_t <span class="dt">True</span>
+      , (,) [re|^.*$|]                                      <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> fin_task_list mmd rf_t
       ]
 
 <span class="ot">heading ::</span> <span class="dt">MarkdownMode</span>
+        <span class="ot">-&gt;</span> <span class="dt">IORef</span> <span class="dt">Bool</span>
         <span class="ot">-&gt;</span> <span class="dt">IORef</span> [<span class="dt">Heading</span>]
         <span class="ot">-&gt;</span> <span class="dt">LineNo</span>
         <span class="ot">-&gt;</span> <span class="dt">Match</span> <span class="dt">LBS.ByteString</span>
         <span class="ot">-&gt;</span> <span class="dt">Location</span>
         <span class="ot">-&gt;</span> <span class="dt">Capture</span> <span class="dt">LBS.ByteString</span>
         <span class="ot">-&gt;</span> <span class="dt">IO</span> (<span class="dt">Maybe</span> <span class="dt">LBS.ByteString</span>)
-heading mmd rf _ mtch _ _ <span class="fu">=</span> <span class="kw">do</span>
-    modifyIORef rf (<span class="dt">Heading</span> ide ttl<span class="fu">:</span>)
-    return <span class="fu">$</span> <span class="dt">Just</span> h2
+heading mmd rf_t rf_h _ mtch _ _ <span class="fu">=</span> <span class="kw">do</span>
+    lbs <span class="ot">&lt;-</span> fromMaybe <span class="st">&quot;&quot;</span> <span class="fu">&lt;$&gt;</span> fin_task_list&#39; mmd rf_t
+    modifyIORef rf_h (<span class="dt">Heading</span> ide ttl<span class="fu">:</span>)
+    return <span class="fu">$</span> <span class="dt">Just</span> <span class="fu">$</span> lbs<span class="fu">&lt;&gt;</span>h2
   <span class="kw">where</span>
     h2 <span class="fu">=</span> <span class="kw">case</span> mmd <span class="kw">of</span>
       <span class="dt">MM_github</span>  <span class="ot">-&gt;</span> <span class="st">&quot;## &quot;</span><span class="fu">&lt;&gt;</span>ttl
@@ -576,6 +586,11 @@ mk_pre_body_html pg hdgs <span class="fu">=</span> hdr <span class="fu">&lt;&gt;
       &lt;/div&gt;
       &lt;div class=&quot;widget-divider&quot;&gt;&amp;nbsp;&lt;/div&gt;
       &lt;div class=&quot;supplementary widget&quot; id=&quot;build-status&quot;&gt;
+        &lt;a href=&quot;https://hackage.haskell.org/package/regex&quot;&gt;
+          &lt;img src=&quot;badges/hackage.svg&quot; alt=&quot;hackage version&quot; /&gt;
+        &lt;/a&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;supplementary widget&quot; id=&quot;build-status&quot;&gt;
         &lt;a href=&quot;build-status&quot;&gt;
           &lt;img src=&quot;badges/build-status.svg&quot; alt=&quot;build status&quot; /&gt;
         &lt;/a&gt;
@@ -597,12 +612,70 @@ mk_pre_body_html pg hdgs <span class="fu">=</span> hdr <span class="fu">&lt;&gt;
 pst_body_html <span class="fu">=</span> [here|      &lt;/div&gt;
     &lt;/div&gt;
 |]</code></pre></div>
+<h2 id="task-lists">Task Lists</h2>
+<div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="co">-- | replacement function to convert GFM task list line into HTML if we</span>
+<span class="co">-- aren&#39;t writing GFM (i.e.,  generating markdown for GitHub)</span>
+<span class="ot">task_list ::</span> <span class="dt">MarkdownMode</span>               <span class="co">-- ^ what flavour of md are we generating</span>
+          <span class="ot">-&gt;</span> <span class="dt">IORef</span> <span class="dt">Bool</span>                 <span class="co">-- ^ will contain True iff we have already entered a task list</span>
+          <span class="ot">-&gt;</span> <span class="dt">Bool</span>                       <span class="co">-- ^ true if this is a checjed line</span>
+          <span class="ot">-&gt;</span> <span class="dt">LineNo</span>                     <span class="co">-- ^ line no of the replacement redex (unused)</span>
+          <span class="ot">-&gt;</span> <span class="dt">Match</span> <span class="dt">LBS.ByteString</span>       <span class="co">-- ^ the matched task-list line</span>
+          <span class="ot">-&gt;</span> <span class="dt">Location</span>                   <span class="co">-- ^ which match and capure (unused)</span>
+          <span class="ot">-&gt;</span> <span class="dt">Capture</span> <span class="dt">LBS.ByteString</span>     <span class="co">-- ^ the capture weare replacing (unsuded)</span>
+          <span class="ot">-&gt;</span> <span class="dt">IO</span> (<span class="dt">Maybe</span> <span class="dt">LBS.ByteString</span>)  <span class="co">-- ^ the replacement text, or Nothing to indicate no change to this line</span>
+task_list mmd rf chk _ mtch _ _ <span class="fu">=</span>
+  <span class="kw">case</span> mmd<span class="fu">==</span><span class="dt">MM_github</span> <span class="kw">of</span>
+    <span class="dt">True</span>  <span class="ot">-&gt;</span> return <span class="dt">Nothing</span>
+    <span class="dt">False</span> <span class="ot">-&gt;</span> <span class="kw">do</span>
+      in_tl <span class="ot">&lt;-</span> readIORef rf
+      writeIORef rf <span class="dt">True</span>
+      return <span class="fu">$</span> tl_line in_tl chk
+  <span class="kw">where</span>
+    tl_line in_tl enbl <span class="fu">=</span> <span class="dt">Just</span> <span class="fu">$</span> LBS.concat
+      [ <span class="kw">if</span> in_tl <span class="kw">then</span> <span class="st">&quot;&quot;</span> <span class="kw">else</span> <span class="st">&quot;&lt;ul class=&#39;contains-task-list&#39;&gt;\n&quot;</span>
+      , <span class="st">&quot;  &lt;li class=&#39;task-list-item&#39;&gt;&quot;</span>
+      , <span class="st">&quot;&lt;input type=&#39;checkbox&#39; class=&#39;task-list-item-checkbox&#39;&quot;</span>
+      , <span class="kw">if</span> enbl <span class="kw">then</span> <span class="st">&quot; checked=&#39;&#39;&quot;</span> <span class="kw">else</span> <span class="st">&quot;&quot;</span>
+      , <span class="st">&quot; disabled=&#39;&#39;/&gt;&quot;</span>
+      , mtch <span class="fu">!$$</span> [cp|itm|]
+      , <span class="st">&quot;&lt;/li&gt;&quot;</span>
+      ]
+
+<span class="co">-- | replacement function used for &#39;other&#39; lines -- terminate any task</span>
+<span class="co">-- list that was being generated</span>
+<span class="ot">fin_task_list ::</span> <span class="dt">MarkdownMode</span>               <span class="co">-- ^ what flavour of md are we generating</span>
+              <span class="ot">-&gt;</span> <span class="dt">IORef</span> <span class="dt">Bool</span>                 <span class="co">-- ^ will contain True iff we have already entered a task list</span>
+              <span class="ot">-&gt;</span> <span class="dt">LineNo</span>                     <span class="co">-- ^ line no of the replacement redex (unused)</span>
+              <span class="ot">-&gt;</span> <span class="dt">Match</span> <span class="dt">LBS.ByteString</span>       <span class="co">-- ^ the matched task-list line</span>
+              <span class="ot">-&gt;</span> <span class="dt">Location</span>                   <span class="co">-- ^ which match and capure (unused)</span>
+              <span class="ot">-&gt;</span> <span class="dt">Capture</span> <span class="dt">LBS.ByteString</span>     <span class="co">-- ^ the capture weare replacing (unsuded)</span>
+              <span class="ot">-&gt;</span> <span class="dt">IO</span> (<span class="dt">Maybe</span> <span class="dt">LBS.ByteString</span>)  <span class="co">-- ^ the replacement text, or Nothing to indicate no change to this line</span>
+fin_task_list mmd rf_t _ mtch _ _ <span class="fu">=</span>
+  fmap (<span class="fu">&lt;&gt;</span>matchSource mtch) <span class="fu">&lt;$&gt;</span> fin_task_list&#39; mmd rf_t
+
+<span class="co">-- | close any task list being processed, returning the closing text</span>
+<span class="co">-- as necessary</span>
+<span class="ot">fin_task_list&#39; ::</span> <span class="dt">MarkdownMode</span>              <span class="co">-- ^ what flavour of md are we generating</span>
+               <span class="ot">-&gt;</span> <span class="dt">IORef</span> <span class="dt">Bool</span>                <span class="co">-- ^ will contain True iff we have already entered a task list</span>
+               <span class="ot">-&gt;</span> <span class="dt">IO</span> (<span class="dt">Maybe</span> <span class="dt">LBS.ByteString</span>) <span class="co">-- ^ task-list closure HTML, if task-list HTML needs closing</span>
+fin_task_list&#39; mmd rf <span class="fu">=</span> <span class="kw">do</span>
+  in_tl <span class="ot">&lt;-</span> readIORef rf
+  writeIORef rf <span class="dt">False</span>
+  <span class="kw">case</span> mmd<span class="fu">==</span><span class="dt">MM_github</span> <span class="fu">||</span> not in_tl <span class="kw">of</span>
+    <span class="dt">True</span>  <span class="ot">-&gt;</span> return <span class="dt">Nothing</span>
+    <span class="dt">False</span> <span class="ot">-&gt;</span> return <span class="fu">$</span> <span class="dt">Just</span> <span class="fu">$</span> <span class="st">&quot;&lt;/ul&gt;\n&quot;</span></code></pre></div>
 <h2 id="literate-haskell-pages">Literate Haskell Pages</h2>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">pandoc_lhs ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
 pandoc_lhs title in_file <span class="fu">=</span> pandoc_lhs&#39; title in_file in_file
 
 <span class="ot">pandoc_lhs&#39; ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
 pandoc_lhs&#39; title repo_path in_file out_file <span class="fu">=</span> <span class="kw">do</span>
+  LBS.writeFile <span class="st">&quot;tmp/metadata.markdown&quot;</span>  <span class="fu">$</span>
+                    LBS.unlines
+                      [ <span class="st">&quot;---&quot;</span>
+                      , <span class="st">&quot;title: &quot;</span><span class="fu">&lt;&gt;</span>LBS.fromStrict (TE.encodeUtf8 title)
+                      ,<span class="st">&quot;---&quot;</span>
+                      ]
   LBS.writeFile <span class="st">&quot;tmp/bc.html&quot;</span> bc
   LBS.writeFile <span class="st">&quot;tmp/ft.html&quot;</span> ft
   fmap (const ()) <span class="fu">$</span>
@@ -615,9 +688,10 @@ pandoc_lhs&#39; title repo_path in_file out_file <span class="fu">=</span> <span
         , <span class="st">&quot;-H&quot;</span>, <span class="st">&quot;lib/favicons.html&quot;</span>
         , <span class="st">&quot;-B&quot;</span>, <span class="st">&quot;tmp/bc.html&quot;</span>
         , <span class="st">&quot;-A&quot;</span>, <span class="st">&quot;tmp/ft.html&quot;</span>
-        , <span class="st">&quot;-c&quot;</span>, <span class="st">&quot;lib/styles.css&quot;</span>
+        , <span class="st">&quot;-c&quot;</span>, <span class="st">&quot;lib/lhs-styles.css&quot;</span>
         , <span class="st">&quot;-c&quot;</span>, <span class="st">&quot;lib/bs.css&quot;</span>
         , <span class="st">&quot;-o&quot;</span>, out_file
+        , <span class="st">&quot;tmp/metadata.markdown&quot;</span>
         , in_file
         ]
   <span class="kw">where</span>

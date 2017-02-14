@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>regex – </title>
+  <title>regex – Text.RE.Capture</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 div.sourceCode { overflow-x: auto; }
@@ -43,7 +43,7 @@ code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Ann
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
   </style>
-  <link rel="stylesheet" href="lib/styles.css">
+  <link rel="stylesheet" href="lib/lhs-styles.css">
   <link rel="stylesheet" href="lib/bs.css">
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
@@ -63,6 +63,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ol>
 </div>
 <div class='litcontent'>
+<header>
+<h1 class="title">Text.RE.Capture</h1>
+</header>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE RecordWildCards            #-}</span>
 <span class="ot">{-# LANGUAGE FlexibleInstances          #-}</span>
 <span class="ot">{-# LANGUAGE UndecidableInstances       #-}</span>
@@ -71,6 +74,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   ( <span class="dt">Matches</span>(<span class="fu">..</span>)
   , <span class="dt">Match</span>(<span class="fu">..</span>)
   , <span class="dt">Capture</span>(<span class="fu">..</span>)
+  , noMatch
+  , emptyMatchArray
   <span class="co">-- Matches functions</span>
   , anyMatches
   , countMatches
@@ -103,7 +108,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">data</span> <span class="dt">Matches</span> a <span class="fu">=</span>
   <span class="dt">Matches</span>
     {<span class="ot"> matchesSource ::</span> <span class="fu">!</span>a          <span class="co">-- ^ the source text being matched</span>
-    ,<span class="ot"> allMatches    ::</span> [<span class="dt">Match</span> a]   <span class="co">-- ^ all captures found, left to right</span>
+    ,<span class="ot"> allMatches    ::</span> <span class="fu">!</span>[<span class="dt">Match</span> a]  <span class="co">-- ^ all captures found, left to right</span>
     }
   <span class="kw">deriving</span> (<span class="dt">Show</span>,<span class="dt">Eq</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="co">-- | the result of matching a RE to a text once, listing the text that</span>
@@ -113,7 +118,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">data</span> <span class="dt">Match</span> a <span class="fu">=</span>
   <span class="dt">Match</span>
     {<span class="ot"> matchSource  ::</span> <span class="fu">!</span>a                <span class="co">-- ^ the whole source text</span>
-    ,<span class="ot"> captureNames ::</span> <span class="dt">CaptureNames</span>      <span class="co">-- ^ the RE&#39;s capture names</span>
+    ,<span class="ot"> captureNames ::</span> <span class="fu">!</span><span class="dt">CaptureNames</span>     <span class="co">-- ^ the RE&#39;s capture names</span>
     ,<span class="ot"> matchArray   ::</span> <span class="fu">!</span>(<span class="dt">Array</span> <span class="dt">CaptureOrdinal</span> (<span class="dt">Capture</span> a))
                                         <span class="co">-- ^ 0..n-1 captures,</span>
                                         <span class="co">-- starting with the</span>
@@ -134,6 +139,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
                               <span class="co">-- sub-string</span>
     }
   <span class="kw">deriving</span> (<span class="dt">Show</span>,<span class="dt">Eq</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="co">-- | Construct a Match that does not match anything.</span>
+<span class="ot">noMatch ::</span> a <span class="ot">-&gt;</span> <span class="dt">Match</span> a
+noMatch t <span class="fu">=</span> <span class="dt">Match</span> t noCaptureNames emptyMatchArray
+
+<span class="co">-- | an empty array of Capture</span>
+<span class="ot">emptyMatchArray ::</span> <span class="dt">Array</span> <span class="dt">CaptureOrdinal</span> (<span class="dt">Capture</span> a)
+emptyMatchArray <span class="fu">=</span> listArray (<span class="dt">CaptureOrdinal</span> <span class="dv">0</span>,<span class="dt">CaptureOrdinal</span> <span class="fu">$</span> <span class="fu">-</span><span class="dv">1</span>) []</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="kw">instance</span> <span class="dt">Functor</span> <span class="dt">Matches</span> <span class="kw">where</span>
   fmap f <span class="dt">Matches</span>{<span class="fu">..</span>} <span class="fu">=</span>
     <span class="dt">Matches</span>

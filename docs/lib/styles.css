@@ -1,44 +1,5 @@
 /*
- * the main style sheet
- */
-
-
-/*
- * For the Literate Haskell pages (which mostly rely on bs.css)
- */
-
-div.litcontent {
-  padding: 20px;
-}
-
-
-
-/*
- * Styles for the tutorial.
- */
-
-div.replcodeblock div.sourceCode pre.sourceCode.literate.haskell {
-  background-color: #f2f2ff;
-  border: 2px solid #ffcccc;
-/*
-  border: 2px solid #cccccc;
- */
-}
-
-div.includedcodeblock div.sourceCode pre.sourceCode.literate.haskell {
-  background-color: #ffffff;
-  border: 2px solid #000000;
-}
-
-div.inlinecodeblock pre {
-  background-color: #ffffff;
-  border: 2px solid #000000;
-}
-
-
-
-/*
- * The maion style sheet
+ * The style sheet for our non-literate-Haskell web pages
  */
 
 html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,code,del,dfn,em,img,q,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td {
@@ -91,6 +52,9 @@ a {
 header>h1 {
   display: none;
 }
+.pagebc {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
 #container {
   width: 1022px;
   margin: 0 auto
@@ -102,7 +66,7 @@ header>h1 {
 }
 #corner #branding {
   color: #111;
-  font-size: 34px;
+  font-size: 32px;
   font-weight: bold;
   padding: 10px 0;
   text-decoration: none
@@ -228,12 +192,6 @@ header>h1 {
 #content ul {
   list-style-position: outside
 }
-#content li ul,#content li ol {
-  margin: 0 1.625em
-}
-#content ul,#content ol {
-  margin: 0 0 1.625em 1.25em
-}
 #content dl {
   margin: 0 0 1.625em 0
 }
@@ -345,3 +303,42 @@ h1 {
   margin: 0 0 20px;
   font-weight: bold
 }
+
+#content ul.contains-task-list {
+    padding-left: 0.5em;
+}
+.task-list-item {
+    list-style-type: none;
+}
+.task-list-item-checkbox {
+    margin: 0 0.7em 0.25em -1.6em;
+    vertical-align: middle;
+}
+#content>*:last-child {
+    margin-bottom: 0 !important;
+}
+#content ul, .content ol {
+    padding-left: 0.4em;
+}
+#content ul,#content ol {
+  margin: 0 0 1.625em 1.25em
+}
+#content li ul,#content li ol {
+  margin: 0 1.225em
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**/

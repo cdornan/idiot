@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>regex – </title>
+  <title>regex – re-tutorial.lhs</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 div.sourceCode { overflow-x: auto; }
@@ -43,7 +43,7 @@ code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Ann
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
   </style>
-  <link rel="stylesheet" href="lib/styles.css">
+  <link rel="stylesheet" href="lib/lhs-styles.css">
   <link rel="stylesheet" href="lib/bs.css">
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
@@ -63,6 +63,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ol>
 </div>
 <div class='litcontent'>
+<header>
+<h1 class="title">re-tutorial.lhs</h1>
+</header>
 <h1 id="the-regex-tutorial">The Regex Tutorial</h1>
 <p>This is a literate Haskell programme lightly processed to produce this web presentation and also to generate a test suite that verifies that each of the example calculations are generating the expected results. You can load it into ghci and try out the examples either by running <em>ghci</em> itself from the root folder of the regex package:</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">ghci</span> examples/re-tutorial.lhs</code></pre></div>
@@ -199,7 +202,7 @@ The type of <code>*=~</code> in this module (imported from <code>Text.RE.TDFA.St
 <span class="kw">data</span> <span class="dt">Matches</span> a <span class="fu">=</span>
   <span class="dt">Matches</span>
     {<span class="ot"> matchesSource ::</span> <span class="fu">!</span>a          <span class="co">-- ^ the source text being matched</span>
-    ,<span class="ot"> allMatches    ::</span> [<span class="dt">Match</span> a]   <span class="co">-- ^ all captures found, left to right</span>
+    ,<span class="ot"> allMatches    ::</span> <span class="fu">!</span>[<span class="dt">Match</span> a]  <span class="co">-- ^ all captures found, left to right</span>
     }
   <span class="kw">deriving</span> (<span class="dt">Show</span>,<span class="dt">Eq</span>)</code></pre></div>
 </div>
@@ -217,7 +220,7 @@ The type of <code>?=~</code> in this module (imported from <code>Text.RE.TDFA.St
 <span class="kw">data</span> <span class="dt">Match</span> a <span class="fu">=</span>
   <span class="dt">Match</span>
     {<span class="ot"> matchSource  ::</span> <span class="fu">!</span>a                <span class="co">-- ^ the whole source text</span>
-    ,<span class="ot"> captureNames ::</span> <span class="dt">CaptureNames</span>      <span class="co">-- ^ the RE&#39;s capture names</span>
+    ,<span class="ot"> captureNames ::</span> <span class="fu">!</span><span class="dt">CaptureNames</span>     <span class="co">-- ^ the RE&#39;s capture names</span>
     ,<span class="ot"> matchArray   ::</span> <span class="fu">!</span>(<span class="dt">Array</span> <span class="dt">CaptureOrdinal</span> (<span class="dt">Capture</span> a))
                                         <span class="co">-- ^ 0..n-1 captures,</span>
                                         <span class="co">-- starting with the</span>

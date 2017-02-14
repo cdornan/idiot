@@ -18,6 +18,7 @@ import           Data.IORef
 import           Data.Maybe
 import           Data.Monoid
 import qualified Data.Text                                as T
+import qualified Data.Text.Encoding                       as TE
 import           Network.HTTP.Conduit
 import           Prelude.Compat
 import qualified Shelly                                   as SH
@@ -627,6 +628,11 @@ mk_pre_body_html pg hdgs = hdr <> LBS.concat (map nav [minBound..maxBound]) <> f
       </div>
       <div class="widget-divider">&nbsp;</div>
       <div class="supplementary widget" id="build-status">
+        <a href="https://hackage.haskell.org/package/regex">
+          <img src="badges/hackage.svg" alt="hackage version" />
+        </a>
+      </div>
+      <div class="supplementary widget" id="build-status">
         <a href="build-status">
           <img src="badges/build-status.svg" alt="build status" />
         </a>
@@ -706,7 +712,6 @@ fin_task_list' mmd rf = do
   case mmd==MM_github || not in_tl of
     True  -> return Nothing
     False -> return $ Just $ "</ul>\n"
-
 \end{code}
 
 
@@ -719,6 +724,12 @@ pandoc_lhs title in_file = pandoc_lhs' title in_file in_file
 
 pandoc_lhs' :: T.Text -> T.Text -> T.Text -> T.Text -> IO ()
 pandoc_lhs' title repo_path in_file out_file = do
+  LBS.writeFile "tmp/metadata.markdown"  $
+                    LBS.unlines
+                      [ "---"
+                      , "title: "<>LBS.fromStrict (TE.encodeUtf8 title)
+                      ,"---"
+                      ]
   LBS.writeFile "tmp/bc.html" bc
   LBS.writeFile "tmp/ft.html" ft
   fmap (const ()) $
@@ -731,9 +742,10 @@ pandoc_lhs' title repo_path in_file out_file = do
         , "-H", "lib/favicons.html"
         , "-B", "tmp/bc.html"
         , "-A", "tmp/ft.html"
-        , "-c", "lib/styles.css"
+        , "-c", "lib/lhs-styles.css"
         , "-c", "lib/bs.css"
         , "-o", out_file
+        , "tmp/metadata.markdown"
         , in_file
         ]
   where
