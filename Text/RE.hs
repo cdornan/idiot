@@ -5,6 +5,7 @@ module Text.RE
   ( Matches(..)
   , Match(..)
   , Capture(..)
+  , noMatch
   -- Matches functions
   , anyMatches
   , countMatches

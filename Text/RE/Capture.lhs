@@ -10,6 +10,8 @@ module Text.RE.Capture
   ( Matches(..)
   , Match(..)
   , Capture(..)
+  , noMatch
+  , emptyMatchArray
   -- Matches functions
   , anyMatches
   , countMatches
@@ -50,7 +52,7 @@ infixl 9 !$, !$$
 data Matches a =
   Matches
     { matchesSource :: !a          -- ^ the source text being matched
-    , allMatches    :: [Match a]   -- ^ all captures found, left to right
+    , allMatches    :: ![Match a]  -- ^ all captures found, left to right
     }
   deriving (Show,Eq)
 \end{code}
@@ -63,7 +65,7 @@ data Matches a =
 data Match a =
   Match
     { matchSource  :: !a                -- ^ the whole source text
-    , captureNames :: CaptureNames      -- ^ the RE's capture names
+    , captureNames :: !CaptureNames     -- ^ the RE's capture names
     , matchArray   :: !(Array CaptureOrdinal (Capture a))
                                         -- ^ 0..n-1 captures,
                                         -- starting with the
@@ -87,6 +89,16 @@ data Capture a =
                               -- sub-string
     }
   deriving (Show,Eq)
+\end{code}
+
+\begin{code}
+-- | Construct a Match that does not match anything.
+noMatch :: a -> Match a
+noMatch t = Match t noCaptureNames emptyMatchArray
+
+-- | an empty array of Capture
+emptyMatchArray :: Array CaptureOrdinal (Capture a)
+emptyMatchArray = listArray (CaptureOrdinal 0,CaptureOrdinal $ -1) []
 \end{code}
 
 \begin{code}

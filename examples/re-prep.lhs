@@ -546,26 +546,32 @@ prep_page mmd in_fp out_fp = do
 
 prep_page' :: MarkdownMode -> LBS.ByteString -> IO ([Heading],LBS.ByteString)
 prep_page' mmd lbs = do
-    rf   <- newIORef []
-    lbs' <- sed' (scr rf) lbs
-    hdgs <- reverse <$> readIORef rf
-    return (hdgs,lbs')
+    rf_h <- newIORef []
+    rf_t <- newIORef False
+    lbs1 <- sed' (scr rf_h rf_t) lbs
+    lbs2 <- fromMaybe "" <$> fin_task_list' mmd rf_t
+    hdgs <- reverse <$> readIORef rf_h
+    return (hdgs,lbs1<>lbs2)
   where
-    scr rf = Select
-      [ (,) [re|^%heading#${ide}(@{%id}) +${ttl}([^ ].*)$|] $ EDIT_fun TOP $ heading mmd rf
-      , (,) [re|^.*$|]                                      $ EDIT_fun TOP $ \_ _ _ _->return Nothing
+    scr rf_h rf_t = Select
+      [ (,) [re|^%heading#${ide}(@{%id}) +${ttl}([^ ].*)$|] $ EDIT_fun TOP $ heading       mmd rf_t rf_h
+      , (,) [re|^- \[ \] +${itm}(.*)$|]                     $ EDIT_fun TOP $ task_list     mmd rf_t False
+      , (,) [re|^- \[[Xx]\] +${itm}(.*)$|]                  $ EDIT_fun TOP $ task_list     mmd rf_t True
+      , (,) [re|^.*$|]                                      $ EDIT_fun TOP $ fin_task_list mmd rf_t
       ]
 
 heading :: MarkdownMode
+        -> IORef Bool
         -> IORef [Heading]
         -> LineNo
         -> Match LBS.ByteString
         -> Location
         -> Capture LBS.ByteString
         -> IO (Maybe LBS.ByteString)
-heading mmd rf _ mtch _ _ = do
-    modifyIORef rf (Heading ide ttl:)
-    return $ Just h2
+heading mmd rf_t rf_h _ mtch _ _ = do
+    lbs <- fromMaybe "" <$> fin_task_list' mmd rf_t
+    modifyIORef rf_h (Heading ide ttl:)
+    return $ Just $ lbs<>h2
   where
     h2 = case mmd of
       MM_github  -> "## "<>ttl
@@ -642,6 +648,65 @@ pst_body_html :: LBS.ByteString
 pst_body_html = [here|      </div>
     </div>
 |]
+\end{code}
+
+
+Task Lists
+----------
+
+\begin{code}
+-- | replacement function to convert GFM task list line into HTML if we
+-- aren't writing GFM (i.e.,  generating markdown for GitHub)
+task_list :: MarkdownMode               -- ^ what flavour of md are we generating
+          -> IORef Bool                 -- ^ will contain True iff we have already entered a task list
+          -> Bool                       -- ^ true if this is a checjed line
+          -> LineNo                     -- ^ line no of the replacement redex (unused)
+          -> Match LBS.ByteString       -- ^ the matched task-list line
+          -> Location                   -- ^ which match and capure (unused)
+          -> Capture LBS.ByteString     -- ^ the capture weare replacing (unsuded)
+          -> IO (Maybe LBS.ByteString)  -- ^ the replacement text, or Nothing to indicate no change to this line
+task_list mmd rf chk _ mtch _ _ =
+  case mmd==MM_github of
+    True  -> return Nothing
+    False -> do
+      in_tl <- readIORef rf
+      writeIORef rf True
+      return $ tl_line in_tl chk
+  where
+    tl_line in_tl enbl = Just $ LBS.concat
+      [ if in_tl then "" else "<ul class='contains-task-list'>\n"
+      , "  <li class='task-list-item'>"
+      , "<input type='checkbox' class='task-list-item-checkbox'"
+      , if enbl then " checked=''" else ""
+      , " disabled=''/>"
+      , mtch !$$ [cp|itm|]
+      , "</li>"
+      ]
+
+-- | replacement function used for 'other' lines -- terminate any task
+-- list that was being generated
+fin_task_list :: MarkdownMode               -- ^ what flavour of md are we generating
+              -> IORef Bool                 -- ^ will contain True iff we have already entered a task list
+              -> LineNo                     -- ^ line no of the replacement redex (unused)
+              -> Match LBS.ByteString       -- ^ the matched task-list line
+              -> Location                   -- ^ which match and capure (unused)
+              -> Capture LBS.ByteString     -- ^ the capture weare replacing (unsuded)
+              -> IO (Maybe LBS.ByteString)  -- ^ the replacement text, or Nothing to indicate no change to this line
+fin_task_list mmd rf_t _ mtch _ _ =
+  fmap (<>matchSource mtch) <$> fin_task_list' mmd rf_t
+
+-- | close any task list being processed, returning the closing text
+-- as necessary
+fin_task_list' :: MarkdownMode              -- ^ what flavour of md are we generating
+               -> IORef Bool                -- ^ will contain True iff we have already entered a task list
+               -> IO (Maybe LBS.ByteString) -- ^ task-list closure HTML, if task-list HTML needs closing
+fin_task_list' mmd rf = do
+  in_tl <- readIORef rf
+  writeIORef rf False
+  case mmd==MM_github || not in_tl of
+    True  -> return Nothing
+    False -> return $ Just $ "</ul>\n"
+
 \end{code}
 
 
