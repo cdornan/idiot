@@ -117,17 +117,17 @@ docMode = Doc <$> newIORef Outside
 loop :: MODE -> FilePath -> FilePath -> IO ()
 loop mode =
   sed $ Select
-    [ (,) [re|^%include ${file}(@{%string}) ${rex}(@{%string})$|]      $ EDIT_fun TOP $ include mode
-    , (,) [re|^%main ${arg}(top|bottom)$|]                             $ EDIT_gen     $ main_   mode
-    , (,) [re|^\\begin\{code\}$|]                                      $ EDIT_gen     $ begin   mode
-    , (,) [re|^${fn}(evalme@{%id}) = checkThis ${arg}(@{%string}).*$|] $ EDIT_fun TOP $ evalme  mode
-    , (,) [re|^\\end\{code\}$|]                                        $ EDIT_fun TOP $ end     mode
-    , (,) [re|^.*$|]                                                   $ EDIT_fun TOP $ other   mode
+    [ (,) [re|^%include ${file}(@{%string}) ${rex}(@{%string})$|]      $ EDIT_fun TOP $ inclde mode
+    , (,) [re|^%main ${arg}(top|bottom)$|]                             $ EDIT_gen     $ main_  mode
+    , (,) [re|^\\begin\{code\}$|]                                      $ EDIT_gen     $ begin  mode
+    , (,) [re|^${fn}(evalme@{%id}) = checkThis ${arg}(@{%string}).*$|] $ EDIT_fun TOP $ evalme mode
+    , (,) [re|^\\end\{code\}$|]                                        $ EDIT_fun TOP $ end    mode
+    , (,) [re|^.*$|]                                                   $ EDIT_fun TOP $ other  mode
     ]
 \end{code}
 
 \begin{code}
-include, evalme, end,
+inclde, evalme, end,
   other :: MODE
         -> LineNo
         -> Match LBS.ByteString
@@ -141,23 +141,23 @@ main_,
         -> Matches LBS.ByteString
         -> IO (LineEdit LBS.ByteString)
 
-include (Doc _ ) = includeDoc
-include (Gen _ ) = passthru
+inclde (Doc _ ) = includeDoc
+inclde (Gen _ ) = passthru
 
-main_   (Doc _ ) = mainDoc
-main_   (Gen gs) = mainGen    gs
+main_  (Doc _ ) = mainDoc
+main_  (Gen gs) = mainGen    gs
 
-begin   (Doc ds) = beginDoc   ds
-begin   (Gen _ ) = passthru_g
+begin  (Doc ds) = beginDoc   ds
+begin  (Gen _ ) = passthru_g
 
-evalme  (Doc ds) = evalmeDoc  ds
-evalme  (Gen gs) = evalmeGen  gs
+evalme (Doc ds) = evalmeDoc  ds
+evalme (Gen gs) = evalmeGen  gs
 
-end     (Doc ds) = endDoc     ds
-end     (Gen _ ) = passthru
+end    (Doc ds) = endDoc     ds
+end    (Gen _ ) = passthru
 
-other   (Doc ds) = otherDoc   ds
-other   (Gen _ ) = passthru
+other  (Doc ds) = otherDoc   ds
+other  (Gen _ ) = passthru
 
 passthru :: LineNo
          -> Match LBS.ByteString
@@ -549,7 +549,7 @@ prep_page' :: MarkdownMode -> LBS.ByteString -> IO ([Heading],LBS.ByteString)
 prep_page' mmd lbs = do
     rf_h <- newIORef []
     rf_t <- newIORef False
-    lbs1 <- sed' (scr rf_h rf_t) lbs
+    lbs1 <- sed' (scr rf_h rf_t) =<< include lbs
     lbs2 <- fromMaybe "" <$> fin_task_list' mmd rf_t
     hdgs <- reverse <$> readIORef rf_h
     return (hdgs,lbs1<>lbs2)
@@ -771,6 +771,21 @@ pandoc_lhs' title repo_path in_file out_file = do
       [ "https://github.com/iconnect/regex/blob/master/"
       , LBS.pack $ T.unpack repo_path
       ]
+\end{code}
+
+
+simple include processor
+------------------------
+
+\begin{code}
+include :: LBS.ByteString -> IO LBS.ByteString
+include = sed' $ Select
+    [ (,) [re|^%include ${file}(@{%string})$|] $ EDIT_fun TOP   incl
+    , (,) [re|^.*$|]                           $ EDIT_fun TOP $ \_ _ _ _->return Nothing
+    ]
+  where
+    incl _ mtch _ _ = Just <$> LBS.readFile (prs_s $ mtch !$$ [cp|file|])
+    prs_s           = fromMaybe (error "include") . parseString
 \end{code}
 
 
