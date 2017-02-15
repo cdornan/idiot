@@ -55,7 +55,9 @@ bumpVersion vrn_s = do
     M.when nope $
       error $ vrn_s ++ ": not in the changelog"
     case vrn > vrn0 of
-      True  -> write_current_version vrn
+      True  -> do
+        write_current_version vrn
+        substVersion "lib/hackage-template.svg" "docs/badges/hackage.svg"
       False -> error $
         printf "version not later ~(%s > %s)" vrn_s $ present_vrn vrn0
   where

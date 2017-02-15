@@ -439,7 +439,6 @@ badges = do
       , (,) "maintainers-contact" "https://img.shields.io/badge/email-maintainers%40regex.uk-blue.svg"
       , (,) "feedback-contact"    "https://img.shields.io/badge/email-feedback%40regex.uk-blue.svg"
       ]
-    substVersion "lib/hackage-template.svg" $ badge_fn "hackage"
   where
     collect (nm,url) = do
       putStrLn $ "updating badge: " ++ nm
