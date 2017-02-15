@@ -38,6 +38,7 @@
           <li class='pagenav toi'><a href='roadmap'>Roadmap</a></li>
           <li class='pagenav toi'><a href='macros'>Macro Tables</a></li>
           <li class='pagenav toi'><a href='directory'>Directory</a></li>
+          <li class='pagenav toi'><a href='changelog'>Change Log</a></li>
           </ul>
       </div>
       <div class="supplementary widget" id="github">
@@ -77,18 +78,41 @@
 <h2 id="tutorial">
 The Tutorial
 </h2>
+<p>The Tutorial <a href="re-tutorial.html">examples/re-tutorial.lhs</a> provides an introduction to the package with simple examples that you can try out in your favourite Haskell REPL and references to examples in the example programs and library code.</p>
 <h2 id="tests">
 The Test Suite
 </h2>
+<p>The Library Tests <a href="re-tests.html">examples/re-tests.lhs</a> contains various test suites for exercising various components of the library.</p>
 <h2 id="programs">
 The NGINX Log Processor
 </h2>
+<p>The Log Processor Example <a href="re-nginx-log-processor.html">examples/re-nginx-log-processor.lhs</a> provides an extended example of large-scale RE development with the regex test bench.</p>
 <h2 id="tools">
 The Regex Tools
 </h2>
+<ul>
+<li><p>The Include Processor Example <a href="re-include.html">examples/re-include.lhs</a> is the starting point for the preprocessor that we use to generate the tutorial HTML and its derived test suite.</p></li>
+<li><p>The Cabal Processor Example <a href="re-gen-cabals.html">examples/re-gen-cabals.lhs</a> is the Sed preprocessor we use to generate our cabal file from the template in <a href="https://github.com/iconnect/regex/blob/master/lib/regex-master.cabal">lib/regex-master.cabal</a>.</p></li>
+<li><p>The Tutorial Preprocessor <a href="re-prep.html">examples/re-prep.lhs</a> contains the tool we use to generate the tutorial HTML and its derived test suite.</p></li>
+<li><p>The API Module Generator <a href="re-gen-modules.html">examples/re-gen-modules.lhs</a> contains a tool for generating the parts of the API that can be easily synthesized from a seed/master module.</p></li>
+<li><p>The Cabal-file Generator <a href="re-gen-modules.html">examples/re-gen-modules.lhs</a> contains a tool for generating the cabal file from the template(s) in <code>lib/cabal-masters</code>.</p></li>
+</ul>
 <h2 id="library">
 Selected Library Modules
 </h2>
+<p>Some of the library modules have been prepared as literate programs for easy browsing of their underlying source code.</p>
+<ul>
+<li><p><a href="Capture.html">Text.RE.Capture</a> contains the definitions of the <code>Matches</code>, <code>Match</code> and <code>Capture</code> data types (with helpers) that form the foundations for everything else.</p></li>
+<li><p><a href="Replace.html">Text.RE.Replace</a> contains the text-replacement toolkit.</p></li>
+<li><p><a href="Options.html">Text.RE.Options</a> contains the <code>Options</code> types for controlling RE parsing and compilation.</p></li>
+<li><p><a href="IsRegex.html">Text.RE.IsRegex</a> contains the IsRegex class for writing polymorphic regex tools that work with all regex back ends and text type combinations.</p></li>
+<li><p><a href="TestBench.html">Text.RE.TestBench</a> contains the test bench used to build the standard macro environment and can be used for developing other macro environments with test and documentation.</p></li>
+<li><p><a href="Edit.html">Text.RE.Edit</a> contains the polymorphic editing toolkit used by <code>Text.RE.Tools.Sed</code>.</p></li>
+<li><p><a href="Sed.html">Text.RE.Tools.Sed</a> contains the Sed tool for building awk-like text processors.</p></li>
+<li><p><a href="Grep.html">Text.RE.Tools.Grep</a> contains a simple grep tool for extracting lines that match a RE from a file.</p></li>
+<li><p><a href="Lex.html">Text.RE.Tools.Lex</a> contains a simple scanning tool for building prototype scanners before being discarded or converted into Alex scanners.</p></li>
+<li><p><a href="NamedCaptures.html">Text.RE.Internal.NamedCaptures</a> is an internal library module for dealing with named captures in REs.</p></li>
+</ul>
       </div>
     </div>
 </body>

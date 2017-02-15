@@ -469,6 +469,7 @@ data Page
   | PG_roadmap
   | PG_macros
   | PG_directory
+  | PG_changelog
   deriving (Bounded,Enum,Eq,Ord,Show)
 
 page_root :: Page -> String
@@ -494,6 +495,7 @@ page_title pg = case pg of
   PG_roadmap      -> "Roadmap"
   PG_macros       -> "Macro Tables"
   PG_directory    -> "Directory"
+  PG_changelog    -> "Change Log"
 \end{code}
 
 \begin{code}

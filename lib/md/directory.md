@@ -5,11 +5,13 @@
 | ~~http://blog.regex.uk~~              | the regex blog (TBA)
 | http://build-status.regex.uk          | the live build status page
 | http://contact.regex.uk               | contacting the maintainer
+| http://code.regex.uk                  | the regex GitHub repository
 | http://directory.regex.uk             | this page
 | http://examples.regex.uk              | the regex examples, tutorial and tests
 | http://haddocks.regex.uk              | the regex haddocks
 | http://hs.regex.uk                    | the regex haddocks
 | http://installation.regex.uk          | the regex installation instructions
+| http://issues.regex.uk                | the regex issue tracker
 | http://macros.regex.uk                | the regex macro tables
 | http://pcre-macros.regex.uk           | the table of PCRE macros
 | http://pcre-macros-src.regex.uk       | tabulation of the source of each PCRE macro

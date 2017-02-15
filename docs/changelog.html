@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>regex – Installation</title>
+  <title>regex – Change Log</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 div.sourceCode { overflow-x: auto; }
@@ -65,18 +65,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <li class='pagenav toi'><a href='index'>Home</a></li>
           <li class='pagenav toi'><a href='contact'>Contact</a></li>
           <li class='pagenav toi'><a href='build-status'>Build Status</a></li>
-          <li class='pagenav moi'><a href='installation'>Installation</a></li>
-            <li class='secnav'><a href='#cabalinstall'>Installing with Cabal</a></li>
-            <li class='secnav'><a href='#stackinstall'>Installing with Stack</a></li>
-            <li class='secnav'><a href='#cabaltutorial'>Loading the Tutorial with Cabal</a></li>
-            <li class='secnav'><a href='#stacktutorial'>Loading the Tutorial with Stack</a></li>
-            <li class='secnav'><a href='#cabaltest'>Running the tests with Cabal</a></li>
-            <li class='secnav'><a href='#stacktest'>Running the tests with Stack</a></li>
+          <li class='pagenav toi'><a href='installation'>Installation</a></li>
           <li class='pagenav toi'><a href='examples'>Examples</a></li>
           <li class='pagenav toi'><a href='roadmap'>Roadmap</a></li>
           <li class='pagenav toi'><a href='macros'>Macro Tables</a></li>
           <li class='pagenav toi'><a href='directory'>Directory</a></li>
-          <li class='pagenav toi'><a href='changelog'>Change Log</a></li>
+          <li class='pagenav moi'><a href='changelog'>Change Log</a></li>
+            <li class='secnav'><a href='#changelog'>The regex Changelog</a></li>
           </ul>
       </div>
       <div class="supplementary widget" id="github">
@@ -108,49 +103,25 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     </div>
     <div id="content">
 <header>
-<h1 class="title">Installation</h1>
+<h1 class="title">Change Log</h1>
 </header>
 <p class="pagebc">
-<a href='.' title='Home'>Home</a> » <strong>Installation</strong>
+<a href='.' title='Home'>Home</a> » <strong>Change Log</strong>
 </p>
-<h2 id="cabalinstall">
-Installing with Cabal
+<h2 id="changelog">
+The regex Changelog
 </h2>
-<p>You know the drill:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">cabal</span> update <span class="kw">&amp;&amp;</span> <span class="ex">cabal</span> install regex</code></pre></div>
-<h2 id="stackinstall">
-Installing with Stack
-</h2>
-<p>Choose your poison:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">stack</span> --stack-yaml stack-8.0.yaml install regex</code></pre></div>
-<p>or</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">stack</span> --stack-yaml stack-7.10.yaml install regex</code></pre></div>
-<p>or</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">stack</span> --stack-yaml stack-7.8.yaml install regex</code></pre></div>
-<h2 id="cabaltutorial">
-Loading the Tutorial with Cabal
-</h2>
-<p>First unpack the source distribution and change into the root folder</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">cabal</span> unpack regex
-<span class="bu">cd</span> regex-*</code></pre></div>
-<p>And load the tutorial into ghci with cabal:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">cabal</span> configure
-<span class="ex">cabal</span> repl re-tutorial</code></pre></div>
-<h2 id="stacktutorial">
-Loading the Tutorial with Stack
-</h2>
-<p>To load the tutorial into ghc-8.0 with stack (from the unpacked root folder):</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">stack</span> --stack-yaml stack-8.0.yaml exec ghci -- -ghci-script lib/ghci examples/re-tutorial.lhs</code></pre></div>
-<h2 id="cabaltest">
-Running the tests with Cabal
-</h2>
-<p>To run the tests with cabal, change into the root folder and:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">cabal</span> test</code></pre></div>
-<h2 id="stacktest">
-Running the tests with Stack
-</h2>
-<p>To test with GHC-8.0 from the root folder:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">stack</span> test --stack-yaml stack-8.0.yaml</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode changelog"><code class="sourceCode changelog">-*-change-log-*-
+
+0.0.0.2 Chris Dornan &lt;chris.dornan@irisconnect.co.uk&gt; 2017-01-30
+  <span class="dv">*</span> Fix for Windows
+  <span class="dv">*</span> Remove hsyslog dependency
+  <span class="dv">*</span> Establish Travis CI, AppVeyor and coveralls.io integrations
+  <span class="dv">*</span> Fix time parser to use Fixed arithmetic
+  <span class="dv">*</span> Miscelaneous minor adjustments
+
+0.0.0.1 Chris Dornan &lt;chris.dornan@irisconnect.co.uk&gt; 2017-01-26
+    <span class="dv">*</span> First public release</code></pre></div>
       </div>
     </div>
 </body>

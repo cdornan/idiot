@@ -170,7 +170,7 @@ header>h1 {
 }
 #content h2 {
   font-size: 1.3em;
-  margin: 0.855em 0 0.4em;
+  margin: 0.8em 0 0.4em;
   color: #000
 }
 #content h3 {
@@ -185,9 +185,6 @@ header>h1 {
   font-size: 1em;
   font-weight: bold;
   margin: 1.238em 0 0.4em
-}
-#content>h1,#content>h2 {
-  margin-top: 0
 }
 #content ul {
   list-style-position: outside
@@ -250,27 +247,28 @@ header>h1 {
 #content dfn {
   font-weight: bold
 }
-#content pre,#content code {
+/*#content pre,#content code {
   margin: 0 0 1.625em;
   white-space: pre
-}
+}*/
 #content pre,#content code,#content tt {
   font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
   line-height: 1.5
 }
-#content code {
+/*#content code {
   font-size: 0.8em;
   background: #f7f8f1;
   padding: 1px 2px;
   border: 1px solid #CCCCCC
-}
+}*/
 #content pre {
   font-size: 0.8em;
   background: #f7f8f1;
   border: 1px solid #CCCCCC;
   padding: 10px 12px;
   word-wrap: normal;
-  overflow-y: auto
+  overflow-y: auto;
+  margin-bottom: 15px;
 }
 #content tt {
   display: block;

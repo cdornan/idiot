@@ -48,3 +48,9 @@ of them used in the package itself).
 
 The macro environments are an important part of the package and they
 are documented [in these tables](macros).
+
+
+# Authors
+
+This library was written and is currently maintained by Chris Dornan,
+<chris@chrisdornan.com>.
