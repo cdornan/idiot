@@ -23,6 +23,7 @@ module TestKit
 
 import           Control.Applicative
 import           Control.Exception
+import qualified Control.Monad                            as M
 import           Data.Maybe
 import qualified Data.Text                                as T
 import qualified Data.ByteString.Lazy.Char8               as LBS
@@ -34,6 +35,7 @@ import           System.Exit
 import           System.IO
 import           Text.Printf
 import           Text.RE.TDFA
+import           Text.RE.Tools.Grep
 \end{code}
 
 
@@ -48,12 +50,16 @@ data Vrn = Vrn { _vrn_a, _vrn_b, _vrn_c, _vrn_d :: Int }
 bumpVersion :: String -> IO ()
 bumpVersion vrn_s = do
     vrn0 <- read_current_version
+    rex  <- compileRegex () $ printf "%d\\.%d\\.%d\\.%d" _vrn_a _vrn_b _vrn_c _vrn_d
+    nope <- null . linesMatched <$> grepLines rex "changelog"
+    M.when nope $
+      error $ vrn_s ++ ": not in the changelog"
     case vrn > vrn0 of
       True  -> write_current_version vrn
       False -> error $
         printf "version not later ~(%s > %s)" vrn_s $ present_vrn vrn0
   where
-    vrn = parse_vrn vrn_s
+    vrn@Vrn{..} = parse_vrn vrn_s
 
 substVersion :: FilePath -> FilePath -> IO ()
 substVersion in_f out_f =

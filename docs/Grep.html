@@ -76,6 +76,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   , grepLines
   , <span class="dt">GrepScript</span>
   , grepScript
+  , linesMatched
   ) <span class="kw">where</span>
 
 <span class="kw">import qualified</span> <span class="dt">Data.ByteString.Lazy.Char8</span>               <span class="kw">as</span> <span class="dt">LBS</span>
@@ -116,14 +117,14 @@ grepScript scr <span class="fu">=</span> loop firstLine
       <span class="dt">Just</span> t  <span class="ot">-&gt;</span> t <span class="fu">:</span> loop (succ i) lns
 
 <span class="ot">report ::</span> [<span class="dt">Line</span>] <span class="ot">-&gt;</span> <span class="dt">String</span>
-report <span class="fu">=</span> unlines <span class="fu">.</span> map fmt <span class="fu">.</span> lines_matched
+report <span class="fu">=</span> unlines <span class="fu">.</span> map fmt <span class="fu">.</span> linesMatched
   <span class="kw">where</span>
     fmt <span class="dt">Line</span>{<span class="fu">..</span>} <span class="fu">=</span>
       printf <span class="st">&quot;%05d %s&quot;</span> (getLineNo _ln_no) <span class="fu">$</span>
           LBS.unpack <span class="fu">$</span> matchesSource _ln_matches
 
-<span class="ot">lines_matched ::</span> [<span class="dt">Line</span>] <span class="ot">-&gt;</span> [<span class="dt">Line</span>]
-lines_matched <span class="fu">=</span> filter <span class="fu">$</span> anyMatches <span class="fu">.</span> _ln_matches</code></pre></div>
+<span class="ot">linesMatched ::</span> [<span class="dt">Line</span>] <span class="ot">-&gt;</span> [<span class="dt">Line</span>]
+linesMatched <span class="fu">=</span> filter <span class="fu">$</span> anyMatches <span class="fu">.</span> _ln_matches</code></pre></div>
 </div>
 </body>
 </html>
