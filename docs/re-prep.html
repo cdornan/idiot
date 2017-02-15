@@ -155,14 +155,14 @@ docMode <span class="fu">=</span> <span class="dt">Doc</span> <span class="fu">&
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">loop ::</span> <span class="dt">MODE</span> <span class="ot">-&gt;</span> FilePath <span class="ot">-&gt;</span> FilePath <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
 loop mode <span class="fu">=</span>
   sed <span class="fu">$</span> <span class="dt">Select</span>
-    [ (,) [re|^%include ${file}(@{%string}) ${rex}(@{%string})$|]      <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> include mode
-    , (,) [re|^%main ${arg}(top|bottom)$|]                             <span class="fu">$</span> <span class="dt">EDIT_gen</span>     <span class="fu">$</span> main_   mode
-    , (,) [re|^\\begin\{code\}$|]                                      <span class="fu">$</span> <span class="dt">EDIT_gen</span>     <span class="fu">$</span> begin   mode
-    , (,) [re|^${fn}(evalme@{%id}) = checkThis ${arg}(@{%string}).*$|] <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> evalme  mode
-    , (,) [re|^\\end\{code\}$|]                                        <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> end     mode
-    , (,) [re|^.*$|]                                                   <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> other   mode
+    [ (,) [re|^%include ${file}(@{%string}) ${rex}(@{%string})$|]      <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> inclde mode
+    , (,) [re|^%main ${arg}(top|bottom)$|]                             <span class="fu">$</span> <span class="dt">EDIT_gen</span>     <span class="fu">$</span> main_  mode
+    , (,) [re|^\\begin\{code\}$|]                                      <span class="fu">$</span> <span class="dt">EDIT_gen</span>     <span class="fu">$</span> begin  mode
+    , (,) [re|^${fn}(evalme@{%id}) = checkThis ${arg}(@{%string}).*$|] <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> evalme mode
+    , (,) [re|^\\end\{code\}$|]                                        <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> end    mode
+    , (,) [re|^.*$|]                                                   <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> other  mode
     ]</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell">include, evalme, end,
+<div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell">inclde, evalme, end,
 <span class="ot">  other ::</span> <span class="dt">MODE</span>
         <span class="ot">-&gt;</span> <span class="dt">LineNo</span>
         <span class="ot">-&gt;</span> <span class="dt">Match</span> <span class="dt">LBS.ByteString</span>
@@ -176,23 +176,23 @@ main_,
         <span class="ot">-&gt;</span> <span class="dt">Matches</span> <span class="dt">LBS.ByteString</span>
         <span class="ot">-&gt;</span> <span class="dt">IO</span> (<span class="dt">LineEdit</span> <span class="dt">LBS.ByteString</span>)
 
-include (<span class="dt">Doc</span> _ ) <span class="fu">=</span> includeDoc
-include (<span class="dt">Gen</span> _ ) <span class="fu">=</span> passthru
+inclde (<span class="dt">Doc</span> _ ) <span class="fu">=</span> includeDoc
+inclde (<span class="dt">Gen</span> _ ) <span class="fu">=</span> passthru
 
-main_   (<span class="dt">Doc</span> _ ) <span class="fu">=</span> mainDoc
-main_   (<span class="dt">Gen</span> gs) <span class="fu">=</span> mainGen    gs
+main_  (<span class="dt">Doc</span> _ ) <span class="fu">=</span> mainDoc
+main_  (<span class="dt">Gen</span> gs) <span class="fu">=</span> mainGen    gs
 
-begin   (<span class="dt">Doc</span> ds) <span class="fu">=</span> beginDoc   ds
-begin   (<span class="dt">Gen</span> _ ) <span class="fu">=</span> passthru_g
+begin  (<span class="dt">Doc</span> ds) <span class="fu">=</span> beginDoc   ds
+begin  (<span class="dt">Gen</span> _ ) <span class="fu">=</span> passthru_g
 
-evalme  (<span class="dt">Doc</span> ds) <span class="fu">=</span> evalmeDoc  ds
-evalme  (<span class="dt">Gen</span> gs) <span class="fu">=</span> evalmeGen  gs
+evalme (<span class="dt">Doc</span> ds) <span class="fu">=</span> evalmeDoc  ds
+evalme (<span class="dt">Gen</span> gs) <span class="fu">=</span> evalmeGen  gs
 
-end     (<span class="dt">Doc</span> ds) <span class="fu">=</span> endDoc     ds
-end     (<span class="dt">Gen</span> _ ) <span class="fu">=</span> passthru
+end    (<span class="dt">Doc</span> ds) <span class="fu">=</span> endDoc     ds
+end    (<span class="dt">Gen</span> _ ) <span class="fu">=</span> passthru
 
-other   (<span class="dt">Doc</span> ds) <span class="fu">=</span> otherDoc   ds
-other   (<span class="dt">Gen</span> _ ) <span class="fu">=</span> passthru
+other  (<span class="dt">Doc</span> ds) <span class="fu">=</span> otherDoc   ds
+other  (<span class="dt">Gen</span> _ ) <span class="fu">=</span> passthru
 
 <span class="ot">passthru ::</span> <span class="dt">LineNo</span>
          <span class="ot">-&gt;</span> <span class="dt">Match</span> <span class="dt">LBS.ByteString</span>
@@ -427,6 +427,7 @@ pages <span class="fu">=</span> <span class="kw">do</span>
   <span class="fu">|</span> <span class="dt">PG_build_status</span>
   <span class="fu">|</span> <span class="dt">PG_installation</span>
   <span class="fu">|</span> <span class="dt">PG_examples</span>
+  <span class="fu">|</span> <span class="dt">PG_roadmap</span>
   <span class="fu">|</span> <span class="dt">PG_macros</span>
   <span class="fu">|</span> <span class="dt">PG_directory</span>
   <span class="kw">deriving</span> (<span class="dt">Bounded</span>,<span class="dt">Enum</span>,<span class="dt">Eq</span>,<span class="dt">Ord</span>,<span class="dt">Show</span>)
@@ -451,6 +452,7 @@ page_title pg <span class="fu">=</span> <span class="kw">case</span> pg <span cl
   <span class="dt">PG_build_status</span> <span class="ot">-&gt;</span> <span class="st">&quot;Build Status&quot;</span>
   <span class="dt">PG_installation</span> <span class="ot">-&gt;</span> <span class="st">&quot;Installation&quot;</span>
   <span class="dt">PG_examples</span>     <span class="ot">-&gt;</span> <span class="st">&quot;Examples&quot;</span>
+  <span class="dt">PG_roadmap</span>      <span class="ot">-&gt;</span> <span class="st">&quot;Roadmap&quot;</span>
   <span class="dt">PG_macros</span>       <span class="ot">-&gt;</span> <span class="st">&quot;Macro Tables&quot;</span>
   <span class="dt">PG_directory</span>    <span class="ot">-&gt;</span> <span class="st">&quot;Directory&quot;</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">pandoc_page ::</span> <span class="dt">Page</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
@@ -465,7 +467,7 @@ pandoc_page pg <span class="fu">=</span> <span class="kw">do</span>
   fmap (const ()) <span class="fu">$</span>
     SH.shelly <span class="fu">$</span> SH.verbosely <span class="fu">$</span>
       SH.run <span class="st">&quot;pandoc&quot;</span>
-        [ <span class="st">&quot;-f&quot;</span>, <span class="st">&quot;markdown+grid_tables&quot;</span>
+        [ <span class="st">&quot;-f&quot;</span>, <span class="st">&quot;markdown+grid_tables+autolink_bare_uris&quot;</span>
         , <span class="st">&quot;-t&quot;</span>, <span class="st">&quot;html5&quot;</span>
         , <span class="st">&quot;-T&quot;</span>, <span class="st">&quot;regex&quot;</span>
         , <span class="st">&quot;-s&quot;</span>
@@ -507,7 +509,7 @@ prep_page mmd in_fp out_fp <span class="fu">=</span> <span class="kw">do</span>
 prep_page&#39; mmd lbs <span class="fu">=</span> <span class="kw">do</span>
     rf_h <span class="ot">&lt;-</span> newIORef []
     rf_t <span class="ot">&lt;-</span> newIORef <span class="dt">False</span>
-    lbs1 <span class="ot">&lt;-</span> sed&#39; (scr rf_h rf_t) lbs
+    lbs1 <span class="ot">&lt;-</span> sed&#39; (scr rf_h rf_t) <span class="fu">=&lt;&lt;</span> include lbs
     lbs2 <span class="ot">&lt;-</span> fromMaybe <span class="st">&quot;&quot;</span> <span class="fu">&lt;$&gt;</span> fin_task_list&#39; mmd rf_t
     hdgs <span class="ot">&lt;-</span> reverse <span class="fu">&lt;$&gt;</span> readIORef rf_h
     return (hdgs,lbs1<span class="fu">&lt;&gt;</span>lbs2)
@@ -717,6 +719,15 @@ pandoc_lhs&#39; title repo_path in_file out_file <span class="fu">=</span> <span
       [ <span class="st">&quot;https://github.com/iconnect/regex/blob/master/&quot;</span>
       , LBS.pack <span class="fu">$</span> T.unpack repo_path
       ]</code></pre></div>
+<h2 id="simple-include-processor">simple include processor</h2>
+<div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">include ::</span> <span class="dt">LBS.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">LBS.ByteString</span>
+include <span class="fu">=</span> sed&#39; <span class="fu">$</span> <span class="dt">Select</span>
+    [ (,) [re|^%include ${file}(@{%string})$|] <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span>   incl
+    , (,) [re|^.*$|]                           <span class="fu">$</span> <span class="dt">EDIT_fun</span> <span class="dt">TOP</span> <span class="fu">$</span> \_ _ _ _<span class="ot">-&gt;</span>return <span class="dt">Nothing</span>
+    ]
+  <span class="kw">where</span>
+    incl _ mtch _ _ <span class="fu">=</span> <span class="dt">Just</span> <span class="fu">&lt;$&gt;</span> LBS.readFile (prs_s <span class="fu">$</span> mtch <span class="fu">!$$</span> [cp|file|])
+    prs_s           <span class="fu">=</span> fromMaybe (error <span class="st">&quot;include&quot;</span>) <span class="fu">.</span> parseString</code></pre></div>
 <h2 id="branding">branding</h2>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">branding ::</span> <span class="dt">LBS.ByteString</span>
 branding <span class="fu">=</span> [here|&lt;a href=&quot;.&quot; style=&quot;Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;&quot; id=&quot;branding&quot;&gt;[&lt;span style=&#39;color:red;&#39;&gt;re&lt;/span&gt;|${&lt;span style=&#39;color:red;&#39;&gt;gex&lt;/span&gt;}(.*)|&lt;span&gt;&lt;/span&gt;]&lt;/a&gt;|]</code></pre></div>

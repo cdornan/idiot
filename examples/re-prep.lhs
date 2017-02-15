@@ -466,6 +466,7 @@ data Page
   | PG_build_status
   | PG_installation
   | PG_examples
+  | PG_roadmap
   | PG_macros
   | PG_directory
   deriving (Bounded,Enum,Eq,Ord,Show)
@@ -490,6 +491,7 @@ page_title pg = case pg of
   PG_build_status -> "Build Status"
   PG_installation -> "Installation"
   PG_examples     -> "Examples"
+  PG_roadmap      -> "Roadmap"
   PG_macros       -> "Macro Tables"
   PG_directory    -> "Directory"
 \end{code}
@@ -507,7 +509,7 @@ pandoc_page pg = do
   fmap (const ()) $
     SH.shelly $ SH.verbosely $
       SH.run "pandoc"
-        [ "-f", "markdown+grid_tables"
+        [ "-f", "markdown+grid_tables+autolink_bare_uris"
         , "-t", "html5"
         , "-T", "regex"
         , "-s"

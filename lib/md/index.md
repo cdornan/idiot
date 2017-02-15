@@ -25,11 +25,7 @@ See [build status page](http://regex.uk/build-status) for details.
 
 %heading#roadmap Road Map
 
-- [X] 2017-01-26  0.0.0.1  Pre-release (I)
-- [X] 2017-01-30  0.0.0.2  Pre-release (II)
-- [ ] 2017-02-06  0.0.1.0  RFC
-- [ ] 2017-02-20  0.1.0.0  a candidate stable release
-- [ ] 2017-03-20  1.0.0.0  first stable release
+%include "lib/md/roadmap-incl.md"
 
 
 %heading#helping Helping Out
