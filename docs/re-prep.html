@@ -401,12 +401,13 @@ scan rex <span class="fu">=</span> grepScript
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">badges ::</span> <span class="dt">IO</span> ()
 badges <span class="fu">=</span> <span class="kw">do</span>
     mapM_ collect
-      [ (,) <span class="st">&quot;license&quot;</span>         <span class="st">&quot;https://img.shields.io/badge/license-BSD3-brightgreen.svg&quot;</span>
-      , (,) <span class="st">&quot;unix-build&quot;</span>      <span class="st">&quot;https://img.shields.io/travis/iconnect/regex.svg?label=Linux%2BmacOS&quot;</span>
-      , (,) <span class="st">&quot;windows-build&quot;</span>   <span class="st">&quot;https://img.shields.io/appveyor/ci/engineerirngirisconnectcouk/regex.svg?label=Windows&quot;</span>
-      , (,) <span class="st">&quot;coverage&quot;</span>        <span class="st">&quot;https://img.shields.io/coveralls/iconnect/regex.svg&quot;</span>
-      , (,) <span class="st">&quot;build-status&quot;</span>    <span class="st">&quot;https://img.shields.io/travis/iconnect/regex.svg?label=Build%20Status&quot;</span>
-      , (,) <span class="st">&quot;email-contact&quot;</span>   <span class="st">&quot;https://img.shields.io/badge/email-regex%40chrisdornan.com-blue.svg&quot;</span>
+      [ (,) <span class="st">&quot;license&quot;</span>             <span class="st">&quot;https://img.shields.io/badge/license-BSD3-brightgreen.svg&quot;</span>
+      , (,) <span class="st">&quot;unix-build&quot;</span>          <span class="st">&quot;https://img.shields.io/travis/iconnect/regex.svg?label=Linux%2BmacOS&quot;</span>
+      , (,) <span class="st">&quot;windows-build&quot;</span>       <span class="st">&quot;https://img.shields.io/appveyor/ci/engineerirngirisconnectcouk/regex.svg?label=Windows&quot;</span>
+      , (,) <span class="st">&quot;coverage&quot;</span>            <span class="st">&quot;https://img.shields.io/coveralls/iconnect/regex.svg&quot;</span>
+      , (,) <span class="st">&quot;build-status&quot;</span>        <span class="st">&quot;https://img.shields.io/travis/iconnect/regex.svg?label=Build%20Status&quot;</span>
+      , (,) <span class="st">&quot;maintainers-contact&quot;</span> <span class="st">&quot;https://img.shields.io/badge/email-maintainers%40regex.uk-blue.svg&quot;</span>
+      , (,) <span class="st">&quot;feedback-contact&quot;</span>    <span class="st">&quot;https://img.shields.io/badge/email-feedback%40regex.uk-blue.svg&quot;</span>
       ]
     substVersion <span class="st">&quot;lib/hackage-template.svg&quot;</span> <span class="fu">$</span> badge_fn <span class="st">&quot;hackage&quot;</span>
   <span class="kw">where</span>
@@ -423,6 +424,7 @@ pages <span class="fu">=</span> <span class="kw">do</span>
   mapM_ pandoc_page [minBound<span class="fu">..</span>maxBound]</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Page</span>
   <span class="fu">=</span> <span class="dt">PG_index</span>
+  <span class="fu">|</span> <span class="dt">PG_about</span>
   <span class="fu">|</span> <span class="dt">PG_contact</span>
   <span class="fu">|</span> <span class="dt">PG_build_status</span>
   <span class="fu">|</span> <span class="dt">PG_installation</span>
@@ -449,6 +451,7 @@ page_address <span class="fu">=</span> LBS.pack <span class="fu">.</span> page_r
 <span class="ot">page_title ::</span> <span class="dt">Page</span> <span class="ot">-&gt;</span> <span class="dt">LBS.ByteString</span>
 page_title pg <span class="fu">=</span> <span class="kw">case</span> pg <span class="kw">of</span>
   <span class="dt">PG_index</span>        <span class="ot">-&gt;</span> <span class="st">&quot;Home&quot;</span>
+  <span class="dt">PG_about</span>        <span class="ot">-&gt;</span> <span class="st">&quot;About&quot;</span>
   <span class="dt">PG_contact</span>      <span class="ot">-&gt;</span> <span class="st">&quot;Contact&quot;</span>
   <span class="dt">PG_build_status</span> <span class="ot">-&gt;</span> <span class="st">&quot;Build Status&quot;</span>
   <span class="dt">PG_installation</span> <span class="ot">-&gt;</span> <span class="st">&quot;Installation&quot;</span>
@@ -599,9 +602,14 @@ mk_pre_body_html pg hdgs <span class="fu">=</span> hdr <span class="fu">&lt;&gt;
           &lt;img src=&quot;badges/build-status.svg&quot; alt=&quot;build status&quot; /&gt;
         &lt;/a&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;supplementary widget&quot; id=&quot;email-contact&quot;&gt;
-        &lt;a href=&quot;mailto:regex@chrisdornan.com&quot;&gt;
-          &lt;img src=&quot;badges/email-contact.svg&quot; alt=&quot;build status&quot; /&gt;
+      &lt;div class=&quot;supplementary widget&quot; id=&quot;maintainers-contact&quot;&gt;
+        &lt;a href=&quot;mailto:maintainers@regex.uk&quot;&gt;
+          &lt;img src=&quot;badges/maintainers-contact.svg&quot; alt=&quot;build status&quot; /&gt;
+        &lt;/a&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;supplementary widget&quot; id=&quot;feedback-contact&quot;&gt;
+        &lt;a href=&quot;mailto:feedback@regex.uk&quot;&gt;
+          &lt;img src=&quot;badges/feedback-contact.svg&quot; alt=&quot;build status&quot; /&gt;
         &lt;/a&gt;
       &lt;/div&gt;
       &lt;div class=&quot;supplementary widget twitter&quot;&gt;

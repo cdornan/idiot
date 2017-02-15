@@ -431,12 +431,13 @@ badges
 badges :: IO ()
 badges = do
     mapM_ collect
-      [ (,) "license"         "https://img.shields.io/badge/license-BSD3-brightgreen.svg"
-      , (,) "unix-build"      "https://img.shields.io/travis/iconnect/regex.svg?label=Linux%2BmacOS"
-      , (,) "windows-build"   "https://img.shields.io/appveyor/ci/engineerirngirisconnectcouk/regex.svg?label=Windows"
-      , (,) "coverage"        "https://img.shields.io/coveralls/iconnect/regex.svg"
-      , (,) "build-status"    "https://img.shields.io/travis/iconnect/regex.svg?label=Build%20Status"
-      , (,) "email-contact"   "https://img.shields.io/badge/email-regex%40chrisdornan.com-blue.svg"
+      [ (,) "license"             "https://img.shields.io/badge/license-BSD3-brightgreen.svg"
+      , (,) "unix-build"          "https://img.shields.io/travis/iconnect/regex.svg?label=Linux%2BmacOS"
+      , (,) "windows-build"       "https://img.shields.io/appveyor/ci/engineerirngirisconnectcouk/regex.svg?label=Windows"
+      , (,) "coverage"            "https://img.shields.io/coveralls/iconnect/regex.svg"
+      , (,) "build-status"        "https://img.shields.io/travis/iconnect/regex.svg?label=Build%20Status"
+      , (,) "maintainers-contact" "https://img.shields.io/badge/email-maintainers%40regex.uk-blue.svg"
+      , (,) "feedback-contact"    "https://img.shields.io/badge/email-feedback%40regex.uk-blue.svg"
       ]
     substVersion "lib/hackage-template.svg" $ badge_fn "hackage"
   where
@@ -462,6 +463,7 @@ pages = do
 \begin{code}
 data Page
   = PG_index
+  | PG_about
   | PG_contact
   | PG_build_status
   | PG_installation
@@ -488,6 +490,7 @@ page_address = LBS.pack . page_root
 page_title :: Page -> LBS.ByteString
 page_title pg = case pg of
   PG_index        -> "Home"
+  PG_about        -> "About"
   PG_contact      -> "Contact"
   PG_build_status -> "Build Status"
   PG_installation -> "Installation"
@@ -641,9 +644,14 @@ mk_pre_body_html pg hdgs = hdr <> LBS.concat (map nav [minBound..maxBound]) <> f
           <img src="badges/build-status.svg" alt="build status" />
         </a>
       </div>
-      <div class="supplementary widget" id="email-contact">
-        <a href="mailto:regex@chrisdornan.com">
-          <img src="badges/email-contact.svg" alt="build status" />
+      <div class="supplementary widget" id="maintainers-contact">
+        <a href="mailto:maintainers@regex.uk">
+          <img src="badges/maintainers-contact.svg" alt="build status" />
+        </a>
+      </div>
+      <div class="supplementary widget" id="feedback-contact">
+        <a href="mailto:feedback@regex.uk">
+          <img src="badges/feedback-contact.svg" alt="build status" />
         </a>
       </div>
       <div class="supplementary widget twitter">
