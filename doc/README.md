@@ -40,8 +40,8 @@ See [build status page](http://regex.uk/build-status) for details.
 
 If you have any feedback or suggestion then please drop me a line.
 
-&nbsp;&nbsp;&nbsp;&nbsp;`t` [@cdornan](https://twitter.com/cdornan)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;`e` chris.dornan@irisconnect.co.uk<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;`t` [&#64;hregex](https://twitter.com/hregex)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;`e` maintainers@regex.uk<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;`w` https://github.com/iconnect/regex/issues
 
 
