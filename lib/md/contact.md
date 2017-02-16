@@ -5,5 +5,5 @@ and other improvements.
 
 Please report bugs via the [issue tracker](http://issues.regex.uk).
 
-You can tweet us `@hregex` or email us `maintainers@regex.uk`
-or `feedback@regex.uk`.
+You can tweet us [&#64;hregex](https://twitter.com/hregex) or email us <maintainers@regex.uk>
+or <feedback@regex.uk>.

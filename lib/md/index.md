@@ -40,4 +40,4 @@ are documented [in these tables](macros).
 # Authors
 
 This library was written and is currently maintained by Chris Dornan,
-<chris@chrisdornan.com>.
+<chris.dornan@irisconnect.com>.
