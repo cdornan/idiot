@@ -629,10 +629,10 @@ mk_pre_body_html pg hdgs = hdr <> LBS.concat (map nav [minBound..maxBound]) <> f
     ftr = [here|          </ul>
       </div>
       <div class="supplementary widget" id="github">
-        <a href="https://github.com/iconnect/regex">Code</a>
+        <a href="https://github.com/iconnect/regex"><img src="images/code.svg" alt="github code" /> Code</a>
       </div>
       <div class="supplementary widget" id="github-issues">
-        <a href="https://github.com/iconnect/regex/issues">Issues</a>
+        <a href="https://github.com/iconnect/regex/issues"><img src="images/issue-opened.svg" alt="github code" /> Issues</a>
       </div>
       <div class="widget-divider">&nbsp;</div>
       <div class="supplementary widget" id="build-status">

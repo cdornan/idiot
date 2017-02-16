@@ -325,7 +325,9 @@ h1 {
   margin: 0 1.225em
 }
 
-
+#sidebar .widget img {
+  vertical-align: bottom;
+}
 
 
 
