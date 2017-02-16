@@ -466,6 +466,7 @@ data Page
   | PG_contact
   | PG_build_status
   | PG_installation
+  | PG_tutorial
   | PG_examples
   | PG_roadmap
   | PG_macros
@@ -493,6 +494,7 @@ page_title pg = case pg of
   PG_contact      -> "Contact"
   PG_build_status -> "Build Status"
   PG_installation -> "Installation"
+  PG_tutorial     -> "Tutorial"
   PG_examples     -> "Examples"
   PG_roadmap      -> "Roadmap"
   PG_macros       -> "Macro Tables"

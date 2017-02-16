@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>regex – Installation</title>
+  <title>regex – Tutorial</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 div.sourceCode { overflow-x: auto; }
@@ -66,14 +66,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <li class='pagenav toi'><a href='about'>About</a></li>
           <li class='pagenav toi'><a href='contact'>Contact</a></li>
           <li class='pagenav toi'><a href='build-status'>Build Status</a></li>
-          <li class='pagenav moi'><a href='installation'>Installation</a></li>
-            <li class='secnav'><a href='#cabalinstall'>Installing with Cabal</a></li>
-            <li class='secnav'><a href='#stackinstall'>Installing with Stack</a></li>
+          <li class='pagenav toi'><a href='installation'>Installation</a></li>
+          <li class='pagenav moi'><a href='tutorial'>Tutorial</a></li>
+            <li class='secnav'><a href='#tutorial'>The regex Tutorial</a></li>
             <li class='secnav'><a href='#cabaltutorial'>Loading the Tutorial with Cabal</a></li>
             <li class='secnav'><a href='#stacktutorial'>Loading the Tutorial with Stack</a></li>
-            <li class='secnav'><a href='#cabaltest'>Running the tests with Cabal</a></li>
-            <li class='secnav'><a href='#stacktest'>Running the tests with Stack</a></li>
-          <li class='pagenav toi'><a href='tutorial'>Tutorial</a></li>
           <li class='pagenav toi'><a href='examples'>Examples</a></li>
           <li class='pagenav toi'><a href='roadmap'>Roadmap</a></li>
           <li class='pagenav toi'><a href='macros'>Macro Tables</a></li>
@@ -115,25 +112,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     </div>
     <div id="content">
 <header>
-<h1 class="title">Installation</h1>
+<h1 class="title">Tutorial</h1>
 </header>
 <p class="pagebc">
-<a href='.' title='Home'>Home</a> » <strong>Installation</strong>
+<a href='.' title='Home'>Home</a> » <strong>Tutorial</strong>
 </p>
-<h2 id="cabalinstall">
-Installing with Cabal
+<h2 id="tutorial">
+The regex Tutorial
 </h2>
-<p>The regex package is <a href="build-status">tested with</a> GHC 7.8.4, 7.10.3 and 8.0.1:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">cabal</span> update <span class="kw">&amp;&amp;</span> <span class="ex">cabal</span> install regex</code></pre></div>
-<h2 id="stackinstall">
-Installing with Stack
-</h2>
-<p>We maintain three stack configurations:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">stack</span> --stack-yaml stack-8.0.yaml install regex</code></pre></div>
-<p>and</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">stack</span> --stack-yaml stack-7.10.yaml install regex</code></pre></div>
-<p>and</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">stack</span> --stack-yaml stack-7.8.yaml install regex</code></pre></div>
+<p>The regex <a href="re-tutorial">tutorial</a> is a literate Haskell program with interactive examples that can be tried out with ghci.</p>
 <h2 id="cabaltutorial">
 Loading the Tutorial with Cabal
 </h2>
@@ -148,16 +135,6 @@ Loading the Tutorial with Stack
 </h2>
 <p>To load the tutorial into ghc-8.0 with stack (from the unpacked root folder):</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">stack</span> --stack-yaml stack-8.0.yaml exec ghci -- -ghci-script lib/ghci examples/re-tutorial.lhs</code></pre></div>
-<h2 id="cabaltest">
-Running the tests with Cabal
-</h2>
-<p>To run the tests with cabal, change into the root folder and:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">cabal</span> test</code></pre></div>
-<h2 id="stacktest">
-Running the tests with Stack
-</h2>
-<p>To test with GHC-8.0 from the root folder:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">stack</span> test --stack-yaml stack-8.0.yaml</code></pre></div>
       </div>
     </div>
 </body>

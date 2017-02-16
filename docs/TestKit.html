@@ -116,7 +116,9 @@ bumpVersion vrn_s <span class="fu">=</span> <span class="kw">do</span>
     M.when nope <span class="fu">$</span>
       error <span class="fu">$</span> vrn_s <span class="fu">++</span> <span class="st">&quot;: not in the changelog&quot;</span>
     <span class="kw">case</span> vrn <span class="fu">&gt;</span> vrn0 <span class="kw">of</span>
-      <span class="dt">True</span>  <span class="ot">-&gt;</span> write_current_version vrn
+      <span class="dt">True</span>  <span class="ot">-&gt;</span> <span class="kw">do</span>
+        write_current_version vrn
+        substVersion <span class="st">&quot;lib/hackage-template.svg&quot;</span> <span class="st">&quot;docs/badges/hackage.svg&quot;</span>
       <span class="dt">False</span> <span class="ot">-&gt;</span> error <span class="fu">$</span>
         printf <span class="st">&quot;version not later ~(%s &gt; %s)&quot;</span> vrn_s <span class="fu">$</span> present_vrn vrn0
   <span class="kw">where</span>

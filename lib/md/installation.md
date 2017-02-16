@@ -1,6 +1,6 @@
 %heading#cabalinstall Installing with Cabal
 
-You know the drill:
+The regex package is [tested with](build-status) GHC 7.8.4, 7.10.3 and 8.0.1:
 
 ```bash
 cabal update && cabal install regex
@@ -8,19 +8,19 @@ cabal update && cabal install regex
 
 %heading#stackinstall Installing with Stack
 
-Choose your poison:
+We maintain three stack configurations:
 
 ```bash
 stack --stack-yaml stack-8.0.yaml install regex
 ```
 
-or
+and
 
 ```bash
 stack --stack-yaml stack-7.10.yaml install regex
 ```
 
-or
+and
 
 ```bash
 stack --stack-yaml stack-7.8.yaml install regex
@@ -29,25 +29,12 @@ stack --stack-yaml stack-7.8.yaml install regex
 
 %heading#cabaltutorial Loading the Tutorial with Cabal
 
-First unpack the source distribution and change into the root folder
-```bash
-cabal unpack regex
-cd regex-*
-```
-
-And load the tutorial into ghci with cabal:
-```bash
-cabal configure
-cabal repl re-tutorial
-```
+%include "lib/md/load-tutorial-cabal-incl.md"
 
 
 %heading#stacktutorial Loading the Tutorial with Stack
 
-To load the tutorial into ghc-8.0 with stack (from the unpacked root folder):
-```bash
-stack --stack-yaml stack-8.0.yaml exec ghci -- -ghci-script lib/ghci examples/re-tutorial.lhs
-```
+%include "lib/md/load-tutorial-stack-incl.md"
 
 
 %heading#cabaltest Running the tests with Cabal

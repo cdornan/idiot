@@ -409,7 +409,6 @@ badges <span class="fu">=</span> <span class="kw">do</span>
       , (,) <span class="st">&quot;maintainers-contact&quot;</span> <span class="st">&quot;https://img.shields.io/badge/email-maintainers%40regex.uk-blue.svg&quot;</span>
       , (,) <span class="st">&quot;feedback-contact&quot;</span>    <span class="st">&quot;https://img.shields.io/badge/email-feedback%40regex.uk-blue.svg&quot;</span>
       ]
-    substVersion <span class="st">&quot;lib/hackage-template.svg&quot;</span> <span class="fu">$</span> badge_fn <span class="st">&quot;hackage&quot;</span>
   <span class="kw">where</span>
     collect (nm,url) <span class="fu">=</span> <span class="kw">do</span>
       putStrLn <span class="fu">$</span> <span class="st">&quot;updating badge: &quot;</span> <span class="fu">++</span> nm
@@ -428,6 +427,7 @@ pages <span class="fu">=</span> <span class="kw">do</span>
   <span class="fu">|</span> <span class="dt">PG_contact</span>
   <span class="fu">|</span> <span class="dt">PG_build_status</span>
   <span class="fu">|</span> <span class="dt">PG_installation</span>
+  <span class="fu">|</span> <span class="dt">PG_tutorial</span>
   <span class="fu">|</span> <span class="dt">PG_examples</span>
   <span class="fu">|</span> <span class="dt">PG_roadmap</span>
   <span class="fu">|</span> <span class="dt">PG_macros</span>
@@ -455,6 +455,7 @@ page_title pg <span class="fu">=</span> <span class="kw">case</span> pg <span cl
   <span class="dt">PG_contact</span>      <span class="ot">-&gt;</span> <span class="st">&quot;Contact&quot;</span>
   <span class="dt">PG_build_status</span> <span class="ot">-&gt;</span> <span class="st">&quot;Build Status&quot;</span>
   <span class="dt">PG_installation</span> <span class="ot">-&gt;</span> <span class="st">&quot;Installation&quot;</span>
+  <span class="dt">PG_tutorial</span>     <span class="ot">-&gt;</span> <span class="st">&quot;Tutorial&quot;</span>
   <span class="dt">PG_examples</span>     <span class="ot">-&gt;</span> <span class="st">&quot;Examples&quot;</span>
   <span class="dt">PG_roadmap</span>      <span class="ot">-&gt;</span> <span class="st">&quot;Roadmap&quot;</span>
   <span class="dt">PG_macros</span>       <span class="ot">-&gt;</span> <span class="st">&quot;Macro Tables&quot;</span>
