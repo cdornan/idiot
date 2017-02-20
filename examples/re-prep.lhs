@@ -452,8 +452,9 @@ pages
 \begin{code}
 pages :: IO ()
 pages = do
-  prep_page   MM_hackage "lib/md/index.md" "README.markdown"
-  prep_page   MM_github  "lib/md/index.md" "README.md"
+  prep_page "regex"          MM_hackage "lib/md/index.md" "lib/README-regex.md"
+  prep_page "regex-examples" MM_hackage "lib/md/index.md" "lib/README-regex-examples.md"
+  prep_page "regex"          MM_github  "lib/md/index.md" "README.md"
   mapM_ pandoc_page [minBound..maxBound]
 \end{code}
 
@@ -510,22 +511,21 @@ pandoc_page pg = do
   LBS.writeFile "tmp/page_pre_body.html" $ mk_pre_body_html pg hdgs
   LBS.writeFile "tmp/page_pst_body.html"   pst_body_html
   LBS.writeFile "tmp/page.markdown"        md_lbs
-  fmap (const ()) $
-    SH.shelly $ SH.verbosely $
-      SH.run "pandoc"
-        [ "-f", "markdown+grid_tables+autolink_bare_uris"
-        , "-t", "html5"
-        , "-T", "regex"
-        , "-s"
-        , "-H", "lib/favicons.html"
-        , "-B", "tmp/page_pre_body.html"
-        , "-A", "tmp/page_pst_body.html"
-        , "-c", "lib/styles.css"
-        , "-o", T.pack $ page_docs_file pg
-        , "tmp/metadata.markdown"
-        , "tmp/heading.markdown"
-        , "tmp/page.markdown"
-        ]
+  SH.shelly $ SH.verbosely $
+    SH.run_ "pandoc"
+      [ "-f", "markdown+grid_tables+autolink_bare_uris"
+      , "-t", "html5"
+      , "-T", "regex"
+      , "-s"
+      , "-H", "lib/favicons.html"
+      , "-B", "tmp/page_pre_body.html"
+      , "-A", "tmp/page_pst_body.html"
+      , "-c", "lib/styles.css"
+      , "-o", T.pack $ page_docs_file pg
+      , "tmp/metadata.markdown"
+      , "tmp/heading.markdown"
+      , "tmp/page.markdown"
+      ]
 
 data Heading =
   Heading
@@ -545,11 +545,19 @@ page_heading PG_index = ""
 page_heading pg       =
   "<p class='pagebc'><a href='.' title='Home'>Home</a> &raquo; **"<>page_title pg<>"**</p>\n"
 
-prep_page :: MarkdownMode -> FilePath -> FilePath -> IO ()
-prep_page mmd in_fp out_fp = do
-  lbs      <- LBS.readFile in_fp
+prep_page :: LBS.ByteString -> MarkdownMode -> FilePath -> FilePath -> IO ()
+prep_page ttl mmd in_fp out_fp = do
+  lbs      <- set_title ttl <$> LBS.readFile in_fp
   (_,lbs') <- prep_page' mmd lbs
   LBS.writeFile out_fp lbs'
+
+set_title :: LBS.ByteString -> LBS.ByteString -> LBS.ByteString
+set_title ttl lbs = fromMaybe oops $ flip sed' lbs $ Pipe
+    [ (,) [re|<<\$title\$>>|] $ EDIT_fun TOP $ \_ _ _ _->return $ Just ttl
+    ]
+  where
+    -- runIdentity added to base in 4.9 only
+    oops = error "set_title"
 
 prep_page' :: MarkdownMode -> LBS.ByteString -> IO ([Heading],LBS.ByteString)
 prep_page' mmd lbs = do
