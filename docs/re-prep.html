@@ -634,7 +634,7 @@ mk_pre_body_html pg hdgs <span class="fu">=</span> hdr <span class="fu">&lt;&gt;
 <span class="ot">pst_body_html ::</span> <span class="dt">LBS.ByteString</span>
 pst_body_html <span class="fu">=</span> [here|      &lt;/div&gt;
     &lt;/div&gt;
-|]</code></pre></div>
+|] <span class="fu">&lt;&gt;</span> tracking</code></pre></div>
 <h2 id="task-lists">Task Lists</h2>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="co">-- | replacement function to convert GFM task list line into HTML if we</span>
 <span class="co">-- aren&#39;t writing GFM (i.e.,  generating markdown for GitHub)</span>
@@ -739,7 +739,7 @@ pandoc_lhs&#39; title repo_path in_file out_file <span class="fu">=</span> <span
 
     ft <span class="fu">=</span> LBS.concat
       [ <span class="st">&quot;&lt;/div&gt;&quot;</span>
-      ]
+      ] <span class="fu">&lt;&gt;</span> tracking
 
     repo_url <span class="fu">=</span> LBS.concat
       [ <span class="st">&quot;https://github.com/iconnect/regex/blob/master/&quot;</span>
@@ -758,6 +758,19 @@ tweak_md <span class="dt">MM_hackage</span> lbs <span class="fu">=</span> fromMa
 <h2 id="branding">branding</h2>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">branding ::</span> <span class="dt">LBS.ByteString</span>
 branding <span class="fu">=</span> [here|&lt;a href=&quot;.&quot; style=&quot;Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;&quot; id=&quot;branding&quot;&gt;[&lt;span style=&#39;color:red;&#39;&gt;re&lt;/span&gt;|${&lt;span style=&#39;color:red;&#39;&gt;gex&lt;/span&gt;}(.*)|&lt;span&gt;&lt;/span&gt;]&lt;/a&gt;|]</code></pre></div>
+<h2 id="tracking">tracking</h2>
+<div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">tracking ::</span> <span class="dt">LBS.ByteString</span>
+tracking <span class="fu">=</span> [here|&lt;script&gt;
+  (function(i,s,o,g,r,a,m){i[&#39;GoogleAnalyticsObject&#39;]=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,&#39;script&#39;,&#39;https://www.google-analytics.com/analytics.js&#39;,&#39;ga&#39;);
+
+  ga(&#39;create&#39;, &#39;UA-92650418-1&#39;, &#39;auto&#39;);
+  ga(&#39;send&#39;, &#39;pageview&#39;);
+
+&lt;/script&gt;
+|]</code></pre></div>
 <h2 id="testing">testing</h2>
 <div class="sourceCode"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">test ::</span> <span class="dt">IO</span> ()
 test <span class="fu">=</span> <span class="kw">do</span>
@@ -766,6 +779,15 @@ test <span class="fu">=</span> <span class="kw">do</span>
   gm <span class="ot">&lt;-</span> genMode
   test_pp <span class="st">&quot;pp-gen&quot;</span> (loop gm) <span class="st">&quot;data/pp-test.lhs&quot;</span> <span class="st">&quot;data/pp-result-gen.lhs&quot;</span>
   putStrLn <span class="st">&quot;tests passed&quot;</span></code></pre></div>
-</div>
+</div><script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-92650418-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
 </body>
 </html>
