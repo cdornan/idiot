@@ -114,8 +114,13 @@ These vectors have expected zeros and sums.
 \begin{code}
 instance Monoid Results where
   mempty  = Results 0 0 0 0 0
-  mappend (Results gp1 gw1 gf1 ga1 ps1) (Results gp2 gw2 gf2 ga2 ps2) =
-      Results (gp1+gp2) (gw1+gw2) (gf1+gf2) (ga1+ga2) (ps1+ps2)
+  mappend (Results gp1 gw1 gf1 ga1 ps1)
+          (Results gp2 gw2 gf2 ga2 ps2) =
+      Results (gp1+gp2)
+              (gw1+gw2)
+              (gf1+gf2)
+              (ga1+ga2)
+              (ps1+ps2)
 \end{code}
 
 PL results are ordered by (points,goal-difference,goals-scored).
