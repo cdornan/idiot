@@ -73,21 +73,30 @@ data Job =
     , jobOutput :: FilePath     -- ^ where is the output
     }
   deriving (Show)
+\end{code}
 
 -- | a match result, data in the usual order:
 --      <home-team> <home-score>-<away-score> <away-team>
+\begin{code}
 data Game = Game Team Int Int Team
   deriving (Eq,Ord,Read,Show)
+\end{code}
 
 -- | a league table is a list of teams and their results; the ordering
 -- on everything is arranged so that the list can be sorted with the
 -- default Ord ordering to arrange the tableaccording to PL conventions
+\begin{code}
 newtype Table = Table { getTable :: [(Results,Team)] }
   deriving (Show)
+\end{code}
 
+\begin{code}
 type Team = T.Text
+\end{code}
 
--- | Results contain everything we need to generate a league table
+Results contain everything we need to generate a league table
+
+\begin{code}
 data Results =
   Results
     { resultsGamesPlayed  :: Int
@@ -97,14 +106,20 @@ data Results =
     , resultsPointsScored :: Int
     }
   deriving (Show)
+\end{code}
 
--- | these vectors have expected zeros and sums
+These vectors have expected zeros and sums.
+
+\begin{code}
 instance Monoid Results where
   mempty  = Results 0 0 0 0 0
   mappend (Results gp1 gw1 gf1 ga1 ps1) (Results gp2 gw2 gf2 ga2 ps2) =
       Results (gp1+gp2) (gw1+gw2) (gf1+gf2) (ga1+ga2) (ps1+ps2)
+\end{code}
 
--- | CL results are ordered by (points,goal-difference,goals-scored)
+PL results are ordered by (points,goal-difference,goals-scored).
+
+\begin{code}
 instance Ord Results where
   compare = comparing $ \Results{..} ->
       ( resultsPointsScored
