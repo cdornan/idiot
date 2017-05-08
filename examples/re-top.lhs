@@ -13,13 +13,10 @@ into the parent directory and checkout the 'corrections' branch.
 {-# LANGUAGE RecordWildCards              #-}
 {-# LANGUAGE OverloadedStrings            #-}
 {-# LANGUAGE QuasiQuotes                  #-}
-{-# LANGUAGE CPP                          #-}
-{-# OPTIONS_GHC -fno-warn-unused-imports  #-}
 
 module Main(main) where
 
 import qualified Control.Monad         as M
-import           Data.Default
 import           Data.Functor.Identity
 import qualified Data.HashMap.Lazy     as HML
 import qualified Data.List             as L
@@ -29,7 +26,6 @@ import           Data.Ord
 import           Data.Sort
 import qualified Data.Text             as T
 import qualified Data.Text.IO          as T
-import qualified Data.Text.Lazy        as LT
 import           Data.Time
 import           Prelude.Compat
 import qualified Shelly                as SH
@@ -38,8 +34,6 @@ import           System.Environment
 import           System.Exit
 import           System.FilePath
 import           System.IO
-import           Text.Blaze.Html.Renderer.Text
-import qualified Text.Blaze.Html5     as H
 import           Text.RE.Summa
 import qualified Text.RE.TDFA         as TDFA
 import           Text.RE.TDFA.Text
@@ -275,10 +269,27 @@ data ParseGames = SimpleParseGames | FunParseGames | PrimParseGames
 
 <h3>simpleParseGames</h3>
 
+Here we apply the `gameEdit` `SearchReplace` editor to:
+
+  1. recognise the lines that contain the match results data and
+
+  2. transform the lines into Haskell `Game` format which can be
+     parsed by `readText`.
+
+The `edit` function is a simple specialisation of the `regex`
+`sed'` function (defined below) that deletes every line in the file
+that edits every line in the file according to the given `SearchReplace`,
+deleting all other lies.
+
+
 \begin{code}
 simpleParseGames :: T.Text -> [Game]
 simpleParseGames = map readText . T.lines . edit gameEdit
 \end{code}
+
+The `[ed|` ... `///` ... `|]` `SearchReplace` editors for recognizing
+line containing matchresults and converting them to Haskell-format
+`Game` data come in two variants that should be equivalent.
 
 \begin{code}
 gameEdit :: SearchReplace RE T.Text
@@ -360,6 +371,11 @@ listMacros = do
 
 <h3>funParseGames</h3>
 
+Here we use the `regex` `grepFilter` to extract all of the lines that
+match our `rex` RE for detecting match-result data and assemble the
+`Game` data directly by extracting the `ht`, `hs`, `as` and `at`
+fields from the matched result.
+
 \begin{code}
 funParseGames :: T.Text -> [Game]
 funParseGames txt =
@@ -371,6 +387,11 @@ funParseGames txt =
         , [mtch]   <- [allMatches getLineMatches]
         ]
 \end{code}
+
+The RE for merely recognising lines that contain match results in the
+input data come in two variants. We either extract the RE from the above
+`SearchReplace` template or rebuild the `[re|` ... `]`. (They should of
+course be equivalent.)
 
 \begin{code}
 rex :: RE
@@ -385,6 +406,9 @@ data REX = Direct | Recycle
 
 
 <h3>primParseGames</h3>
+
+This variant of `funParseGames` uses `T.lines` and `?=~` instead of
+`grepFilter`.
 
 \begin{code}
 primParseGames :: T.Text -> [Game]
@@ -491,7 +515,9 @@ column_header col = case col of
 parseCLI
 --------
 
-The command line parser generates a list of jobs for execution.
+The command line parser generates a list of league-table
+generating/testing jobs for execution by the above `job`
+action.
 
 \begin{code}
 parseCLI :: IO [Job]
@@ -700,16 +726,29 @@ Helpers
 
 The general helpers.
 
+<h3>edit</h3>
+
+The `edit` function is a simple specialisation of the `regex`
+`sed'` function (defined below) that deletes every line in the file
+that edits every line in the file according to the given `SearchReplace`
+template, deleting all other lines. (It should probably be added to
+regex.)
+
 \begin{code}
--- | apply a SearchReplace edit to a line of text,
 edit :: SearchReplace RE T.Text -> T.Text -> T.Text
 edit sr txt = runIdentity $ flip sed' txt $
     Select
       [ Template sr
       , LineEdit [re|.*|] $ \_ _ -> return Delete
       ]
+\end{code}
 
--- | Construct a Macros table for compiling REs from a MacroEnv.
+<h3>makeMacros and makeEnv</h3>
+
+Construct a Macros table for compiling REs from a MacroEnv. (Something
+similar  should probably be added to regex.)
+
+\begin{code}
 makeMacros :: MacroEnv -> Macros RE
 makeMacros ev = runIdentity $
     mkMacros mk TDFA.regexType ExclCaptures ev
@@ -718,10 +757,14 @@ makeMacros ev = runIdentity $
                 TDFA.compileRegexWithOptions TDFA.noPreludeREOptions
 
     oops = error "makeMacros: unexpected RE compilation error"
+\end{code}
 
--- | Construct a a MacroEnv from an association list of MacroId and
--- MacroDescriptior constructor functions and the base MacroEnv
--- (the macros that can be used inside the macros).
+Construct a a `MacroEnv` from an association list of `MacroId` and
+`MacroDescriptior` constructor functions and the base `MacroEnv`
+(the macros that can be used inside the macros). (Something
+similar  should probably be added to regex.)
+
+\begin{code}
 makeEnv :: [(MacroID,MacroEnv -> MacroID -> MacroDescriptor)]
         -> MacroEnv
         -> MacroEnv
@@ -729,7 +772,14 @@ makeEnv al ev0 = ev
   where
     ev = ev0 `HML.union` HML.fromList
                   [ (mid, mk ev mid) | (mid,mk) <- al ]
+\end{code}
 
+
+<h3>showText and readText</h3>
+
+Variants of the standard functions that operate over `Text`.
+
+\begin{code}
 showText :: Show a => a -> T.Text
 showText = T.pack . show
 
