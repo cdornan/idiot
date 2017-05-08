@@ -61,12 +61,12 @@ to do with it.
 \begin{code}
 data Job =
   Job
-    { jobTitle  :: T.Text       -- ^ title for the table
-    , jobSize   :: Maybe Int    -- ^ is it the full table or a top-n table
-    , jobInputs :: [FilePath]   -- ^ the files containing the game data
-    , jobIsTest :: Bool         -- ^ are we testing against the output or writing it
-    , jobIsHtml :: Bool         -- ^ are we generating HTML from markdown
-    , jobOutput :: FilePath     -- ^ where is the output
+    { jobTitle  :: T.Text     -- ^ title for the table
+    , jobSize   :: Maybe Int  -- ^ a full table or a top-n table
+    , jobInputs :: [FilePath] -- ^ the files containing the game data
+    , jobIsTest :: Bool       -- ^ are we testing o/p or writing it
+    , jobIsHtml :: Bool       -- ^ are we generating HTML from markdown
+    , jobOutput :: FilePath   -- ^ where is the output
     }
   deriving (Show)
 \end{code}
