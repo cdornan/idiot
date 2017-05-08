@@ -1,12 +1,14 @@
 top: Calculating league table variations for the Premier League
 ===============================================================
 
-This program calculates top-n league tables for the Premier League
-based on this [openfootball data](https://github.com/cdornan/eng-england/tree/corrections).
+This program calculates top-n league tables for the Premier League based
+on this [openfootball
+data](https://github.com/cdornan/eng-england/tree/corrections).
 
-The program has enough data to self-test but to generate any useful
-data you will need to clone [this repo](git@github.com:cdornan/eng-england.git)
-into the parent directory and checkout the 'corrections' branch.
+The program has enough data to self-test but to generate any useful data
+you will need to clone [this
+repo](git@github.com:cdornan/eng-england.git) into the parent directory
+and checkout the 'corrections' branch.
 
 \begin{code}
 {-# LANGUAGE NoImplicitPrelude            #-}
@@ -247,7 +249,7 @@ Parse openfootball data into Game data, eliminating duplicate results.
 \begin{code}
 input :: Job -> IO [Game]
 input Job{..} =
-    groupSort const . parseGames . T.concat <$> mapM T.readFile jobInputs
+  groupSort const . parseGames . T.concat <$> mapM T.readFile jobInputs
 \end{code}
 
 
@@ -276,10 +278,10 @@ Here we apply the `gameEdit` `SearchReplace` editor to:
   2. transform the lines into Haskell `Game` format which can be
      parsed by `readText`.
 
-The `edit` function is a simple specialisation of the `regex`
-`sed'` function (defined below) that deletes every line in the file
-that edits every line in the file according to the given `SearchReplace`,
-deleting all other lies.
+The `edit` function is a simple specialisation of the `regex` `sed'`
+function (defined below) that deletes every line in the file that edits
+every line in the file according to the given `SearchReplace`, deleting
+all other lies.
 
 
 \begin{code}
