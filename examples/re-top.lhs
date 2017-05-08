@@ -80,7 +80,7 @@ data Game = Game Team Int Int Team
 
 A league table is a list of teams and their results with the ordering
 on everything is arranged so that the list can be sorted with the
-default Ord ordering to arrange the table according to PL conventions.
+default `Ord` ordering to arrange the table according to PL conventions.
 
 \begin{code}
 newtype Table = Table { getTable :: [(Results,Team)] }
@@ -517,7 +517,9 @@ parseCLI
 
 The command line parser generates a list of league-table
 generating/testing jobs for execution by the above `job`
-action.
+action. Non-league-table-generating CLI commands like
+`macros` for listing our RE table macros just do their
+thing and return an empty list of jobs.
 
 \begin{code}
 parseCLI :: IO [Job]
