@@ -75,26 +75,31 @@ data Job =
   deriving (Show)
 \end{code}
 
--- | a match result, data in the usual order:
---      <home-team> <home-score>-<away-score> <away-team>
+A match result lists the data in the usual order:
+
+    <home-team> <home-score> <away-score> <away-team>
+
 \begin{code}
 data Game = Game Team Int Int Team
   deriving (Eq,Ord,Read,Show)
 \end{code}
 
--- | a league table is a list of teams and their results; the ordering
--- on everything is arranged so that the list can be sorted with the
--- default Ord ordering to arrange the tableaccording to PL conventions
+A league table is a list of teams and their results with the ordering
+on everything is arranged so that the list can be sorted with the
+default Ord ordering to arrange the table according to PL conventions.
+
 \begin{code}
 newtype Table = Table { getTable :: [(Results,Team)] }
   deriving (Show)
 \end{code}
 
+Teams are just Text containing the names used by the openfootball data.
+
 \begin{code}
 type Team = T.Text
 \end{code}
 
-Results contain everything we need to generate a league table
+Results contain everything we need to generate a league table.
 
 \begin{code}
 data Results =
