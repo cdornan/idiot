@@ -253,7 +253,7 @@ data ParseGames = SimpleParseGames | FunParseGames | PrimParseGames
 \end{code}
 
 
-<h3>simpleParseGames</2>
+<h3>simpleParseGames</h3>
 
 \begin{code}
 simpleParseGames :: T.Text -> [Game]
@@ -270,7 +270,7 @@ data GameEdit = SimpleGameEdit | MacrosGameEdit
 \end{code}
 
 
-<h4>simpleGameEdit</2>
+<h4>simpleGameEdit</h4>
 
 \begin{code}
 simpleGameEdit :: SearchReplace RE T.Text
@@ -279,7 +279,7 @@ simpleGameEdit =
 \end{code}
 
 
-<h4>simpleGameEdit</2>
+<h4>simpleGameEdit</h4>
 
 \begin{code}
 macrosGameEdit :: SearchReplace RE T.Text
@@ -338,7 +338,7 @@ listMacros = do
 \end{code}
 
 
-<h3>funParseGames</2>
+<h3>funParseGames</h3>
 
 \begin{code}
 funParseGames :: T.Text -> [Game]
@@ -364,7 +364,7 @@ data REX = Direct | Recycle
 \end{code}
 
 
-<h3>primParseGames</2>
+<h3>primParseGames</h3>
 
 \begin{code}
 primParseGames :: T.Text -> [Game]
